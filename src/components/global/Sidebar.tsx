@@ -77,6 +77,7 @@ const Sidebar = ({
       <nav className="flex flex-col gap-y-3">
         {menus.map((menu) => (
           <a
+            key={menu.path}
             href={menu.path}
             className={`flex items-center gap-3 py-3 px-4 rounded-full ${
               currentPath === menu.path
