@@ -14,22 +14,22 @@ import { usePathname } from "next/navigation";
 const menus = [
   {
     name: "Dashboard",
-    path: "/dashboard",
+    path: "/user/dashboard",
     icon: faChartPie,
   },
   {
     name: "User Recognition",
-    path: "/user-recognition",
+    path: "/user/user-recognition",
     icon: faExpand,
   },
   {
     name: "User Profile",
-    path: "/profile",
+    path: "/user/profile",
     icon: faUser,
   },
   {
     name: "My Business",
-    path: "/business",
+    path: "/user/business",
     icon: faShop,
   },
 ];
@@ -42,14 +42,13 @@ const Sidebar = ({
   setSidebarOpen: (params: boolean) => void;
 }) => {
   const currentPath = usePathname();
-  // const [showSidebar, setShowSidebar] = useState(true);
 
   return (
     <div
       className={`h-screen absolute lg:fixed w-10/12 md:w-1/2 lg:w-1/5 bg-white overflow-x-visible px-8 absolute lg:block top-0 ${
         sidebarOpen
           ? "left-0 overflow-y-auto"
-          : "-left-full md:left-0 overflow-y-visible"
+          : "-left-full lg:left-0 overflow-y-visible"
       } z-40`}
     >
       <div className="flex items-center justify-center py-6">

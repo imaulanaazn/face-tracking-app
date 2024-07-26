@@ -70,7 +70,6 @@ const FaceRecognizer: React.FC = () => {
         });
         const result = await response.json();
         if (response.ok) {
-          console.log("Attendance checked successfully", result);
           setLog((prevLog) => [...prevLog, `Attendance: ${result.name}`]);
         } else {
           console.error("Failed to check attendance", result);
