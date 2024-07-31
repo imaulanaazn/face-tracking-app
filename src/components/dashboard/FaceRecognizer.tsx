@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import * as faceapi from "face-api.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -9,149 +9,174 @@ import {
   faPlay,
 } from "@fortawesome/free-solid-svg-icons";
 
-const BACKEND_URL = "http://localhost:3000/";
-
 const FaceRecognizer: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [log, setLog] = useState<string[]>([]);
+  const [detectedUser, setDetectedUser] = useState<{
+    name: string;
+    status: string;
+  }>({ name: "unknown", status: "not marked" });
   const [cameraActive, setCameraActive] = useState<boolean>(false);
   const [cbUploadFromLocal, setCbUploadFromLocal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
 
+  const knownFaces = useRef<{ name: string; descriptor: Float32Array }[]>([]);
+
   useEffect(() => {
-    const startVideo = async () => {
-      try {
-        await faceapi.nets.tinyFaceDetector.loadFromUri(
-          "/models/tiny_face_detector"
-        );
-        await faceapi.nets.faceLandmark68Net.loadFromUri(
-          "/models/face_landmark_68"
-        );
-        await faceapi.nets.faceRecognitionNet.loadFromUri(
-          "/models/face_recognition"
-        );
-
-        navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
-          if (videoRef.current) {
-            videoRef.current.srcObject = stream;
-          }
-        });
-      } catch (error) {
-        console.error("Error loading models:", error);
-      }
+    const loadModels = async () => {
+      await faceapi.nets.tinyFaceDetector.loadFromUri(
+        "/models/tiny_face_detector"
+      );
+      await faceapi.nets.faceLandmark68Net.loadFromUri(
+        "/models/face_landmark_68"
+      );
+      await faceapi.nets.faceRecognitionNet.loadFromUri(
+        "/models/face_recognition"
+      );
     };
+    loadModels();
+  }, []);
 
-    const stopVideo = () => {
-      if (videoRef.current && videoRef.current.srcObject) {
-        const stream = videoRef.current.srcObject as MediaStream;
-        const tracks = stream.getTracks();
-        tracks.forEach((track) => track.stop());
-        videoRef.current.srcObject = null;
+  const startVideo = useCallback(async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
       }
-    };
+    } catch (error) {
+      console.error("Error accessing webcam:", error);
+    }
+  }, []);
+
+  const stopVideo = useCallback(() => {
+    if (videoRef.current && videoRef.current.srcObject) {
+      const stream = videoRef.current.srcObject as MediaStream;
+      const tracks = stream.getTracks();
+      tracks.forEach((track) => track.stop());
+      videoRef.current.srcObject = null;
+    }
+  }, []);
+
+  const updateCanvasSize = useCallback(() => {
+    if (videoRef.current && canvasRef.current) {
+      const displaySize = {
+        width: videoRef.current.clientWidth,
+        height: videoRef.current.clientHeight,
+      };
+      canvasRef.current.width = displaySize.width;
+      canvasRef.current.height = displaySize.height;
+      faceapi.matchDimensions(canvasRef.current, displaySize);
+    }
+  }, []);
+
+  const isKnownFace = (descriptor: Float32Array) => {
+    const distanceThreshold = 0.6;
+    return knownFaces.current.some((face) => {
+      const distance = faceapi.euclideanDistance(face.descriptor, descriptor);
+      console.log(distance);
+      return distance < distanceThreshold;
+    });
+  };
+
+  const handleNewFace = (descriptor: Float32Array) => {
+    console.log(isKnownFace(descriptor));
+    if (!isKnownFace(descriptor)) {
+      checkAttendance(descriptor);
+      const newFace = { name: "unknown", descriptor };
+      knownFaces.current = [newFace];
+    } else {
+      console.log("face already detected");
+    }
+  };
+
+  async function checkAttendance(descriptor: Float32Array) {
+    const arrayDescriptor = Array.from(descriptor);
+    try {
+      const response = await fetch("http://localhost:3001/check-attendance", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ faceDescriptor: arrayDescriptor }),
+      });
+      if (response.status === 404) {
+        setDetectedUser({ name: "unknown", status: "not marked" });
+        console.log("user unkown");
+      } else {
+        const result = await response.json();
+        setDetectedUser({ name: result.name, status: "marked" });
+      }
+    } catch (error) {
+      console.error("Error recognizing face:", error);
+    }
+  }
+
+  useEffect(() => {
+    const isGoodDetection = (detection: any) => detection.detection.score > 0.9;
 
     if (cameraActive) {
       startVideo();
+      if (videoRef.current && canvasRef.current) {
+        videoRef.current.addEventListener("play", () => {
+          updateCanvasSize();
+          window.addEventListener("resize", updateCanvasSize);
+
+          const interval = setInterval(async () => {
+            const detections = await faceapi
+              .detectAllFaces(
+                videoRef.current!,
+                new faceapi.TinyFaceDetectorOptions()
+              )
+              .withFaceLandmarks()
+              .withFaceDescriptors();
+
+            if (detections.length > 0) {
+              const goodDetections = detections.filter(isGoodDetection);
+              if (goodDetections.length > 0) {
+                const faceDescriptor = goodDetections[0].descriptor;
+                handleNewFace(faceDescriptor);
+              }
+
+              if (canvasRef.current) {
+                const resizedDetections = faceapi.resizeResults(
+                  goodDetections,
+                  {
+                    width: canvasRef.current.width,
+                    height: canvasRef.current.height,
+                  }
+                );
+                const context = canvasRef.current.getContext("2d");
+                context?.clearRect(
+                  0,
+                  0,
+                  canvasRef.current.width,
+                  canvasRef.current.height
+                );
+                faceapi.draw.drawDetections(
+                  canvasRef.current,
+                  resizedDetections
+                );
+                faceapi.draw.drawFaceLandmarks(
+                  canvasRef.current,
+                  resizedDetections
+                );
+              }
+            }
+          }, 100);
+
+          return () => {
+            clearInterval(interval);
+            window.removeEventListener("resize", updateCanvasSize);
+          };
+        });
+      }
     } else {
       stopVideo();
     }
+  }, [cameraActive, startVideo, stopVideo, updateCanvasSize]);
 
-    const checkAttendance = async (faceDescriptor: Float32Array) => {
-      try {
-        const response = await fetch(`${BACKEND_URL}/check-attendance`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "ngrok-skip-browser-warning": "true",
-          },
-          body: JSON.stringify({ faceDescriptor: Array.from(faceDescriptor) }),
-        });
-        const result = await response.json();
-        if (response.ok) {
-          setLog((prevLog) => [...prevLog, `Attendance: ${result.name}`]);
-        } else {
-          console.error("Failed to check attendance", result);
-        }
-      } catch (error) {
-        console.error("Error checking attendance:", error);
-      }
-    };
-
-    const isGoodDetection = (detection: any) => {
-      return detection.detection.score > 0.9;
-    };
-
-    if (videoRef.current && canvasRef.current) {
-      videoRef.current.addEventListener("play", () => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-
-        const displaySize = {
-          width: videoRef.current?.videoWidth ?? 0,
-          height: videoRef.current?.videoHeight ?? 0,
-        };
-
-        faceapi.matchDimensions(canvas, displaySize);
-
-        const updateCanvasSize = () => {
-          if (videoRef.current) {
-            const displaySize = {
-              width: videoRef.current.clientWidth,
-              height: videoRef.current.clientHeight,
-            };
-            canvas.width = displaySize.width;
-            canvas.height = displaySize.height;
-            faceapi.matchDimensions(canvas, displaySize);
-          }
-        };
-
-        updateCanvasSize();
-        window.addEventListener("resize", updateCanvasSize);
-
-        const interval = setInterval(async () => {
-          const detections = await faceapi
-            .detectAllFaces(
-              videoRef.current!,
-              new faceapi.TinyFaceDetectorOptions()
-            )
-            .withFaceLandmarks()
-            .withFaceDescriptors();
-
-          if (detections.length > 0) {
-            const goodDetections = detections.filter(isGoodDetection);
-            if (goodDetections.length > 0) {
-              const detectionsString = JSON.stringify(goodDetections);
-              setLog((prevLog) => [
-                ...prevLog,
-                `Good Detections: ${detectionsString}`,
-              ]);
-
-              const faceDescriptor = goodDetections[0].descriptor;
-              checkAttendance(faceDescriptor);
-            }
-
-            const resizedDetections = faceapi.resizeResults(goodDetections, {
-              width: canvas.width,
-              height: canvas.height,
-            });
-            canvas
-              .getContext("2d")
-              ?.clearRect(0, 0, canvas.width, canvas.height);
-            faceapi.draw.drawDetections(canvas, resizedDetections);
-            faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
-
-            // if (videoRef.current) {
-            //   setImageUrl(urlToImage);
-            // }
-          }
-        }, 100);
-
-        return () => clearInterval(interval);
-      });
-    }
-  }, [cameraActive]);
+  console.log(detectedUser);
 
   return (
     <div className="attendance-wrapper w-full lg:w-3/5 p-4 md:p-6 bg-white rounded-lg">
@@ -183,12 +208,15 @@ const FaceRecognizer: React.FC = () => {
         />
         <div className="absolute bottom-0 left-0 bg-[rgba(0,0,0,0.4)] w-full flex items-center justify-between md:justify-end text-center py-3 gap-10 px-4 md:px-6">
           <div className="flex gap-1 text-base">
-            <p className="text-white">nama :</p>
-            <span className="text-base text-white"> Irham</span>
+            <p className="text-white">Nama :</p>
+            <span className="text-base text-white"> {detectedUser.name}</span>
           </div>
           <div className="flex gap-1 text-base">
             <p className="text-white font-light">status :</p>
-            <span className="text-base text-green-200"> Attended</span>
+            <span className="text-base text-green-200">
+              {" "}
+              {detectedUser.status}
+            </span>
           </div>
         </div>
       </div>
