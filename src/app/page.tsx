@@ -10,7 +10,7 @@ import Footer from "@/components/landing_page/Footer";
 const Home: React.FC = () => {
   return (
     <>
-      <div className="pt-[4.75rem] lg:pt-[5.25rem] bg-slate-50">
+      <div className="pt-[4.75rem] lg:pt-[5.25rem] bg-slate-50 w-screen overflow-x-hidden">
         <Header />
         <Hero />
         <Benefits />

@@ -40,7 +40,7 @@ const Benefits = () => {
                     className="object-cover"
                     alt={item.title}
                   />
-                  <p className="ml-auto font-code text-xs font-bold text-n-1 uppercase tracking-wider">
+                  <p className="ml-auto font-code text-xs font-bold uppercase tracking-wider text-gray-600">
                     Explore more
                   </p>
                   <Arrow />
