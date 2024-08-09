@@ -163,7 +163,7 @@ const FaceRecognizer: React.FC = () => {
                 );
               }
             }
-          }, 100);
+          }, 1000);
 
           return () => {
             clearInterval(interval);
