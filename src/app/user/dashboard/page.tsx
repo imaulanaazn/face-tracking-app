@@ -19,7 +19,7 @@ import { height } from "@fortawesome/free-brands-svg-icons/fa42Group";
 const breakpoints = {
   0: {
     slidesPerView: 1.4,
-    spaceBetween: 30,
+    spaceBetween: 20,
   },
   640: {
     slidesPerView: 1.5,
@@ -141,7 +141,7 @@ export default function Dashboard() {
         onSwiper={() => {}}
       >
         <SwiperSlide style={{ height: "auto" }}>
-          <div className="bg-blue-600 h-full rounded-2xl flex-1 text-white p-6">
+          <div className="bg-blue-600 h-full rounded-xl md:rounded-2xl flex-1 text-white p-6">
             <div className="flex items-center gap-4">
               <FontAwesomeIcon icon={faUserGroup} className="text-xl" />
               <h3 className="">Pelanggan</h3>
@@ -162,7 +162,7 @@ export default function Dashboard() {
           </div>
         </SwiperSlide>
         <SwiperSlide style={{ height: "auto" }}>
-          <div className="bg-white h-full rounded-2xl flex-1 text-gray-700 p-6">
+          <div className="bg-white h-full rounded-xl md:rounded-2xl flex-1 text-gray-700 p-6">
             <div className="flex items-center gap-4">
               <FontAwesomeIcon icon={faPaperPlane} className="text-xl" />
               <h3 className="">Pesan Tersisa</h3>
@@ -173,7 +173,7 @@ export default function Dashboard() {
           </div>
         </SwiperSlide>
         <SwiperSlide style={{ height: "auto" }}>
-          <div className="bg-white h-full rounded-2xl flex-1 text-gray-700 p-6">
+          <div className="bg-white h-full rounded-xl md:rounded-2xl flex-1 text-gray-700 p-6">
             <div className="flex items-center gap-4">
               <FontAwesomeIcon icon={faUserPlus} className="text-xl" />
               <h3 className="">Pelanggan Baru</h3>
@@ -195,7 +195,7 @@ export default function Dashboard() {
         </SwiperSlide>
       </Swiper>
 
-      <div className="graphic rounded-xl bg-white p-6 md:p-8 mt-4  md:mt-8">
+      <div className="graphic rounded-xl md:rounded-2xl bg-white p-4 md:p-6 md:p-8 mt-4 md:mt-8">
         <h2 className="text-lg font-medium text-gray-800">
           Grafik pelanggan bulan ini
         </h2>

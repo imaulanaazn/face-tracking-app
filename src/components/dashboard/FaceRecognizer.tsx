@@ -179,7 +179,7 @@ const FaceRecognizer: React.FC = () => {
   console.log(detectedUser);
 
   return (
-    <div className="attendance-wrapper w-full lg:w-3/5 p-4 md:p-6 bg-white rounded-lg">
+    <div className="attendance-wrapper w-full lg:w-3/5 p-4 md:p-6 lg:p-8 bg-white rounded-xl md:rounded-2xl">
       <div className="header flex items-center justify-between mb-4">
         <h2 className="text-lg font-medium text-gray-800">Face Recognition</h2>
 
@@ -230,10 +230,10 @@ const FaceRecognizer: React.FC = () => {
       <img src={imageUrl} alt="" />
 
       {showModal && (
-        <div className="form-wrapper absolute top-0 left-0 w-full h-screen bg-gray-800/30">
-          <div className="register w-max bg-white py-10 px-8 rounded-lg absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 text-gray-800 mt-6">
+        <div className="form-wrapper fixed top-0 left-0 w-full h-screen bg-gray-800/30 p-6 z-50">
+          <div className="register w-max bg-white p-6 md:p-8 rounded-xl md:rounded-2xl absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 text-gray-800 mt-6">
             <h2 className="text-lg font-medium">Daftarkan Pelanggan Baru</h2>
-            <div className="flex flex-col gap-3 md:gap-4 mt-4">
+            <div className="flex flex-col gap-3 md:gap-4 mt-6">
               <div className="flex gap-2 items-center">
                 <input
                   type="checkbox"
@@ -243,7 +243,9 @@ const FaceRecognizer: React.FC = () => {
                     setCbUploadFromLocal(e.target.checked);
                   }}
                 />
-                <label htmlFor="cb-local">Gunakan image dari penyimpanan</label>
+                <label htmlFor="cb-local" className="text-gray-600">
+                  Gunakan image dari penyimpanan
+                </label>
               </div>
               {cbUploadFromLocal && (
                 <div className="relative bg-gray-200 w-full h-auto aspect-video rounded-md border border-dashed border-black flex items-center justify-center">
@@ -271,7 +273,7 @@ const FaceRecognizer: React.FC = () => {
                 placeholder="No Telp"
                 className="py-2 px-4 bg-gray-200 rounded-md flex-1"
               />
-              <div className="flex justify-between gap-4">
+              <div className="flex justify-between gap-4 mt-2">
                 <button
                   onClick={() => {
                     setShowModal((prev) => !prev);

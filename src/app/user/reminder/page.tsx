@@ -150,7 +150,7 @@ export default function UserReminder() {
 
   return (
     <div className="wrapper md:p-8 p-6">
-      <div className="md:p-8 p-6 bg-white rounded-xl">
+      <div className="lg:p-8 md:p-6 p-4 bg-white rounded-xl">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4">
           <h2 className="text-lg font-medium">Reminder</h2>
           <div className="flex gap-6 items-center">

@@ -4,7 +4,7 @@ const UserRecognition: React.FC = () => {
   return (
     <div className="w-full p-6 md:p-8 flex flex-col lg:flex-row gap-6 md:gap-8">
       <FaceRecognizer />
-      <div className="w-full lg:w-2/5 history bg-white h-auto rounded-lg p-4 md:p-6">
+      <div className="w-full lg:w-2/5 history bg-white h-auto rounded-xl md:rounded-2xl p-4 md:p-6 lg:p-8">
         <h2 className="text-lg font-medium mb-4">History</h2>
         <div className="tables">
           <table className="min-w-full">

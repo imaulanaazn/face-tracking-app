@@ -17,14 +17,14 @@ export default function RootLayout({
 
   return (
     <>
-      <main className="flex w-screen h-screen overflow-x-hidden overflow-y-auto bg-slate-100 justify-end">
+      <main className="flex bg-slate-100 justify-end">
         <Sidebar
           sidebarOpen={sidebarOpen}
           setSidebarOpen={(params) => {
             setSidebarOpen(params);
           }}
         />
-        <div className="bg-slate-100 w-full lg:w-4/5 relative">
+        <div className="bg-slate-100 w-full lg:w-4/5 relative h-screen overflow-auto">
           <Header
             setSidebarOpen={(params) => {
               setSidebarOpen(params);

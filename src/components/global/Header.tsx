@@ -13,7 +13,7 @@ const Header = ({
   setSidebarOpen: (params: boolean) => void;
 }) => {
   return (
-    <header className="bg-white py-4  px-10 flex items-center justify-between justify-end shadow-sm">
+    <header className="bg-white py-4 px-6 lg:px-10 flex items-center justify-between justify-end shadow-sm sticky top-0 right-0 z-40">
       <div className="">
         <h1 className="hidden lg:block text-2xl font-bold text-gray-800">
           Good Morning, Alexander

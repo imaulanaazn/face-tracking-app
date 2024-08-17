@@ -6,7 +6,7 @@ const Notification = ({ className, title }) => {
     <div
       className={`${
         className || ""
-      } flex items-center p-4 pr-6 bg-blue-600/40 backdrop-blur border border-n-1/10 rounded-2xl gap-5`}
+      } flex items-center p-4 pr-6 bg-blue-600/40 backdrop-blur border border-n-1/10 rounded-xl md:rounded-2xl gap-5`}
     >
       <img
         src={"/assets/notification/image-1.png"}

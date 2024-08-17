@@ -55,7 +55,7 @@ const Sidebar = ({
         sidebarOpen
           ? "left-0 overflow-y-auto"
           : "-left-full lg:left-0 overflow-y-visible"
-      } z-40`}
+      } z-50`}
     >
       <div className="flex items-center justify-center py-6">
         <img
@@ -85,7 +85,7 @@ const Sidebar = ({
             key={menu.path}
             href={menu.path}
             className={`flex items-center gap-3 py-3 px-4 rounded-full ${
-              currentPath === menu.path
+              currentPath.includes(menu.path)
                 ? "bg-blue-500 text-white"
                 : "bg-white text-gray-500 hover:bg-sky-100 hover:text-blue-600"
             }`}

@@ -45,6 +45,16 @@ canvas {
   position: absolute;
 }
 
+#message-templates::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+#message-templates::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: lightgray;
+}
+
 .rotate-45 {
   @apply rotate-[45deg];
 }
