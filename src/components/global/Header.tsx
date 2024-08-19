@@ -15,10 +15,10 @@ const Header = ({
   return (
     <header className="bg-white py-4 px-6 lg:px-10 flex items-center justify-between justify-end shadow-sm sticky top-0 right-0 z-40">
       <div className="">
-        <h1 className="hidden lg:block text-2xl font-bold text-gray-800">
+        <h1 className="hidden xl:block text-2xl font-bold text-gray-800">
           Good Morning, Alexander
         </h1>
-        <p className="hidden lg:block text-gray-500">
+        <p className="hidden xl:block text-gray-500">
           Welcome back, nice to see you again!
         </p>
         <button
@@ -26,7 +26,7 @@ const Header = ({
             setSidebarOpen(true);
           }}
           className={
-            "w-7 h-7 rounded-full text-blue-600 right-8 bg-blue-100 lg:hidden"
+            "w-7 h-7 rounded-full text-blue-600 right-8 bg-blue-100 xl:hidden"
           }
         >
           <FontAwesomeIcon icon={faArrowRight} />

@@ -51,10 +51,10 @@ const Sidebar = ({
 
   return (
     <div
-      className={`h-screen absolute lg:fixed w-10/12 md:w-1/2 lg:w-1/5 bg-white overflow-x-visible px-8 absolute lg:block top-0 ${
+      className={`h-screen absolute xl:fixed w-10/12 md:w-1/2 lg:w-2/6 xl:w-1/5 bg-white overflow-x-visible px-8 absolute xl:block top-0 ${
         sidebarOpen
           ? "left-0 overflow-y-auto"
-          : "-left-full lg:left-0 overflow-y-visible"
+          : "-left-full xl:left-0 overflow-y-visible"
       } z-50`}
     >
       <div className="flex items-center justify-center py-6">
@@ -70,7 +70,7 @@ const Sidebar = ({
             setSidebarOpen(false);
           }}
           className={
-            "w-7 h-7 bg-blue-100 absolute top-7 rounded-full text-blue-600 right-8 lg:hidden"
+            "w-7 h-7 bg-blue-100 absolute top-7 rounded-full text-blue-600 right-8 xl:hidden"
           }
         >
           <FontAwesomeIcon icon={faArrowLeft} />

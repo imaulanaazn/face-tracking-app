@@ -24,7 +24,7 @@ export default function RootLayout({
             setSidebarOpen(params);
           }}
         />
-        <div className="bg-slate-100 w-full lg:w-4/5 relative h-screen overflow-auto">
+        <div className="bg-slate-100 w-full xl:w-4/5 relative h-screen overflow-auto">
           <Header
             setSidebarOpen={(params) => {
               setSidebarOpen(params);
