@@ -48,8 +48,6 @@ const data = [
   },
 ];
 
-console.log(data);
-
 export default function ComposeMessage() {
   const [selectedTemplate, setSelectedTemplate] = useState<string>("");
   const [messageTitle, setMessageTitle] = useState("");

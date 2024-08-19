@@ -5,9 +5,12 @@ import * as faceapi from "face-api.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowUpFromBracket,
+  faCamera,
+  faMountainSun,
   faPause,
   faPlay,
 } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 
 const FaceRecognizer: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -15,11 +18,15 @@ const FaceRecognizer: React.FC = () => {
   const [detectedUser, setDetectedUser] = useState<{
     name: string;
     status: string;
-  }>({ name: "unknown", status: "not marked" });
+  }>({
+    name: "unknown",
+    status: "not marked",
+  });
   const [cameraActive, setCameraActive] = useState<boolean>(false);
-  const [cbUploadFromLocal, setCbUploadFromLocal] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [imageUrl, setImageUrl] = useState("");
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const inputFile = useRef<HTMLInputElement>(null);
+  const [previewImage, setPreviewImage] = useState("");
 
   const knownFaces = useRef<{ name: string; descriptor: Float32Array }[]>([]);
 
@@ -35,7 +42,12 @@ const FaceRecognizer: React.FC = () => {
         "/models/face_recognition"
       );
     };
-    loadModels();
+    // loadModels()
+    toast.promise(loadModels(), {
+      pending: "Loading models",
+      success: "Models loaded",
+      error: "Failed to load models",
+    });
   }, []);
 
   const startVideo = useCallback(async () => {
@@ -74,19 +86,17 @@ const FaceRecognizer: React.FC = () => {
     const distanceThreshold = 0.6;
     return knownFaces.current.some((face) => {
       const distance = faceapi.euclideanDistance(face.descriptor, descriptor);
-      console.log(distance);
       return distance < distanceThreshold;
     });
   };
 
   const handleNewFace = (descriptor: Float32Array) => {
-    console.log(isKnownFace(descriptor));
     if (!isKnownFace(descriptor)) {
       checkAttendance(descriptor);
       const newFace = { name: "unknown", descriptor };
       knownFaces.current = [newFace];
     } else {
-      console.log("face already detected");
+      console.error("face already detected");
     }
   };
 
@@ -102,7 +112,6 @@ const FaceRecognizer: React.FC = () => {
       });
       if (response.status === 404) {
         setDetectedUser({ name: "unknown", status: "not marked" });
-        console.log("user unkown");
       } else {
         const result = await response.json();
         setDetectedUser({ name: result.name, status: "marked" });
@@ -139,6 +148,20 @@ const FaceRecognizer: React.FC = () => {
               }
 
               if (canvasRef.current) {
+                const context = canvasRef.current.getContext("2d");
+
+                // Clear the previous frame
+                context?.clearRect(
+                  0,
+                  0,
+                  canvasRef.current.width,
+                  canvasRef.current.height
+                );
+
+                // Flip context horizontally
+                context?.scale(-1, 1);
+                context?.translate(-canvasRef.current.width, 0);
+
                 const resizedDetections = faceapi.resizeResults(
                   goodDetections,
                   {
@@ -146,13 +169,8 @@ const FaceRecognizer: React.FC = () => {
                     height: canvasRef.current.height,
                   }
                 );
-                const context = canvasRef.current.getContext("2d");
-                context?.clearRect(
-                  0,
-                  0,
-                  canvasRef.current.width,
-                  canvasRef.current.height
-                );
+
+                // Draw detections and landmarks
                 faceapi.draw.drawDetections(
                   canvasRef.current,
                   resizedDetections
@@ -161,9 +179,12 @@ const FaceRecognizer: React.FC = () => {
                   canvasRef.current,
                   resizedDetections
                 );
+
+                // Reset context after drawing
+                context?.setTransform(1, 0, 0, 1, 0, 0);
               }
             }
-          }, 1000);
+          }, 200);
 
           return () => {
             clearInterval(interval);
@@ -176,12 +197,49 @@ const FaceRecognizer: React.FC = () => {
     }
   }, [cameraActive, startVideo, stopVideo, updateCanvasSize]);
 
-  console.log(detectedUser);
+  const captureImage = () => {
+    if (videoRef.current && cameraActive) {
+      const canvas = document.createElement("canvas");
+      canvas.width = videoRef.current.videoWidth;
+      canvas.height = videoRef.current.videoHeight;
+      const context = canvas.getContext("2d");
+
+      if (context) {
+        context.scale(-1, 1); // Mirror the capture
+        context.translate(-canvas.width, 0);
+        context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+        const imageData = canvas.toDataURL("image/png");
+        setPreviewImage(imageData); // Save captured image
+      }
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0];
+    if (
+      file &&
+      file.size <= 2 * 1024 * 1024 &&
+      ["image/png", "image/jpg", "image/jpeg"].includes(file.type)
+    ) {
+      // Check file size and type
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      alert(
+        "Please select a valid image file (png, jpg, jpeg) with size up to 2MB."
+      );
+    }
+  };
 
   return (
-    <div className="attendance-wrapper w-full lg:w-3/5 p-4 md:p-6 lg:p-8 bg-white rounded-xl md:rounded-2xl">
+    <div className="attendance-wrapper w-full lg:w-3/5 p-4 md:p-6 bg-white rounded-xl md:rounded-2xl">
       <div className="header flex items-center justify-between mb-4">
-        <h2 className="text-lg font-medium text-gray-800">Face Recognition</h2>
+        <h2 className="text-xl font-semibold text-gray-800">
+          Face Recognition
+        </h2>
 
         <button
           onClick={() => setCameraActive(!cameraActive)}
@@ -195,80 +253,110 @@ const FaceRecognizer: React.FC = () => {
           <FontAwesomeIcon icon={cameraActive ? faPause : faPlay} />
         </button>
       </div>
-      <div className="relative w-full h-auto aspect-[4/3] bg-gray-200 rounded-lg overflow-hidden">
+      <div className="relative w-full h-auto aspect-[4/3] bg-gray-200 rounded-lg lg:rounded-xl overflow-hidden">
         <video
           ref={videoRef}
           autoPlay
           muted
-          className="w-full h-full aspect-square object-cover absolute top-0 left-0"
+          className="w-full h-full aspect-square object-cover absolute top-0 left-0 transform scale-x-[-1]"
         />
         <canvas
           ref={canvasRef}
           className="absolute top-0 left-0 w-full h-full aspect-square"
         />
-        <div className="absolute bottom-0 left-0 bg-[rgba(0,0,0,0.4)] w-full flex items-center justify-between md:justify-end text-center py-3 gap-10 px-4 md:px-6">
-          <div className="flex gap-1 text-base">
-            <p className="text-white">Nama :</p>
-            <span className="text-base text-white"> {detectedUser.name}</span>
+        <div className="absolute bottom-0 left-0 bg-[rgba(255,255,255,0.6)] w-full flex items-center justify-end text-center py-3 gap-10 px-4 md:px-6">
+          <div className="hidden md:flex gap-1 text-base">
+            <p className="text-gray-700">nama :</p>
+            <span className="text-base text-gray-700">
+              {" "}
+              {detectedUser.name}
+            </span>
           </div>
-          <div className="flex gap-1 text-base">
-            <p className="text-white font-light">status :</p>
-            <span className="text-base text-green-200">
+          <div className="hidden md:flex gap-1 text-base">
+            <p className="text-gray-700">status :</p>
+            <span className="text-base text-emerald-600">
               {" "}
               {detectedUser.status}
             </span>
           </div>
+
+          <button
+            onClick={() => {
+              setShowModal(true);
+              captureImage();
+            }}
+            className="text-blue-600 text-sm md:hidden"
+          >
+            Daftarkan pengguna ?
+          </button>
         </div>
       </div>
 
-      <div className="flex justify-end mt-3">
-        <button onClick={() => setShowModal(true)} className="text-blue-600">
+      <div className="md:hidden flex gap-1 text-base mt-2">
+        <p className="text-gray-500 text-sm">nama :</p>
+        <span className="text-sm text-gray-500"> {detectedUser.name}</span>
+      </div>
+
+      <div className="md:hidden flex gap-1 text-base">
+        <p className="text-gray-500 text-sm">status :</p>
+        <span className="text-sm text-emerald-600"> {detectedUser.status}</span>
+      </div>
+
+      <div className="flex justify-start mt-3 hidden md:block">
+        <button
+          onClick={() => {
+            setShowModal(true);
+            captureImage();
+          }}
+          className="text-blue-600"
+        >
           Daftarkan pengguna ?
         </button>
       </div>
 
-      <img src={imageUrl} alt="" />
-
       {showModal && (
-        <div className="form-wrapper fixed top-0 left-0 w-full h-screen bg-gray-800/30 p-6 z-50">
-          <div className="register w-max bg-white p-6 md:p-8 rounded-xl md:rounded-2xl absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 text-gray-800 mt-6">
-            <h2 className="text-lg font-medium">Daftarkan Pelanggan Baru</h2>
+        <div className="form-wrapper fixed top-0 left-0 w-full h-screen bg-gray-800/30 p-6 z-50 flex items-center justify-center p-4">
+          <div className="register w-full md:w-max bg-white p-6 md:p-8 rounded-xl md:rounded-2xl text-gray-800">
+            <h2 className="text-xl font-semibold text-gray-800">
+              Daftarkan Pelanggan Baru
+            </h2>
             <div className="flex flex-col gap-3 md:gap-4 mt-6">
-              <div className="flex gap-2 items-center">
-                <input
-                  type="checkbox"
-                  id="cb-local"
-                  defaultChecked={cbUploadFromLocal}
-                  onChange={(e) => {
-                    setCbUploadFromLocal(e.target.checked);
-                  }}
-                />
-                <label htmlFor="cb-local" className="text-gray-600">
-                  Gunakan image dari penyimpanan
-                </label>
-              </div>
-              {cbUploadFromLocal && (
-                <div className="relative bg-gray-200 w-full h-auto aspect-video rounded-md border border-dashed border-black flex items-center justify-center">
-                  <input
-                    type="file"
-                    className="w-full h-full opacity-0 absolute top-0 left-0"
+              <div className="relative bg-gray-200 w-full md:max-w-96 h-auto aspect-video rounded-lg border border-dashed border-black flex items-center justify-center group overflow-hidden">
+                {previewImage && (
+                  <img
+                    src={previewImage}
+                    alt=""
+                    className="w-full h-full object-cover"
                   />
-                  <div className="flex gap-2 items-center justify-center">
-                    <FontAwesomeIcon
-                      icon={faArrowUpFromBracket}
-                      className="text-sm"
-                    />
-                    <span>upload image</span>
-                  </div>
+                )}
+                <input
+                  type="file"
+                  accept=".png, .jpg, .jpeg"
+                  ref={inputFile}
+                  onChange={handleFileChange}
+                  className="hover:cursor-pointer w-full h-full opacity-0 absolute top-0 left-0 z-50"
+                />
+                <div
+                  className={`w-full h-full flex gap-2 items-center justify-center absolute z-40 text-gray-900 transition-all ${
+                    previewImage ? "opacity-0" : "opacity-100"
+                  } group-hover:opacity-100 group-hover:bg-white/40`}
+                >
+                  <FontAwesomeIcon
+                    icon={faArrowUpFromBracket}
+                    className="text-sm"
+                  />
+                  <span className="font-medium">upload image</span>
                 </div>
-              )}
+              </div>
 
               <input
+                required={true}
                 type="text"
                 placeholder="Nama pelanggan"
                 className="py-2 px-4 bg-gray-200 rounded-md flex-1"
               />
               <input
+                required={true}
                 type="text"
                 placeholder="No Telp"
                 className="py-2 px-4 bg-gray-200 rounded-md flex-1"
