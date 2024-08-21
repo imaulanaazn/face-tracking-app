@@ -19,8 +19,6 @@ const FaceRecognizer: React.FC = () => {
   });
   const [cameraActive, setCameraActive] = useState<boolean>(false);
   const [showModal, setShowModal] = useState(false);
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-
   const [previewImage, setPreviewImage] = useState("");
 
   const knownFaces = useRef<{ name: string; descriptor: Float32Array }[]>([]);
@@ -37,7 +35,6 @@ const FaceRecognizer: React.FC = () => {
         "/models/face_recognition"
       );
     };
-    // loadModels()
     toast.promise(loadModels(), {
       pending: "Loading models",
       success: "Models loaded",
@@ -67,13 +64,30 @@ const FaceRecognizer: React.FC = () => {
 
   const updateCanvasSize = useCallback(() => {
     if (videoRef.current && canvasRef.current) {
-      const displaySize = {
-        width: videoRef.current.clientWidth,
-        height: videoRef.current.clientHeight,
-      };
-      canvasRef.current.width = displaySize.width;
-      canvasRef.current.height = displaySize.height;
-      faceapi.matchDimensions(canvasRef.current, displaySize);
+      const videoAspectRatio =
+        videoRef.current.videoWidth / videoRef.current.videoHeight;
+      const canvasContainer = videoRef.current.parentElement;
+
+      if (canvasContainer) {
+        const { width: containerWidth, height: containerHeight } =
+          canvasContainer.getBoundingClientRect();
+        let canvasWidth, canvasHeight;
+
+        if (containerWidth / containerHeight > videoAspectRatio) {
+          canvasHeight = containerHeight;
+          canvasWidth = containerHeight * videoAspectRatio;
+        } else {
+          canvasWidth = containerWidth;
+          canvasHeight = containerWidth / videoAspectRatio;
+        }
+
+        canvasRef.current.width = canvasWidth;
+        canvasRef.current.height = canvasHeight;
+        faceapi.matchDimensions(canvasRef.current, {
+          width: canvasWidth,
+          height: canvasHeight,
+        });
+      }
     }
   }, []);
 
@@ -228,29 +242,25 @@ const FaceRecognizer: React.FC = () => {
           <FontAwesomeIcon icon={cameraActive ? faPause : faPlay} />
         </button>
       </div>
-      <div className="relative w-full h-auto aspect-[4/3] bg-gray-200 rounded-lg lg:rounded-xl overflow-hidden">
+      <div className="relative w-full h-auto aspect-[4/5] md:aspect-[4/3] bg-gray-200 rounded-lg lg:rounded-xl overflow-hidden">
         <video
           ref={videoRef}
           autoPlay
           muted
-          className="w-full h-full aspect-square object-cover absolute top-0 left-0 transform scale-x-[-1]"
+          className="w-full h-full object-cover absolute top-0 left-0 transform scale-x-[-1]"
         />
         <canvas
           ref={canvasRef}
-          className="absolute top-0 left-0 w-full h-full aspect-square"
+          className="absolute top-0 left-0 w-full h-full"
         />
         <div className="absolute bottom-0 left-0 bg-[rgba(255,255,255,0.6)] w-full flex items-center justify-end text-center py-3 gap-10 px-4 md:px-6">
           <div className="hidden md:flex gap-1 text-base">
             <p className="text-gray-700">nama :</p>
-            <span className="text-base text-gray-700">
-              {" "}
-              {detectedUser.name}
-            </span>
+            <span className="text-base text-gray-700">{detectedUser.name}</span>
           </div>
           <div className="hidden md:flex gap-1 text-base">
             <p className="text-gray-700">status :</p>
             <span className="text-base text-emerald-600">
-              {" "}
               {detectedUser.status}
             </span>
           </div>
