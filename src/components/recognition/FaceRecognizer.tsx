@@ -3,14 +3,9 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import * as faceapi from "face-api.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faArrowUpFromBracket,
-  faCamera,
-  faMountainSun,
-  faPause,
-  faPlay,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPause, faPlay } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
+import RegisterUserModal from "./RegisterUserModal";
 
 const FaceRecognizer: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -25,7 +20,7 @@ const FaceRecognizer: React.FC = () => {
   const [cameraActive, setCameraActive] = useState<boolean>(false);
   const [showModal, setShowModal] = useState(false);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  const inputFile = useRef<HTMLInputElement>(null);
+
   const [previewImage, setPreviewImage] = useState("");
 
   const knownFaces = useRef<{ name: string; descriptor: Float32Array }[]>([]);
@@ -214,28 +209,8 @@ const FaceRecognizer: React.FC = () => {
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files && e.target.files[0];
-    if (
-      file &&
-      file.size <= 2 * 1024 * 1024 &&
-      ["image/png", "image/jpg", "image/jpeg"].includes(file.type)
-    ) {
-      // Check file size and type
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      alert(
-        "Please select a valid image file (png, jpg, jpeg) with size up to 2MB."
-      );
-    }
-  };
-
   return (
-    <div className="attendance-wrapper w-full lg:w-3/5 p-4 md:p-6 bg-white rounded-xl md:rounded-2xl">
+    <div className="attendance-wrapper w-full lg:w-3/5 p-4 md:p-6 lg:p-8 bg-white rounded-xl md:rounded-2xl">
       <div className="header flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold text-gray-800">
           Face Recognition
@@ -315,68 +290,15 @@ const FaceRecognizer: React.FC = () => {
       </div>
 
       {showModal && (
-        <div className="form-wrapper fixed top-0 left-0 w-full h-screen bg-gray-800/30 p-6 z-50 flex items-center justify-center p-4">
-          <div className="register w-full md:w-max bg-white p-6 md:p-8 rounded-xl md:rounded-2xl text-gray-800">
-            <h2 className="text-xl font-semibold text-gray-800">
-              Daftarkan Pelanggan Baru
-            </h2>
-            <div className="flex flex-col gap-3 md:gap-4 mt-6">
-              <div className="relative bg-gray-200 w-full md:max-w-96 h-auto aspect-video rounded-lg border border-dashed border-black flex items-center justify-center group overflow-hidden">
-                {previewImage && (
-                  <img
-                    src={previewImage}
-                    alt=""
-                    className="w-full h-full object-cover"
-                  />
-                )}
-                <input
-                  type="file"
-                  accept=".png, .jpg, .jpeg"
-                  ref={inputFile}
-                  onChange={handleFileChange}
-                  className="hover:cursor-pointer w-full h-full opacity-0 absolute top-0 left-0 z-50"
-                />
-                <div
-                  className={`w-full h-full flex gap-2 items-center justify-center absolute z-40 text-gray-900 transition-all ${
-                    previewImage ? "opacity-0" : "opacity-100"
-                  } group-hover:opacity-100 group-hover:bg-white/40`}
-                >
-                  <FontAwesomeIcon
-                    icon={faArrowUpFromBracket}
-                    className="text-sm"
-                  />
-                  <span className="font-medium">upload image</span>
-                </div>
-              </div>
-
-              <input
-                required={true}
-                type="text"
-                placeholder="Nama pelanggan"
-                className="py-2 px-4 bg-gray-200 rounded-md flex-1"
-              />
-              <input
-                required={true}
-                type="text"
-                placeholder="No Telp"
-                className="py-2 px-4 bg-gray-200 rounded-md flex-1"
-              />
-              <div className="flex justify-between gap-4 mt-2">
-                <button
-                  onClick={() => {
-                    setShowModal((prev) => !prev);
-                  }}
-                  className="flex-1 py-2 px-4 bg-rose-600 rounded-md font-medium text-white"
-                >
-                  cancel
-                </button>
-                <button className="flex-1 py-2 px-4 bg-blue-600 rounded-md font-medium text-white">
-                  submit
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <RegisterUserModal
+          setPreviewImage={(imagUrl: string) => {
+            setPreviewImage(imagUrl);
+          }}
+          previewImage={previewImage}
+          setShowModal={(showModal: boolean) => {
+            setShowModal(showModal);
+          }}
+        />
       )}
     </div>
   );

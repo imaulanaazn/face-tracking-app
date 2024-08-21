@@ -87,9 +87,9 @@ export default function ComposeMessage() {
 
   return (
     <div className="container p-6 md:p-8">
-      <div className="wrapper flex flex-col lg:flex-row lg:gap-6 gap-4">
+      <div className="wrapper flex flex-col lg:flex-row lg:gap-8 md:gap-6 gap-4">
         <div
-          className="templates w-full lg:w-2/6 lg:h-[80vh] h-max overflow-y-auto overflow-x-auto flex flex-row lg:flex-col gap-4 "
+          className="templates w-full lg:w-2/6 lg:h-[80vh] h-max overflow-y-auto overflow-x-auto flex flex-row lg:flex-col gap-4 md:gap-6"
           id="message-templates"
         >
           <div

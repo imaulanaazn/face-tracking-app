@@ -11,6 +11,7 @@ import {
   faBell,
 } from "@fortawesome/free-solid-svg-icons";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 const menus = [
   {
@@ -58,7 +59,9 @@ const Sidebar = ({
       } z-50`}
     >
       <div className="flex items-center justify-center py-6">
-        <img
+        <Image
+          width={50}
+          height={50}
           src="/images/logo.svg"
           alt="Findappa Logo"
           className="h-6 w-auto aspect-square object-cover mr-2"
