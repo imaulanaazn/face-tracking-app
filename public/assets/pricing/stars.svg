@@ -20,19 +20,19 @@
 <defs>
 <linearGradient id="paint0_linear_701_17365" x1="834" y1="126" x2="834" y2="150" gradientUnits="userSpaceOnUse">
 <stop stop-color="#88E5BE"/>
-<stop offset="1" stop-color="#1A1A32"/>
+<stop offset="1" stop-color="#93B8FF"/>
 </linearGradient>
 <linearGradient id="paint1_linear_701_17365" x1="4" y1="198" x2="4" y2="206" gradientUnits="userSpaceOnUse">
 <stop stop-color="#DD734F"/>
-<stop offset="1" stop-color="#1A1A32"/>
+<stop offset="1" stop-color="#93B8FF"/>
 </linearGradient>
 <linearGradient id="paint2_linear_701_17365" x1="948" y1="198" x2="948" y2="206" gradientUnits="userSpaceOnUse">
 <stop stop-color="#DD734F"/>
-<stop offset="1" stop-color="#1A1A32"/>
+<stop offset="1" stop-color="#93B8FF"/>
 </linearGradient>
 <linearGradient id="paint3_linear_701_17365" x1="154" y1="310" x2="154" y2="326" gradientUnits="userSpaceOnUse">
 <stop stop-color="#B9AEDF"/>
-<stop offset="1" stop-color="#1A1A32"/>
+<stop offset="1" stop-color="#93B8FF"/>
 </linearGradient>
 </defs>
 </svg>

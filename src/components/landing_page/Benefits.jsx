@@ -9,7 +9,7 @@ const Benefits = () => {
   return (
     <Section id="features">
       <div
-        className="container relative z-2 pb-20"
+        className="container relative z-2 pt-10 xl:pb-20"
         style={{
           background:
             "linear-gradient(180deg, rgba(255,255,255,0.2884803579634979) 0%, rgba(224,240,255,1) 66%, rgba(255,255,255,1) 100%);",
@@ -20,7 +20,7 @@ const Benefits = () => {
           title="BOLO, Cepat, Mudah dan Lengkap"
         />
 
-        <div className="flex flex-wrap gap-10 mb-10">
+        <div className="flex flex-wrap gap-10">
           {benefits.map((item) => (
             <div
               className="block relative p-0.5 bg-no-repeat bg-[length:100%_100%] md:max-w-[24rem]"

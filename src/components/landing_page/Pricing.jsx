@@ -29,7 +29,7 @@ const Pricing = () => {
 
         <Heading
           tag="Mulai Berlangganan Sekarang"
-          title="Bayar sekali, gunakan sepuasnya"
+          title="Tersedia beragam paket"
         />
 
         <div className="relative">
@@ -38,9 +38,9 @@ const Pricing = () => {
           <RightLine />
         </div>
 
-        <div className="flex justify-center mt-10">
+        <div className="flex justify-center mt-4">
           <a
-            className="text-xs font-code font-bold tracking-wider uppercase border-b hover:text-blue-400"
+            className="text-xs font-code font-bold tracking-wider uppercase border-b text-blue-600 hover:text-blue-400"
             href="/pricing"
           >
             Lihat Selengkapnya
