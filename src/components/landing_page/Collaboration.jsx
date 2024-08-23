@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { brainwaveSymbol, check } from "../../../public/assets";
-import { collabApps, collabContent, collabText } from "../../constants";
+import { collabApps, collabContent, collabText } from "../../lib/constants";
 import Button from "./Button";
 import Section from "./Section";
 import { LeftCurve, RightCurve } from "./design/Collaboration";

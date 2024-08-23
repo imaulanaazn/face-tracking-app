@@ -1,4 +1,4 @@
-import { benefits } from "../../constants";
+import { benefits } from "../../lib/constants";
 import Heading from "./Heading";
 import Section from "./Section";
 import Arrow from "../../../public/assets/svg/Arrow";
