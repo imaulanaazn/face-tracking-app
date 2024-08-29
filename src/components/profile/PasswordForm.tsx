@@ -1,10 +1,28 @@
-import React from "react";
+import { changePassword } from "@/services/api/user";
+import React, { SyntheticEvent, useState } from "react";
 
 export default function PasswordForm() {
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const handleChangePassword = async (e: SyntheticEvent) => {
+    e.preventDefault();
+    if (newPassword === confirmPassword) {
+      try {
+        const data = { oldPassword, newPassword };
+        const response = await changePassword(data);
+        console.log(response);
+      } catch (err: any) {
+        console.log(err.message);
+      }
+    }
+  };
+
   return (
     <div className="bg-white p-6 rounded-xl shadow-sm w-full">
       <h2 className="text-xl font-semibold text-gray-800 mb-6">Password</h2>
-      <form>
+      <form onSubmit={handleChangePassword}>
         <div className="flex flex-col md:flex-row gap-4 w-full mb-4">
           <div className="w-full">
             <label
@@ -14,9 +32,13 @@ export default function PasswordForm() {
               Password saat ini
             </label>
             <input
+              onChange={(e) => {
+                setOldPassword(e.target.value);
+              }}
+              value={oldPassword}
               id="current-password"
               type="password"
-              className="w-full p-2 bg-white text-white border border-gray-300 rounded focus:outline-blue-600"
+              className="w-full p-2 bg-white text-gray-600 border border-gray-300 rounded focus:outline-blue-600"
             />
           </div>
           <div className="w-full">
@@ -27,9 +49,13 @@ export default function PasswordForm() {
               Password baru
             </label>
             <input
+              onChange={(e) => {
+                setNewPassword(e.target.value);
+              }}
+              value={newPassword}
               id="new-password"
               type="password"
-              className="w-full p-2 bg-white text-white border border-gray-300 rounded focus:outline-blue-600"
+              className="w-full p-2 bg-white text-gray-600 border border-gray-300 rounded focus:outline-blue-600"
             />
           </div>
         </div>
@@ -41,9 +67,13 @@ export default function PasswordForm() {
             Konfirmasi Password
           </label>
           <input
+            onChange={(e) => {
+              setConfirmPassword(e.target.value);
+            }}
+            value={confirmPassword}
             id="confirm-password"
             type="password"
-            className="w-full p-2 bg-white text-white border border-gray-300 rounded focus:outline-blue-600"
+            className="w-full p-2 bg-white text-gray-600 border border-gray-300 rounded focus:outline-blue-600"
           />
         </div>
         <div className="mb-6 text-gray-600 text-sm">

@@ -2,7 +2,7 @@
 import { disablePageScroll, enablePageScroll } from "scroll-lock";
 import { usePathname } from "next/navigation";
 
-import { navigation } from "../../lib/constants";
+import { navigation } from "../../lib/statics";
 import Button from "./Button";
 import MenuSvg from "../../../public/assets/svg/MenuSvg";
 import { HamburgerMenu } from "./design/Header";

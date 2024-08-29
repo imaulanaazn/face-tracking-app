@@ -1,12 +1,13 @@
 "use client";
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../globals.css";
 import Sidebar from "@/components/global/Sidebar";
 import Header from "@/components/global/header/Header";
-import { useState } from "react";
-
-const inter = Inter({ subsets: ["latin"] });
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { setUser } from "@/store/slices/userSlice";
+import { getUser } from "@/services/api/user";
 
 export default function RootLayout({
   children,
@@ -14,6 +15,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const dispatch = useDispatch();
+
+  const user = useSelector((state: RootState) => state.user);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const profile = await getUser();
+        dispatch(setUser(profile));
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   return (
     <>

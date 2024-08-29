@@ -1,6 +1,28 @@
-import React from "react";
+"use client";
+import { getRecognitionHistory } from "@/services/api/getRecognitionHistory";
+import React, { useEffect, useState } from "react";
+
+interface IHistory {
+  id: string;
+  name: string;
+  mobileNo: string;
+}
 
 export default function RecognitionHistory() {
+  const [history, setHistory] = useState<IHistory[]>([]);
+  useEffect(() => {
+    async function getHistory() {
+      try {
+        const data = await getRecognitionHistory();
+        setHistory(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    getHistory();
+  }, []);
+
   return (
     <div className="w-full lg:w-2/5 history bg-white h-auto rounded-xl md:rounded-2xl p-4 md:p-6 lg:p-8">
       <h2 className="text-xl font-semibold text-gray-800 mb-4">History</h2>
@@ -29,36 +51,22 @@ export default function RecognitionHistory() {
             </tr>
           </thead>
           <tbody>
-            <tr className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
-              <td className="text-sm text-gray-500 px-6 py-4 whitespace-nowrap">
-                Mark
-              </td>
-              <td className="text-sm text-gray-500 px-6 py-4 whitespace-nowrap">
-                Otto
-              </td>
-              <td className="text-sm text-gray-500 px-6 py-4 whitespace-nowrap">
-                @mdo
-              </td>
-            </tr>
-            <tr className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
-              <td className="text-sm text-gray-500 px-6 py-4 whitespace-nowrap">
-                Jacob
-              </td>
-              <td className="text-sm text-gray-500 px-6 py-4 whitespace-nowrap">
-                Thornton
-              </td>
-              <td className="text-sm text-gray-500 px-6 py-4 whitespace-nowrap">
-                @fat
-              </td>
-            </tr>
-            <tr className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
-              <td className="text-sm text-gray-500 px-6 py-4 whitespace-nowrap">
-                Larry
-              </td>
-              <td className="text-sm text-gray-500 px-6 py-4 whitespace-nowrap">
-                @twitter
-              </td>
-            </tr>
+            {history.map((data) => (
+              <tr
+                key={data.id}
+                className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100"
+              >
+                <td className="text-sm text-gray-500 px-6 py-4 whitespace-nowrap">
+                  {data.name}
+                </td>
+                <td className="text-sm text-gray-500 px-6 py-4 whitespace-nowrap">
+                  {data.mobileNo}
+                </td>
+                <td className="text-sm text-gray-500 px-6 py-4 whitespace-nowrap">
+                  {data.id}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

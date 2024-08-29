@@ -50,12 +50,20 @@ const SplineChart = () => {
       },
     });
 
-    setSeries([
-      {
-        name: "Series 1",
-        data: [10, 41, 35, 51, 49, 62, 69, 91, 148, 172, 213, 248],
-      },
-    ]);
+    const fetchCharts = async () => {
+      try {
+        setSeries([
+          {
+            name: "Series 1",
+            data: [10, 41, 35, 51, 49, 62, 69, 91, 148, 172, 213, 248],
+          },
+        ]);
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+      }
+    };
+
+    fetchCharts();
   }, []);
 
   return (

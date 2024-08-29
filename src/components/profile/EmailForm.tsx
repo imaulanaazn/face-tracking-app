@@ -1,35 +1,53 @@
-import React from "react";
+import { changeEmail } from "@/services/api/user";
+import React, { SyntheticEvent, useState } from "react";
 
 export default function EmailForm() {
+  const [email, setEmail] = useState("");
+
+  const handleChangeEmail = async (e: SyntheticEvent) => {
+    e.preventDefault();
+    try {
+      const data = { email };
+      const response = await changeEmail(data);
+      console.log(response);
+    } catch (err: any) {
+      console.log(err.message);
+    }
+  };
+
   return (
     <div className="bg-white p-6 rounded-xl shadow-sm w-full">
       <h2 className="text-xl font-semibold text-gray-800 mb-6">Email</h2>
-      <form>
+      <form onSubmit={handleChangeEmail}>
+        <div className="mb-4">
+          <label
+            className="block text-gray-600 text-sm mb-2"
+            htmlFor="old-mail"
+          >
+            Email Lama
+          </label>
+          <input
+            id="old-mail"
+            type="email"
+            disabled
+            className="w-full p-2 bg-gray-100 text-gray-600 border border-gray-300 rounded focus:outline-blue-600"
+          />
+        </div>
+
         <div className="w-full mb-4">
           <label
             className="block text-gray-600 text-sm mb-2"
-            htmlFor="new-password"
+            htmlFor="new-email"
           >
             Email Baru
           </label>
           <input
-            id="new-password"
-            type="password"
-            className="w-full p-2 bg-white text-white border border-gray-300 rounded focus:outline-blue-600"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label
-            className="block text-gray-600 text-sm mb-2"
-            htmlFor="confirm-password"
-          >
-            Masukkan Password
-          </label>
-          <input
-            id="confirm-password"
-            type="password"
-            className="w-full p-2 bg-white text-white border border-gray-300 rounded focus:outline-blue-600"
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
+            id="new-email"
+            type="email"
+            className="w-full p-2 bg-white text-gray-600 border border-gray-300 rounded focus:outline-blue-600"
           />
         </div>
 

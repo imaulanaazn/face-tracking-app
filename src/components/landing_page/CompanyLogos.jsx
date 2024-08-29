@@ -1,4 +1,4 @@
-import { companyLogos } from "../../lib/constants";
+import { companyLogos } from "../../lib/statics";
 
 const CompanyLogos = ({ className }) => {
   return (

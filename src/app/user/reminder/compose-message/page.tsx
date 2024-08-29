@@ -1,11 +1,13 @@
 "use client";
 import {
+  faEye,
   faFloppyDisk,
   faPaperPlane,
   faTrash,
+  faX,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { SyntheticEvent, useState } from "react";
 import { toast } from "react-toastify";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 
@@ -50,8 +52,24 @@ const data = [
 
 export default function ComposeMessage() {
   const [selectedTemplate, setSelectedTemplate] = useState<string>("");
-  const [messageTitle, setMessageTitle] = useState("");
   const [message, setMessage] = useState("");
+  const [name, setName] = useState("John Doe");
+  const [showPreview, setShowPreview] = useState(false);
+
+  const handleMessageChange = (e: any) => {
+    setMessage(e.target.value);
+  };
+
+  // Function to replace markdown-like syntax and line breaks with corresponding HTML
+  const formatMessage = (text: string) => {
+    let formatted = text.replace(/{{name}}/g, name); // Replace {{name}} placeholder
+    formatted = formatted.replace(/\*([^*]+)\*/g, "<strong>$1</strong>"); // Bold
+    formatted = formatted.replace(/_([^_]+)_/g, "<em>$1</em>"); // Italic
+    formatted = formatted.replace(/~([^~]+)~/g, "<del>$1</del>"); // Strikethrough
+    formatted = formatted.replace(/`([^`]+)`/g, "<code>$1</code>"); // Monospace
+    formatted = formatted.replace(/\n/g, "<br>"); // Line breaks
+    return formatted;
+  };
 
   async function handleSendMessage() {
     try {
@@ -65,7 +83,6 @@ export default function ComposeMessage() {
 
       const bodyReq = {
         message: message,
-        messageTitle: messageTitle,
         users: parsedUsers,
       };
 
@@ -175,41 +192,73 @@ export default function ComposeMessage() {
         </div>
 
         <div className="message w-full lg:w-4/6 bg-white rounded-lg shadow-sm p-4 md:p-6 lg:p-8">
-          <input
-            onChange={(e) => {
-              setMessageTitle(e.target.value);
-            }}
-            value={messageTitle}
-            type="text"
-            name="message_title"
-            id="message-title"
-            className="w-full focus:outline-none text-xl text-gray-700"
-            placeholder="Message Title"
-          />
+          <h1 className="text-xl font-semibold text-gray-800">Tulis Pesan</h1>
+
           <hr className="my-4" />
+
           <textarea
-            onChange={(e) => {
-              setMessage(e.target.value);
-            }}
+            placeholder="Type your message here, use *bold*, _italic_, ~strikethrough~, `monospace`, and line breaks."
             value={message}
+            onChange={handleMessageChange}
             name="message"
             id="message"
-            className="w-full focus:outline-none text-gray-500"
-            placeholder="write message"
-            rows={17}
+            className="w-full max-h-96 md:max-h-[90vh] lg:max-h-[50vh] xl:max-h-[55vh] focus:outline-none text-gray-500"
+            rows={20}
           ></textarea>
 
-          <div className="buttons flex flex-col-reverse lg:flex-row gap-4 mt-4 justify-end">
-            <button className="flex gap-2 items-center justify-center border border-solid border-blue-500 py-2 px-4 rounded-md text-blue-500 font-medium">
-              Simpan Sebagai Template{" "}
-              <FontAwesomeIcon icon={faFloppyDisk} className="text-sm" />
-            </button>
+          <div className="buttons flex flex-col md:flex-row gap-4 mt-4 justify-between">
             <button
-              onClick={handleSendMessage}
-              className="flex gap-2 items-center justify-center bg-blue-500 py-2 px-4 rounded-md text-white font-medium"
+              onClick={() => {
+                setShowPreview(true);
+              }}
+              className="flex gap-2 items-center justify-center border border-solid border-blue-500 py-2 px-4 rounded-md text-blue-500 font-medium"
             >
-              Kirim <FontAwesomeIcon icon={faPaperPlane} className="text-sm" />
+              Preview <FontAwesomeIcon icon={faEye} className="text-sm" />
             </button>
+
+            <div className="flex flex-col-reverse md:flex-row items-center gap-4">
+              <button className="w-full md:w-max flex gap-2 items-center justify-center border border-solid border-blue-500 py-2 px-4 rounded-md text-blue-500 font-medium">
+                Simpan Sebagai Template{" "}
+                <FontAwesomeIcon icon={faFloppyDisk} className="text-sm" />
+              </button>
+              <button
+                onClick={handleSendMessage}
+                className="w-full md:w-max flex gap-2 items-center justify-center bg-blue-600 hover:bg-blue-500 py-2 px-4 rounded-md text-white font-medium"
+              >
+                Kirim{" "}
+                <FontAwesomeIcon icon={faPaperPlane} className="text-sm" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div
+          className={`w-full h-[100vh] overflow-hidden bg-black/20 fixed top-0 left-0 z-50 p-6 ${
+            showPreview ? "flex" : "hidden"
+          } items-center justify-center`}
+        >
+          <div className="w-full md:w-3/4 lg:w-2/4 xl:w-2/5 min-h-96 max-h-[80vh] md:max-h-[70vh] lg:max-h-[80vh] p-6 md:p-8 border rounded-xl bg-gray-50 overflow-y-auto">
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg font-semibold text-gray-800">
+                Message Preview
+              </h2>
+              <button
+                onClick={() => {
+                  setShowPreview(false);
+                }}
+                className="w-8 h-8 rounded-full bg-gray-200 hover:bg-blue-600 flex items-center justify-center transition-all group"
+              >
+                <FontAwesomeIcon
+                  icon={faX}
+                  className="text-gray-600 text-sm font-bold group-hover:text-white transition-all"
+                />
+              </button>
+            </div>
+            <hr className="my-4" />
+            <div
+              className="whitespace-pre-wrap"
+              dangerouslySetInnerHTML={{ __html: formatMessage(message) }}
+            />
           </div>
         </div>
       </div>

@@ -53,8 +53,8 @@ export default function Footer() {
                   fill="white"
                 />
                 <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
                   d="M0.5 5.42955C0.5 2.91846 2.57211 0.882812 5.12819 0.882812H22.0399V0.884053C29.4908 0.982665 35.5 6.9471 35.5 14.2904C35.5 21.6951 29.3897 27.6979 21.8523 27.6979C19.1648 27.6979 16.6587 26.9348 14.5463 25.617L7.08815 32.7885C4.63431 35.148 0.5 33.4401 0.5 30.0669V5.42955ZM12.0194 23.5883C9.65709 21.1778 8.20452 17.9007 8.20452 14.2904C8.20452 13.4105 8.93056 12.6972 9.82619 12.6972C10.7218 12.6972 11.4479 13.4105 11.4479 14.2904C11.4479 19.9354 16.1061 24.5116 21.8523 24.5116C27.5985 24.5116 32.2567 19.9354 32.2567 14.2904C32.2567 8.6453 27.5985 4.06907 21.8523 4.06907H5.12819C4.36336 4.06907 3.74334 4.67818 3.74334 5.42955V30.0669C3.74334 30.6179 4.41866 30.8968 4.81948 30.5114L12.0194 23.5883Z"
                   fill="white"
                 />
@@ -67,7 +67,7 @@ export default function Footer() {
 
             <div className="flex  space-x-4 sm:justify-center  ">
               <a
-                href="javascript:;"
+                href="#"
                 className="w-9 h-9 rounded-full bg-white flex justify-center items-center hover:shadow-md"
               >
                 <svg
@@ -87,7 +87,7 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="javascript:;"
+                href="#"
                 className="w-9 h-9 rounded-full bg-white flex justify-center items-center hover:shadow-md"
               >
                 <svg
@@ -109,14 +109,14 @@ export default function Footer() {
                       y2="14.3286"
                       gradientUnits="userSpaceOnUse"
                     >
-                      <stop stop-color="#7C3AED" />
-                      <stop offset="0.993738" stop-color="#4F46E5" />
+                      <stop stopColor="#7C3AED" />
+                      <stop offset="0.993738" stopColor="#4F46E5" />
                     </linearGradient>
                   </defs>
                 </svg>
               </a>
               <a
-                href="javascript:;"
+                href="#"
                 className="w-9 h-9 rounded-full bg-white flex justify-center items-center hover:shadow-md"
               >
                 <svg
@@ -138,14 +138,14 @@ export default function Footer() {
                       y2="11.4629"
                       gradientUnits="userSpaceOnUse"
                     >
-                      <stop stop-color="#7C3AED" />
-                      <stop offset="0.993738" stop-color="#4F46E5" />
+                      <stop stopColor="#7C3AED" />
+                      <stop offset="0.993738" stopColor="#4F46E5" />
                     </linearGradient>
                   </defs>
                 </svg>
               </a>
               <a
-                href="javascript:;"
+                href="#"
                 className="w-9 h-9 rounded-full bg-white flex justify-center items-center hover:shadow-md"
               >
                 <svg
@@ -155,8 +155,8 @@ export default function Footer() {
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
+                    fillRule="evenodd"
+                    clipRule="evenodd"
                     d="M13.4346 1.0181C14.0684 1.18926 14.5665 1.68869 14.7349 2.32177C15.0413 3.47069 15.0413 5.86935 15.0413 5.86935C15.0413 5.86935 15.0413 8.26801 14.7349 9.41693C14.5642 10.0524 14.0661 10.5518 13.4346 10.7206C12.2886 11.0278 7.69058 11.0278 7.69058 11.0278C7.69058 11.0278 3.09491 11.0278 1.94657 10.7206C1.31277 10.5494 0.814613 10.05 0.646222 9.41693C0.339844 8.26801 0.339844 5.86935 0.339844 5.86935C0.339844 5.86935 0.339844 3.47069 0.646222 2.32177C0.816952 1.68635 1.31511 1.18692 1.94657 1.0181C3.09491 0.710938 7.69058 0.710938 7.69058 0.710938C7.69058 0.710938 12.2886 0.710938 13.4346 1.0181ZM10.041 5.86935L6.22178 8.08043V3.65827L10.041 5.86935Z"
                     fill="url(#paint0_linear_9147_18425)"
                   />
@@ -169,8 +169,8 @@ export default function Footer() {
                       y2="14.2671"
                       gradientUnits="userSpaceOnUse"
                     >
-                      <stop stop-color="#7C3AED" />
-                      <stop offset="0.993738" stop-color="#4F46E5" />
+                      <stop stopColor="#7C3AED" />
+                      <stop offset="0.993738" stopColor="#4F46E5" />
                     </linearGradient>
                   </defs>
                 </svg>
@@ -195,30 +195,30 @@ export default function Footer() {
             <div className="flex gap-6 xl:gap-12 max-xl:justify-center text-center lg:text-start">
               <ul className="text-gray-600 transition-all duration-500 grid gap-6">
                 <li>
-                  <a href="javascript:;">Home</a>
+                  <a href="#">Home</a>
                 </li>
                 <li>
-                  <a href="javascript:;">FAQs</a>
+                  <a href="#">FAQs</a>
                 </li>
                 <li>
-                  <a href="javascript:;">Price Plan</a>
+                  <a href="#">Price Plan</a>
                 </li>
                 <li>
-                  <a href="javascript:;">Features</a>
+                  <a href="#">Features</a>
                 </li>
               </ul>
               {/* <ul className="text-gray-600 transition-all duration-500 grid gap-6">
                 <li>
-                  <a href="javascript:;">Careers</a>
+                  <a href="#">Careers</a>
                 </li>
                 <li>
-                  <a href="javascript:;">About </a>
+                  <a href="#">About </a>
                 </li>
                 <li>
-                  <a href="javascript:;">Contact</a>
+                  <a href="#">Contact</a>
                 </li>
                 <li>
-                  <a href="javascript:;">Products</a>
+                  <a href="#">Products</a>
                 </li>
               </ul> */}
             </div>
@@ -249,9 +249,9 @@ export default function Footer() {
                   <path
                     d="M1.5 6.88281L14.8333 6.88281M10.6667 11.8828L15.0774 7.47207C15.3552 7.19429 15.4941 7.0554 15.4941 6.88281C15.4941 6.71022 15.3552 6.57133 15.0774 6.29356L10.6667 1.88281"
                     stroke="white"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   />
                 </svg>
               </button>

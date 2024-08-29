@@ -1,35 +1,57 @@
-import React from "react";
+import { changeUsername } from "@/services/api/user";
+import React, { SyntheticEvent, useState } from "react";
 
 export default function UsernameForm() {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+
+  const handleChangeUsername = async (e: SyntheticEvent) => {
+    e.preventDefault();
+    try {
+      const data = { firstName, lastName };
+      const response = await changeUsername(data);
+      console.log(response);
+    } catch (err: any) {
+      console.log(err.message);
+    }
+  };
   return (
     <div className="bg-white p-6 rounded-xl shadow-sm w-full">
       <h2 className="text-xl font-semibold text-gray-800 mb-6">Username</h2>
-      <form>
+      <form onSubmit={handleChangeUsername}>
         <div className="w-full mb-4">
           <label
             className="block text-gray-600 text-sm mb-2"
-            htmlFor="new-password"
+            htmlFor="firstname"
           >
             Nama Depan
           </label>
           <input
-            id="new-password"
-            type="password"
-            className="w-full p-2 bg-white text-white border border-gray-300 rounded focus:outline-blue-600"
+            onChange={(e) => {
+              setFirstName(e.target.value);
+            }}
+            value={firstName}
+            id="firstname"
+            type="text"
+            className="w-full p-2 bg-white text-gray-600 border border-gray-300 rounded focus:outline-blue-600"
           />
         </div>
 
         <div className="mb-4">
           <label
             className="block text-gray-600 text-sm mb-2"
-            htmlFor="confirm-password"
+            htmlFor="lastname"
           >
             Nama Belakang
           </label>
           <input
-            id="confirm-password"
-            type="password"
-            className="w-full p-2 bg-white text-white border border-gray-300 rounded focus:outline-blue-600"
+            onChange={(e) => {
+              setLastName(e.target.value);
+            }}
+            value={lastName}
+            id="lastname"
+            type="text"
+            className="w-full p-2 bg-white text-gray-600 border border-gray-300 rounded focus:outline-blue-600"
           />
         </div>
 

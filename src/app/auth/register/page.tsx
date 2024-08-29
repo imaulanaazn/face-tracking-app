@@ -1,8 +1,29 @@
+"use client";
+import { register } from "@/services/api/auth";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { SyntheticEvent, useState } from "react";
 
 export default function RegisterPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [error, setError] = useState("");
+  const router = useRouter();
+
+  const handleRegister = async (e: SyntheticEvent) => {
+    e.preventDefault();
+    try {
+      const data = { username, email, password };
+      const response = await register(data);
+      localStorage.setItem("token", response.token);
+      router.push("/dashboard");
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
+
   return (
     <section className="flex flex-col md:flex-row h-screen items-center">
       <div className="bg-blue-600 hidden lg:flex w-full md:w-1/2 xl:w-2/3 h-screen items-center justify-center">
@@ -24,13 +45,20 @@ export default function RegisterPage() {
             Buat akun baru
           </h1>
 
-          <form className="mt-6" action="#" method="POST">
+          <form
+            className="mt-6"
+            action="#"
+            method="POST"
+            onSubmit={handleRegister}
+          >
             <div>
-              <label className="block text-gray-700">Username</label>
+              <label htmlFor="username" className="block text-gray-700">
+                Username
+              </label>
               <input
                 type="text"
-                name=""
-                id=""
+                id="username"
+                onChange={(e) => setUsername(e.target.value)}
                 placeholder="Masukkan Username"
                 className="w-full px-4 py-3 rounded-lg bg-white mt-2 border border-gray-400 focus:border-blue-500 focus:bg-white focus:outline-none"
                 autoFocus
@@ -39,11 +67,13 @@ export default function RegisterPage() {
             </div>
 
             <div className="mt-4">
-              <label className="block text-gray-700">Alamat Email</label>
+              <label htmlFor="email" className="block text-gray-700">
+                Alamat Email
+              </label>
               <input
                 type="email"
-                name=""
-                id=""
+                id="email"
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Masukkan Alamat Email"
                 className="w-full px-4 py-3 rounded-lg bg-white mt-2 border border-gray-400 focus:border-blue-500 focus:bg-white focus:outline-none"
                 autoFocus
@@ -52,11 +82,13 @@ export default function RegisterPage() {
             </div>
 
             <div className="mt-4">
-              <label className="block text-gray-700">Password</label>
+              <label htmlFor="password" className="block text-gray-700">
+                Password
+              </label>
               <input
                 type="password"
-                name=""
-                id=""
+                id="password"
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Masukkan Password"
                 minLength={6}
                 className="w-full px-4 py-3 rounded-lg bg-white mt-2 border border-gray-400 focus:border-blue-500
@@ -82,6 +114,8 @@ export default function RegisterPage() {
               Create Account
             </button>
           </form>
+
+          {error && <p className="text-red-600 mt-2">{error}</p>}
 
           <p className="mt-8">
             Sudah memiliki akun?{" "}

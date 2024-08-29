@@ -1,5 +1,5 @@
 import { check } from "../../../public/assets";
-import { pricing } from "../../lib/constants";
+import { pricing } from "../../lib/statics";
 import Button from "./Button";
 
 const PricingList = () => {
@@ -124,7 +124,7 @@ const PricingList = () => {
                 </p>
               </div>
               <a
-                href="javascript:void(0)"
+                href=""
                 className="
                   w-full
                   block
@@ -161,12 +161,8 @@ const PricingList = () => {
                         y2="172"
                         gradientUnits="userSpaceOnUse"
                       >
-                        <stop stop-color="#3056D3" stop-opacity="0.09" />
-                        <stop
-                          offset="1"
-                          stop-color="#C4C4C4"
-                          stop-opacity="0"
-                        />
+                        <stop stopColor="#3056D3" stopOpacity="0.09" />
+                        <stop offset="1" stopColor="#C4C4C4" stopOpacity="0" />
                       </linearGradient>
                     </defs>
                   </svg>
@@ -466,7 +462,7 @@ const PricingList = () => {
                 </p>
               </div>
               <a
-                href="javascript:void(0)"
+                href=""
                 className="
                   w-full
                   block
@@ -503,12 +499,8 @@ const PricingList = () => {
                         y2="172"
                         gradientUnits="userSpaceOnUse"
                       >
-                        <stop stop-color="#3056D3" stop-opacity="0.09" />
-                        <stop
-                          offset="1"
-                          stop-color="#C4C4C4"
-                          stop-opacity="0"
-                        />
+                        <stop stopColor="#3056D3" stopOpacity="0.09" />
+                        <stop offset="1" stopColor="#C4C4C4" stopOpacity="0" />
                       </linearGradient>
                     </defs>
                   </svg>
@@ -808,7 +800,7 @@ const PricingList = () => {
                 </p>
               </div>
               <a
-                href="javascript:void(0)"
+                href=""
                 className="
                   w-full
                   block
@@ -845,12 +837,8 @@ const PricingList = () => {
                         y2="172"
                         gradientUnits="userSpaceOnUse"
                       >
-                        <stop stop-color="#3056D3" stop-opacity="0.09" />
-                        <stop
-                          offset="1"
-                          stop-color="#C4C4C4"
-                          stop-opacity="0"
-                        />
+                        <stop stopColor="#3056D3" stopOpacity="0.09" />
+                        <stop offset="1" stopColor="#C4C4C4" stopOpacity="0" />
                       </linearGradient>
                     </defs>
                   </svg>

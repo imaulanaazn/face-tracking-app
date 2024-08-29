@@ -1,8 +1,28 @@
+"use client";
+import { login } from "@/services/api/auth";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { SyntheticEvent, useState } from "react";
 
 export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const router = useRouter();
+
+  const handleLogin = async (e: SyntheticEvent) => {
+    e.preventDefault();
+    try {
+      const data = { email, password };
+      const response = await login(data);
+      localStorage.setItem("token", response.token); // Store token securely
+      router.push("/dashboard"); // Redirect after successful login
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
+
   return (
     <section className="flex flex-col md:flex-row h-screen items-center">
       <div className="bg-blue-600 hidden lg:flex w-full md:w-1/2 xl:w-2/3 h-screen items-center justify-center">
@@ -24,13 +44,21 @@ export default function LoginPage() {
             Masuk ke akun mu
           </h1>
 
-          <form className="mt-6" action="#" method="POST">
+          <form
+            className="mt-6"
+            action="#"
+            method="POST"
+            onSubmit={handleLogin}
+          >
             <div>
-              <label className="block text-gray-700">Alamat Email</label>
+              <label htmlFor="email" className="block text-gray-700">
+                Alamat Email
+              </label>
               <input
                 type="email"
-                name=""
-                id=""
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Masukkan alamat email"
                 className="w-full px-4 py-3 rounded-lg bg-white mt-2 border border-gray-400 focus:border-blue-500 focus:bg-white focus:outline-none"
                 autoFocus
@@ -39,11 +67,14 @@ export default function LoginPage() {
             </div>
 
             <div className="mt-4">
-              <label className="block text-gray-700">Password</label>
+              <label htmlFor="password" className="block text-gray-700">
+                Password
+              </label>
               <input
                 type="password"
-                name=""
-                id=""
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Masukkan Password"
                 minLength={6}
                 className="w-full px-4 py-3 rounded-lg bg-white mt-2 border border-gray-400 focus:border-blue-500
@@ -69,6 +100,7 @@ export default function LoginPage() {
               Log in
             </button>
           </form>
+          {error && <p className="text-red-600 mt-2">{error}</p>}
 
           {/* <hr className="my-6 border-gray-300 w-full" />
 
