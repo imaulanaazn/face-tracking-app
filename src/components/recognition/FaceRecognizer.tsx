@@ -42,55 +42,6 @@ const FaceRecognizer: React.FC = () => {
     });
   }, []);
 
-  const startVideo = useCallback(async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-      }
-    } catch (error) {
-      console.error("Error accessing webcam:", error);
-    }
-  }, []);
-
-  const stopVideo = useCallback(() => {
-    if (videoRef.current && videoRef.current.srcObject) {
-      const stream = videoRef.current.srcObject as MediaStream;
-      const tracks = stream.getTracks();
-      tracks.forEach((track) => track.stop());
-      videoRef.current.srcObject = null;
-    }
-  }, []);
-
-  const updateCanvasSize = useCallback(() => {
-    if (videoRef.current && canvasRef.current) {
-      const videoAspectRatio =
-        videoRef.current.videoWidth / videoRef.current.videoHeight;
-      const canvasContainer = videoRef.current.parentElement;
-
-      if (canvasContainer) {
-        const { width: containerWidth, height: containerHeight } =
-          canvasContainer.getBoundingClientRect();
-        let canvasWidth, canvasHeight;
-
-        if (containerWidth / containerHeight > videoAspectRatio) {
-          canvasHeight = containerHeight;
-          canvasWidth = containerHeight * videoAspectRatio;
-        } else {
-          canvasWidth = containerWidth;
-          canvasHeight = containerWidth / videoAspectRatio;
-        }
-
-        canvasRef.current.width = canvasWidth;
-        canvasRef.current.height = canvasHeight;
-        faceapi.matchDimensions(canvasRef.current, {
-          width: canvasWidth,
-          height: canvasHeight,
-        });
-      }
-    }
-  }, []);
-
   const isKnownFace = (descriptor: Float32Array) => {
     const distanceThreshold = 0.6;
     return knownFaces.current.some((face) => {
@@ -130,81 +81,119 @@ const FaceRecognizer: React.FC = () => {
     }
   }
 
-  useEffect(() => {
-    const isGoodDetection = (detection: any) => detection.detection.score > 0.9;
+  const startVideo = useCallback(async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+    } catch (error) {
+      console.error("Error accessing webcam:", error);
+    }
+  }, []);
 
-    if (cameraActive) {
-      startVideo();
-      if (videoRef.current && canvasRef.current) {
-        videoRef.current.addEventListener("play", () => {
-          updateCanvasSize();
-          window.addEventListener("resize", updateCanvasSize);
+  const stopVideo = useCallback(() => {
+    if (videoRef.current && videoRef.current.srcObject) {
+      const stream = videoRef.current.srcObject as MediaStream;
+      stream.getTracks().forEach((track) => track.stop());
+      videoRef.current.srcObject = null;
+    }
+  }, []);
 
-          const interval = setInterval(async () => {
-            const detections = await faceapi
-              .detectAllFaces(
-                videoRef.current!,
-                new faceapi.TinyFaceDetectorOptions()
-              )
-              .withFaceLandmarks()
-              .withFaceDescriptors();
+  const updateCanvasSize = useCallback(() => {
+    if (videoRef.current && canvasRef.current) {
+      const videoAspectRatio =
+        videoRef.current.videoWidth / videoRef.current.videoHeight;
+      const canvasContainer = videoRef.current.parentElement;
 
-            if (detections.length > 0) {
-              const goodDetections = detections.filter(isGoodDetection);
-              if (goodDetections.length > 0) {
-                const faceDescriptor = goodDetections[0].descriptor;
-                handleNewFace(faceDescriptor);
-              }
+      if (canvasContainer) {
+        const { width: containerWidth, height: containerHeight } =
+          canvasContainer.getBoundingClientRect();
+        let canvasWidth, canvasHeight;
 
-              if (canvasRef.current) {
-                const context = canvasRef.current.getContext("2d");
+        if (containerWidth / containerHeight > videoAspectRatio) {
+          canvasHeight = containerHeight;
+          canvasWidth = canvasHeight * videoAspectRatio;
+        } else {
+          canvasWidth = containerWidth;
+          canvasHeight = canvasWidth / videoAspectRatio;
+        }
 
-                // Clear the previous frame
-                context?.clearRect(
-                  0,
-                  0,
-                  canvasRef.current.width,
-                  canvasRef.current.height
-                );
-
-                // Flip context horizontally
-                context?.scale(-1, 1);
-                context?.translate(-canvasRef.current.width, 0);
-
-                const resizedDetections = faceapi.resizeResults(
-                  goodDetections,
-                  {
-                    width: canvasRef.current.width,
-                    height: canvasRef.current.height,
-                  }
-                );
-
-                // Draw detections and landmarks
-                faceapi.draw.drawDetections(
-                  canvasRef.current,
-                  resizedDetections
-                );
-                faceapi.draw.drawFaceLandmarks(
-                  canvasRef.current,
-                  resizedDetections
-                );
-
-                // Reset context after drawing
-                context?.setTransform(1, 0, 0, 1, 0, 0);
-              }
-            }
-          }, 200);
-
-          return () => {
-            clearInterval(interval);
-            window.removeEventListener("resize", updateCanvasSize);
-          };
+        faceapi.matchDimensions(canvasRef.current, {
+          width: canvasWidth,
+          height: canvasHeight,
         });
       }
-    } else {
-      stopVideo();
     }
-  }, [cameraActive, startVideo, stopVideo, updateCanvasSize]);
+  }, []);
+
+  const detectFace = useCallback(async () => {
+    if (!videoRef.current || !canvasRef.current) return;
+
+    const detection = await faceapi
+      .detectSingleFace(
+        videoRef.current!,
+        new faceapi.TinyFaceDetectorOptions({ inputSize: 224 })
+      )
+      .withFaceLandmarks()
+      .withFaceDescriptor();
+
+    const context = canvasRef.current.getContext("2d");
+
+    if (detection) {
+      if (context) {
+        context.clearRect(
+          0,
+          0,
+          canvasRef.current.width,
+          canvasRef.current.height
+        );
+        context.save();
+        context.scale(-1, 1);
+        context.translate(-canvasRef.current.width, 0);
+
+        const resizedDetections = faceapi.resizeResults(detection, {
+          width: canvasRef.current.width,
+          height: canvasRef.current.height,
+        });
+
+        faceapi.draw.drawDetections(canvasRef.current, resizedDetections);
+        context.restore();
+        handleNewFace(detection.descriptor);
+      }
+    } else {
+      if (context) {
+        context.clearRect(
+          0,
+          0,
+          canvasRef.current.width,
+          canvasRef.current.height
+        );
+        context.save();
+      }
+    }
+    // Schedule the next detection
+    setTimeout(detectFace);
+  }, []);
+
+  useEffect(() => {
+    if (cameraActive) {
+      startVideo();
+      const handlePlay = () => {
+        updateCanvasSize();
+        window.addEventListener("resize", updateCanvasSize);
+        detectFace(); // Start detection loop
+      };
+
+      videoRef.current?.addEventListener("play", handlePlay);
+
+      return () => {
+        videoRef.current?.removeEventListener("play", handlePlay);
+        window.removeEventListener("resize", updateCanvasSize);
+        stopVideo();
+      };
+    }
+  }, [cameraActive, startVideo, stopVideo, updateCanvasSize, detectFace]);
 
   const captureImage = () => {
     if (videoRef.current && cameraActive) {
