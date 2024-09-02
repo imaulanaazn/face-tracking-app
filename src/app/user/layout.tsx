@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { setUser } from "@/store/slices/userSlice";
-import { getUser } from "@/services/api/user";
+// import { getUser } from "@/services/api/user";
 
 export default function RootLayout({
   children,
@@ -19,18 +19,18 @@ export default function RootLayout({
 
   const user = useSelector((state: RootState) => state.user);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const profile = await getUser();
-        dispatch(setUser(profile));
-      } catch (error) {
-        console.error("Failed to fetch user data:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchUserData = async () => {
+  //     try {
+  //       const profile = await getUser();
+  //       dispatch(setUser(profile));
+  //     } catch (error) {
+  //       console.error("Failed to fetch user data:", error);
+  //     }
+  //   };
 
-    fetchUserData();
-  }, []);
+  //   fetchUserData();
+  // }, []);
 
   return (
     <>

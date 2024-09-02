@@ -1,3 +1,4 @@
+import { logout } from "@/services/api/auth";
 import {
   faArrowRightFromBracket,
   faGear,
@@ -81,7 +82,9 @@ export default function ProfilePopover() {
           <MenuItem
             icon={faArrowRightFromBracket}
             label="Sign Out"
-            handleClick={() => {}}
+            handleClick={() => {
+              logout();
+            }}
           />
         </ul>
       )}

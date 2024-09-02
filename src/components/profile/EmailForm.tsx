@@ -9,9 +9,8 @@ export default function EmailForm() {
     try {
       const data = { email };
       const response = await changeEmail(data);
-      console.log(response);
     } catch (err: any) {
-      console.log(err.message);
+      console.error(err.message);
     }
   };
 

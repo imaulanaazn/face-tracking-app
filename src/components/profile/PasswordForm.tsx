@@ -12,9 +12,8 @@ export default function PasswordForm() {
       try {
         const data = { oldPassword, newPassword };
         const response = await changePassword(data);
-        console.log(response);
       } catch (err: any) {
-        console.log(err.message);
+        console.error(err.message);
       }
     }
   };

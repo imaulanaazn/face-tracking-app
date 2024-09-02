@@ -27,18 +27,6 @@ export const navigation = [
     title: "Contacts",
     url: "#contacts",
   },
-  {
-    id: "4",
-    title: "New account",
-    url: "#signup",
-    onlyMobile: true,
-  },
-  {
-    id: "5",
-    title: "Sign in",
-    url: "#login",
-    onlyMobile: true,
-  },
 ];
 
 export const heroIcons = [

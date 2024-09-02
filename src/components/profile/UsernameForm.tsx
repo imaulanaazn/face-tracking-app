@@ -10,9 +10,8 @@ export default function UsernameForm() {
     try {
       const data = { firstName, lastName };
       const response = await changeUsername(data);
-      console.log(response);
     } catch (err: any) {
-      console.log(err.message);
+      console.error(err.message);
     }
   };
   return (

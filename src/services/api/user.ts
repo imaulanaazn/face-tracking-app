@@ -1,10 +1,24 @@
 import apiClient from "@/lib/apiClient";
 
 interface IUserReponse {
+  success: boolean;
+  message: string;
+  data: IUserReponseData;
+}
+
+interface IUserReponseData {
+  errorCode: string;
+  message: string;
   id: string;
   name: string;
-  email: string;
-  avatarUrl: string;
+  logo: string;
+  street: string;
+  district: string;
+  city: string;
+  province: string;
+  country: string;
+  dateCreated: Date;
+  lastUpdated: Date;
 }
 
 interface UsernameData {
@@ -33,14 +47,22 @@ interface ChangePasswordResponse {
   message: string;
 }
 
-export const getUser = async (): Promise<IUserReponse> => {
+export const getMyMerchant = async (): Promise<IUserReponse> => {
   try {
-    const response = await apiClient.get<IUserReponse>("/getMe", {
+    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const response = await apiClient.get<IUserReponseData>("/v1/merchant/me", {
       headers: {
-        credentials: "include",
+        Authorization: accessToken ? "Bearer " + accessToken.token : "",
       },
     });
-    return response.data;
+
+    const result = {
+      success: response.status === 200,
+      message: response.data.message || "Berhasil mengambil data",
+      data: response.data || {},
+    };
+
+    return result;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || "Failed to get user data");
   }
