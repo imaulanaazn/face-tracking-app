@@ -1,4 +1,5 @@
 import { logout } from "@/services/api/auth";
+import { RootState } from "@/store";
 import {
   faArrowRightFromBracket,
   faGear,
@@ -10,13 +11,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 
 export default function ProfilePopover() {
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLUListElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
   const router = useRouter();
-  const userProfile = "";
+  const merchant = useSelector((state: RootState) => state.merchant);
 
   const toggleMenu = () => setOpen(!open);
 
@@ -45,15 +47,16 @@ export default function ProfilePopover() {
   function handleEditProfile() {
     router.push("/user/profile");
   }
+
   return (
     <div className="relative">
       <div ref={imgRef} onClick={toggleMenu} className="hover:cursor-pointer">
-        {userProfile ? (
+        {merchant.logo ? (
           <Image
             width={50}
             height={50}
             alt="tania andrew"
-            src={userProfile}
+            src={merchant.logo}
             className="h-12 w-12  rounded-full object-cover object-center"
           />
         ) : (

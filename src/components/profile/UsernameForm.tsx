@@ -1,4 +1,4 @@
-import { changeUsername } from "@/services/api/user";
+import { changeUsername } from "@/services/api/merchant";
 import React, { SyntheticEvent, useState } from "react";
 
 export default function UsernameForm() {

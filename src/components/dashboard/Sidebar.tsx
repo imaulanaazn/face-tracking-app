@@ -16,15 +16,15 @@ import Link from "next/link";
 
 const menus = [
   {
+    name: "User Recognition",
+    path: "/user/recognition",
+    icon: faExpand,
+  },
+  {
     name: "Dashboard",
     path: "/user/dashboard",
     icon: faChartPie,
   },
-  // {
-  //   name: "User Recognition",
-  //   path: "/user/recognition",
-  //   icon: faExpand,
-  // },
   {
     name: "User Reminder",
     path: "/user/reminder",
@@ -84,15 +84,6 @@ const Sidebar = ({
       <div className="divider w-full h-px bg-sky-600 mb-6"></div>
 
       <nav className="flex flex-col gap-y-3">
-        <a
-          target="_blank"
-          href={"http://localhost:3001/webcam_face_detection"}
-          className={`flex items-center gap-3 py-3 px-4 rounded-full bg-white text-gray-500 hover:bg-sky-100 hover:text-blue-600"
-          }`}
-        >
-          <FontAwesomeIcon icon={faExpand} className="w-4 h-4 object-cover" />
-          <span className="">User Recognition</span>
-        </a>
         {menus.map((menu) => (
           <Link
             key={menu.path}

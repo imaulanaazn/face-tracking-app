@@ -1,4 +1,5 @@
-import { changeEmail } from "@/services/api/user";
+
+import { changeEmail } from "@/services/api/merchant";
 import React, { SyntheticEvent, useState } from "react";
 
 export default function EmailForm() {

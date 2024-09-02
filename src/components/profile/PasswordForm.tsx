@@ -1,4 +1,4 @@
-import { changePassword } from "@/services/api/user";
+import { changePassword } from "@/services/api/merchant";
 import React, { SyntheticEvent, useState } from "react";
 
 export default function PasswordForm() {

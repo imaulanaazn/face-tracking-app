@@ -1,24 +1,14 @@
 import apiClient from "@/lib/apiClient";
 
-interface IUserReponse {
+interface IMerchantResponse {
   success: boolean;
   message: string;
-  data: IUserReponseData;
+  data: IMerchantResponseData;
 }
 
-interface IUserReponseData {
+interface IMerchantResponseData extends IMerchant {
   errorCode: string;
   message: string;
-  id: string;
-  name: string;
-  logo: string;
-  street: string;
-  district: string;
-  city: string;
-  province: string;
-  country: string;
-  dateCreated: Date;
-  lastUpdated: Date;
 }
 
 interface UsernameData {
@@ -47,14 +37,17 @@ interface ChangePasswordResponse {
   message: string;
 }
 
-export const getMyMerchant = async (): Promise<IUserReponse> => {
+export const getMyMerchant = async (): Promise<IMerchantResponse> => {
   try {
     const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
-    const response = await apiClient.get<IUserReponseData>("/v1/merchant/me", {
-      headers: {
-        Authorization: accessToken ? "Bearer " + accessToken.token : "",
-      },
-    });
+    const response = await apiClient.get<IMerchantResponseData>(
+      "/v1/merchant/me",
+      {
+        headers: {
+          Authorization: accessToken ? "Bearer " + accessToken.token : "",
+        },
+      }
+    );
 
     const result = {
       success: response.status === 200,

@@ -8,8 +8,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faUser, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { getMyMerchant } from "@/services/api/user";
 import Image from "next/image";
+import { getMyMerchant } from "@/services/api/merchant";
 
 const Header = () => {
   const pathname = usePathname();
