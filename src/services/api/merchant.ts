@@ -37,6 +37,37 @@ interface ChangePasswordResponse {
   message: string;
 }
 
+interface IRegisterFaceData {
+  name: string;
+  mobileNumber: string;
+  faceDescriptor: number[];
+}
+
+interface IRegisterFaceResponse {
+  success: boolean;
+  message: string;
+  data: any;
+}
+
+interface IAttendanceData {
+  faceDescriptor: number[];
+}
+
+interface ICheckAttendanceResponse {
+  success: boolean;
+  message: string;
+  data: ICheckAttendanceResponseData;
+}
+
+interface ICheckAttendanceResponseData {
+  id: string;
+  merchantId: string;
+  name: string;
+  mobileNumber: number;
+  dateCreated: Date | string;
+  lastUpdated: string | null;
+}
+
 export const getMyMerchant = async (): Promise<IMerchantResponse> => {
   try {
     const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
@@ -115,5 +146,53 @@ export const changePassword = async (
     return response.data;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || "Change Password failed");
+  }
+};
+
+export const registerFace = async (
+  data: IRegisterFaceData
+): Promise<IRegisterFaceResponse> => {
+  try {
+    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const response = await apiClient.post<IRegisterFaceResponse>(
+      "/v1/merchant/face-registration",
+      data,
+      {
+        headers: {
+          Authorization: accessToken ? "Bearer " + accessToken.token : "",
+        },
+      }
+    );
+    return {
+      success: true,
+      message: "Member berhasil didaftarkan",
+      data: response.data,
+    };
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Register face failed");
+  }
+};
+
+export const checkAttendance = async (
+  data: IAttendanceData
+): Promise<ICheckAttendanceResponse> => {
+  try {
+    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const response = await apiClient.post<ICheckAttendanceResponseData>(
+      "/v1/merchant/attendace",
+      data,
+      {
+        headers: {
+          Authorization: accessToken ? "Bearer " + accessToken.token : "",
+        },
+      }
+    );
+    return {
+      success: true,
+      message: "Member terdeteksi",
+      data: response.data,
+    };
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Register face failed");
   }
 };

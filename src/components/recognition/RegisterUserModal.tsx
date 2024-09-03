@@ -1,14 +1,27 @@
+import { registerFace } from "@/services/api/merchant";
 import { faArrowUpFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
+import { toast } from "react-toastify";
 
 interface IRegisterUserModalProps {
   setPreviewImage: (imagUrl: string) => void;
   previewImage: string;
   setShowModal: (showModal: boolean) => void;
+  faceDescriptor: Float32Array | null;
+  handleResetKnownFace: () => void;
 }
 export default function RegisterUserModal(props: IRegisterUserModalProps) {
-  const { setPreviewImage, previewImage, setShowModal } = props;
+  const {
+    setPreviewImage,
+    previewImage,
+    setShowModal,
+    faceDescriptor,
+    handleResetKnownFace,
+  } = props;
+
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [name, setName] = useState("");
 
   const inputFile = useRef<HTMLInputElement>(null);
 
@@ -25,11 +38,32 @@ export default function RegisterUserModal(props: IRegisterUserModalProps) {
       };
       reader.readAsDataURL(file);
     } else {
-      alert(
+      toast.info(
         "Please select a valid image file (png, jpg, jpeg) with size up to 2MB."
       );
     }
   };
+
+  async function handleRegisterUser() {
+    if (faceDescriptor) {
+      try {
+        const data = {
+          name,
+          mobileNumber,
+          faceDescriptor: Array.from(faceDescriptor),
+        };
+        const response = await registerFace(data);
+        toast.success("Member berhasil didaftarkan");
+        handleResetKnownFace();
+        setShowModal(false);
+      } catch (err: any) {
+        toast.error("Gagal mendaftarkan member" + err);
+        console.error("Register member failed: ", err);
+      }
+    } else {
+      alert("Wajah tidak terdeteksi");
+    }
+  }
 
   return (
     <div className="form-wrapper fixed top-0 left-0 w-full h-screen bg-gray-800/30 p-6 z-50 flex items-center justify-center p-4">
@@ -75,9 +109,13 @@ export default function RegisterUserModal(props: IRegisterUserModalProps) {
             </label>
             <input
               required={true}
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
               id="visitor-name"
-              type="password"
-              className="w-full p-2 bg-white text-white border border-gray-300 rounded focus:outline-blue-600"
+              type="text"
+              className="w-full p-2 bg-white  border border-gray-300 rounded focus:outline-blue-600"
             />
           </div>
 
@@ -89,9 +127,13 @@ export default function RegisterUserModal(props: IRegisterUserModalProps) {
               No Telp
             </label>
             <input
+              value={mobileNumber}
+              onChange={(e) => {
+                setMobileNumber(e.target.value);
+              }}
               id="phone-number"
-              type="password"
-              className="w-full p-2 bg-white text-white border border-gray-300 rounded focus:outline-blue-600"
+              type="number"
+              className="w-full p-2 bg-white  border border-gray-300 rounded focus:outline-blue-600"
             />
           </div>
 
@@ -102,10 +144,13 @@ export default function RegisterUserModal(props: IRegisterUserModalProps) {
               }}
               className="flex-1 py-2 px-4 bg-rose-600 hover:bg-rose-400 rounded-md font-medium text-white"
             >
-              cancel
+              Tutup
             </button>
-            <button className="flex-1 py-2 px-4 bg-blue-600 hover:bg-blue-400 rounded-md font-medium text-white">
-              submit
+            <button
+              onClick={handleRegisterUser}
+              className="flex-1 py-2 px-4 bg-blue-600 hover:bg-blue-400 rounded-md font-medium text-white"
+            >
+              Daftarkan
             </button>
           </div>
         </div>

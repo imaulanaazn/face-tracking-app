@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPause, faPlay } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 import RegisterUserModal from "./RegisterUserModal";
+import { checkAttendance } from "@/services/api/merchant";
 
 const FaceRecognizer: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -13,15 +14,20 @@ const FaceRecognizer: React.FC = () => {
   const [detectedUser, setDetectedUser] = useState<{
     name: string;
     status: string;
+    descriptor: Float32Array | null;
   }>({
     name: "unknown",
     status: "not marked",
+    descriptor: null,
   });
   const [cameraActive, setCameraActive] = useState<boolean>(false);
   const [showModal, setShowModal] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
 
-  const knownFaces = useRef<{ name: string; descriptor: Float32Array }[]>([]);
+  const knownFace = useRef<{ name: string; descriptor: Float32Array } | null>(
+    null
+  );
+  const retryTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const loadModels = async () => {
@@ -43,40 +49,70 @@ const FaceRecognizer: React.FC = () => {
   }, []);
 
   const isKnownFace = (descriptor: Float32Array) => {
-    const distanceThreshold = 0.6;
-    return knownFaces.current.some((face) => {
-      const distance = faceapi.euclideanDistance(face.descriptor, descriptor);
-      return distance < distanceThreshold;
-    });
+    if (!knownFace.current) return false;
+    const distance = faceapi.euclideanDistance(
+      knownFace.current.descriptor,
+      descriptor
+    );
+    return distance < 0.55;
   };
 
   const handleNewFace = (descriptor: Float32Array) => {
-    if (!isKnownFace(descriptor)) {
-      checkAttendance(descriptor);
-      const newFace = { name: "unknown", descriptor };
-      knownFaces.current = [newFace];
-    } else {
-      console.error("face already detected");
+    if (knownFace.current) {
+      if (isKnownFace(descriptor)) {
+        if (knownFace.current.name !== "unknown") {
+          console.error(
+            "Face already detected and recognized:",
+            knownFace.current.name
+          );
+          return; // Do nothing if the face is already recognized
+        }
+        // Retry attendance check for "unknown" faces
+        if (!retryTimeoutRef.current) {
+          retryTimeoutRef.current = setInterval(() => {
+            handleAttendance(descriptor);
+          }, 4000);
+        }
+      } else {
+        console.error("A new face was detected, resetting known face.");
+        knownFace.current = null;
+        if (retryTimeoutRef.current) {
+          clearInterval(retryTimeoutRef.current);
+          retryTimeoutRef.current = null;
+        }
+      }
+    }
+
+    if (!knownFace.current) {
+      handleAttendance(descriptor);
+      knownFace.current = { name: "unknown", descriptor };
     }
   };
 
-  async function checkAttendance(descriptor: Float32Array) {
+  async function handleAttendance(descriptor: Float32Array) {
     const arrayDescriptor = Array.from(descriptor);
     try {
-      const response = await fetch("http://localhost:3001/check-attendance", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ faceDescriptor: arrayDescriptor }),
+      const response = await checkAttendance({
+        faceDescriptor: arrayDescriptor,
       });
-      if (response.status === 404) {
-        setDetectedUser({ name: "unknown", status: "not marked" });
-      } else {
-        const result = await response.json();
-        setDetectedUser({ name: result.name, status: "marked" });
+      setDetectedUser({
+        name: response.data.name,
+        status: "marked",
+        descriptor,
+      });
+
+      // Update the known face with the recognized name
+      if (knownFace.current && isKnownFace(descriptor)) {
+        knownFace.current.name = response.data.name;
+      }
+
+      // Clear the retry interval if the face is recognized
+      if (retryTimeoutRef.current) {
+        clearInterval(retryTimeoutRef.current);
+        retryTimeoutRef.current = null;
       }
     } catch (error) {
+      setDetectedUser({ name: "unknown", status: "not marked", descriptor });
       console.error("Error recognizing face:", error);
     }
   }
@@ -133,7 +169,7 @@ const FaceRecognizer: React.FC = () => {
     const detection = await faceapi
       .detectSingleFace(
         videoRef.current!,
-        new faceapi.TinyFaceDetectorOptions({ inputSize: 224 })
+        new faceapi.TinyFaceDetectorOptions({ inputSize: 416 })
       )
       .withFaceLandmarks()
       .withFaceDescriptor();
@@ -171,6 +207,11 @@ const FaceRecognizer: React.FC = () => {
         );
         context.save();
       }
+
+      if (retryTimeoutRef.current) {
+        clearInterval(retryTimeoutRef.current);
+        retryTimeoutRef.current = null;
+      }
     }
     // Schedule the next detection
     setTimeout(detectFace);
@@ -191,6 +232,12 @@ const FaceRecognizer: React.FC = () => {
         videoRef.current?.removeEventListener("play", handlePlay);
         window.removeEventListener("resize", updateCanvasSize);
         stopVideo();
+
+        // Clear retry interval on camera stop
+        if (retryTimeoutRef.current) {
+          clearInterval(retryTimeoutRef.current);
+          retryTimeoutRef.current = null;
+        }
       };
     }
   }, [cameraActive, startVideo, stopVideo, updateCanvasSize, detectFace]);
@@ -249,20 +296,28 @@ const FaceRecognizer: React.FC = () => {
           </div>
           <div className="hidden md:flex gap-1 text-base">
             <p className="text-gray-700">status :</p>
-            <span className="text-base text-emerald-600">
+            <span
+              className={`text-base ${
+                detectedUser.status === "marked"
+                  ? "text-emerald-600"
+                  : "text-red-500"
+              }`}
+            >
               {detectedUser.status}
             </span>
           </div>
 
-          <button
-            onClick={() => {
-              setShowModal(true);
-              captureImage();
-            }}
-            className="text-blue-600 text-sm md:hidden"
-          >
-            Daftarkan pengguna ?
-          </button>
+          {detectedUser.name === "unknown" && (
+            <button
+              onClick={() => {
+                setShowModal(true);
+                captureImage();
+              }}
+              className="text-blue-600 text-sm md:hidden"
+            >
+              Daftarkan pengguna ?
+            </button>
+          )}
         </div>
       </div>
 
@@ -276,17 +331,19 @@ const FaceRecognizer: React.FC = () => {
         <span className="text-sm text-emerald-600"> {detectedUser.status}</span>
       </div>
 
-      <div className="flex justify-start mt-3 hidden md:block">
-        <button
-          onClick={() => {
-            setShowModal(true);
-            captureImage();
-          }}
-          className="text-blue-600"
-        >
-          Daftarkan pengguna ?
-        </button>
-      </div>
+      {detectedUser.name === "unknown" && (
+        <div className="flex justify-start mt-3 hidden md:block">
+          <button
+            onClick={() => {
+              setShowModal(true);
+              captureImage();
+            }}
+            className="text-blue-600"
+          >
+            Daftarkan pengguna ?
+          </button>
+        </div>
+      )}
 
       {showModal && (
         <RegisterUserModal
@@ -296,6 +353,10 @@ const FaceRecognizer: React.FC = () => {
           previewImage={previewImage}
           setShowModal={(showModal: boolean) => {
             setShowModal(showModal);
+          }}
+          faceDescriptor={detectedUser.descriptor}
+          handleResetKnownFace={() => {
+            knownFace.current = null;
           }}
         />
       )}
