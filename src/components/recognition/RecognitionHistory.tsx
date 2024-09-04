@@ -1,32 +1,36 @@
 "use client";
-import { getRecognitionHistory } from "@/services/api/merchant";
-import { RootState } from "@/store";
+import formatDateToIndonesian from "@/lib/formatter";
+import {
+  getMerchantMemberHistory,
+  IDetectionHistory,
+} from "@/services/api/merchant";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
-interface IHistory {
-  id: string;
-  name: string;
-  timestamp: string;
+interface IRecognitionHistoryProps {
+  memberId: string;
 }
 
-export default function RecognitionHistory() {
-  const [history, setHistory] = useState<IHistory[]>([]);
-  const merchant = useSelector((state: RootState) => state.merchant);
+export default function RecognitionHistory({
+  memberId,
+}: IRecognitionHistoryProps) {
+  const [history, setHistory] = useState<IDetectionHistory[]>([]);
 
   useEffect(() => {
-    async function getHistory() {
+    async function getDetectionHistory() {
+      setHistory([]);
       try {
-        const response = await getRecognitionHistory(merchant.id);
+        const response = await getMerchantMemberHistory(memberId);
         setHistory(response.data.data);
-      } catch (error) {
+      } catch (error: any) {
         setHistory([]);
-        console.error(error);
+        console.error(error.message);
       }
     }
 
-    getHistory();
-  }, []);
+    getDetectionHistory();
+  }, [memberId]);
 
   return (
     <div className="w-full lg:w-2/5 history bg-white h-auto rounded-xl md:rounded-2xl p-4 md:p-6 lg:p-8">
@@ -45,35 +49,36 @@ export default function RecognitionHistory() {
                 scope="col"
                 className="text-sm font-semibold text-gray-600 px-6 py-4 text-left"
               >
-                No HP
-              </th>
-              <th
-                scope="col"
-                className="text-sm font-semibold text-gray-600 px-6 py-4 text-left"
-              >
-                Tanggal
+                Tanggal kunjungan
               </th>
             </tr>
           </thead>
           <tbody>
             {history.map((data) => (
               <tr
-                key={data.id}
+                key={data.timestamp}
                 className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100"
               >
                 <td className="text-sm text-gray-500 px-6 py-4 whitespace-nowrap">
                   {data.name}
                 </td>
                 <td className="text-sm text-gray-500 px-6 py-4 whitespace-nowrap">
-                  {data.name}
-                </td>
-                <td className="text-sm text-gray-500 px-6 py-4 whitespace-nowrap">
-                  {data.id}
+                  {formatDateToIndonesian(data.timestamp)}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+
+        {history.length > 0 && (
+          <a
+            href=""
+            className="text-blue-600 flex items-center gap-2 justify-center mt-4"
+          >
+            <span>Lihat selengkapnya</span>{" "}
+            <FontAwesomeIcon icon={faArrowRight} />
+          </a>
+        )}
       </div>
     </div>
   );

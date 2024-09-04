@@ -148,19 +148,21 @@ interface IEditMerchantAddress {
 interface IGetMerchantMemberHistory {
   success: boolean;
   message: string;
-  data: IGetMerchantMemberHistoryResponse[];
+  data: IGetMerchantMemberHistoryResponse;
 }
 
 interface IGetMerchantMemberHistoryResponse {
-  data: {
-    id: string;
-    name: string;
-    timestamp: string;
-  }[];
+  data: IDetectionHistory[];
   limit: number;
   sort: string;
   order: string;
   totalPages: number;
+}
+
+export interface IDetectionHistory {
+  id: string;
+  name: string;
+  timestamp: string;
 }
 
 export const getMyMerchant = async (): Promise<IMerchantResponse> => {
@@ -419,8 +421,14 @@ export const getMerchantMemberHistory = async (
   memberId: string
 ): Promise<IGetMerchantMemberHistory> => {
   try {
-    const response = await apiClient.get<IGetMerchantMemberHistoryResponse[]>(
-      `/v1/merchant/member-detection-history/${memberId}`
+    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const response = await apiClient.get<IGetMerchantMemberHistoryResponse>(
+      `/v1/merchant/member-detection-history/${memberId}?limit=10`,
+      {
+        headers: {
+          Authorization: accessToken ? "Bearer " + accessToken.token : "",
+        },
+      }
     );
     return {
       success: true,

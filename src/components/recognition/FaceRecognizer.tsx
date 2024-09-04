@@ -8,7 +8,11 @@ import { toast } from "react-toastify";
 import RegisterUserModal from "./RegisterUserModal";
 import { checkAttendance } from "@/services/api/merchant";
 
-const FaceRecognizer: React.FC = () => {
+interface IFaceRecognizerProps {
+  handleDetectionHistory: (memberId: string) => void;
+}
+
+const FaceRecognizer = ({ handleDetectionHistory }: IFaceRecognizerProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [detectedUser, setDetectedUser] = useState<{
@@ -95,6 +99,7 @@ const FaceRecognizer: React.FC = () => {
       const response = await checkAttendance({
         faceDescriptor: arrayDescriptor,
       });
+
       setDetectedUser({
         name: response.data.name,
         status: "marked",
@@ -111,7 +116,9 @@ const FaceRecognizer: React.FC = () => {
         clearInterval(retryTimeoutRef.current);
         retryTimeoutRef.current = null;
       }
+      handleDetectionHistory(response.data.id);
     } catch (error) {
+      handleDetectionHistory("");
       setDetectedUser({ name: "unknown", status: "not marked", descriptor });
       console.error("Error recognizing face:", error);
     }
