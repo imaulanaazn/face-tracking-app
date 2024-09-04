@@ -68,6 +68,101 @@ interface ICheckAttendanceResponseData {
   lastUpdated: string | null;
 }
 
+interface IRecognitionHistory {
+  success: boolean;
+  message: string;
+  data: IHistoryResponse;
+}
+
+interface IHistoryResponse {
+  data: IHistoryData[];
+  limit: number;
+  sort: string;
+  order: string;
+  totalPages: number;
+}
+
+interface IHistoryData {
+  id: string;
+  name: string;
+  timestamp: string;
+}
+
+interface IUpdateMerchantProfile {
+  success: boolean;
+  message: string;
+  data: IUpdateMerchantProfileResponse;
+}
+
+interface IUpdateMerchantProfileResponse {
+  url: string;
+}
+
+interface IGetIndonesiaLocations {
+  success: boolean;
+  message: string;
+  data: IGetLocationsResponse[];
+}
+
+interface IGetLocationsResponse {
+  id: string;
+  name: string;
+}
+
+interface IGetCities {
+  success: boolean;
+  message: string;
+  data: IGetCitiesResponse[];
+}
+
+interface IGetCitiesResponse {
+  id: string;
+  province_id: string;
+  name: string;
+}
+
+interface IGetDistricts {
+  success: boolean;
+  message: string;
+  data: IGetDistrictsResponse[];
+}
+
+interface IGetDistrictsResponse {
+  id: string;
+  regency_id: string;
+  name: string;
+}
+
+interface IEditMerchantAddressProps {
+  province: string;
+  city: string;
+  district: string;
+  street: string;
+}
+
+interface IEditMerchantAddress {
+  success: boolean;
+  message: string;
+}
+
+interface IGetMerchantMemberHistory {
+  success: boolean;
+  message: string;
+  data: IGetMerchantMemberHistoryResponse[];
+}
+
+interface IGetMerchantMemberHistoryResponse {
+  data: {
+    id: string;
+    name: string;
+    timestamp: string;
+  }[];
+  limit: number;
+  sort: string;
+  order: string;
+  totalPages: number;
+}
+
 export const getMyMerchant = async (): Promise<IMerchantResponse> => {
   try {
     const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
@@ -194,5 +289,145 @@ export const checkAttendance = async (
     };
   } catch (error: any) {
     throw new Error(error.response?.data?.message || "Register face failed");
+  }
+};
+
+export const getRecognitionHistory = async (
+  merchantId: string
+): Promise<IRecognitionHistory> => {
+  try {
+    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const response = await apiClient.get<IHistoryResponse>(
+      `/v1/merchant/member-detection-history/${merchantId}`,
+      {
+        headers: {
+          Authorization: accessToken ? "Bearer " + accessToken.token : "",
+        },
+      }
+    );
+    return {
+      success: true,
+      message: "Berhasil mengambil data recognition history",
+      data: response.data,
+    };
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message || "Failed to get recognition history"
+    );
+  }
+};
+
+export const updateMerchantProfile = async (
+  logo: File
+): Promise<IUpdateMerchantProfile> => {
+  const formData = new FormData();
+  logo && formData.append("logo", logo);
+  try {
+    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const response = await apiClient.put<IUpdateMerchantProfileResponse>(
+      "/v1/merchant/logo",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: accessToken ? "Bearer " + accessToken.token : "",
+        },
+      }
+    );
+    return {
+      success: true,
+      message: "Berhasil mengubah logo merchant",
+      data: response.data,
+    };
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message || "Failed to update merchant logo"
+    );
+  }
+};
+
+export const getIndonesiaLocations =
+  async (): Promise<IGetIndonesiaLocations> => {
+    try {
+      const response = await apiClient.get<IGetLocationsResponse[]>(
+        "/v1/indonesia-location"
+      );
+      return {
+        success: true,
+        message: "Berhasil mengambil data lokasi",
+        data: response.data,
+      };
+    } catch (error: any) {
+      throw new Error(
+        error.response?.data?.message || "Failed to get locations"
+      );
+    }
+  };
+
+export const getCities = async (province_id: string): Promise<IGetCities> => {
+  try {
+    const response = await apiClient.get<IGetCitiesResponse[]>(
+      `/v1/indonesia-location?province=${province_id}`
+    );
+    return {
+      success: true,
+      message: "Berhasil mengambil data provinsi",
+      data: response.data,
+    };
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Failed to get provinsi");
+  }
+};
+
+export const getDistricts = async (city_id: string): Promise<IGetDistricts> => {
+  try {
+    const response = await apiClient.get<IGetDistrictsResponse[]>(
+      `/v1/indonesia-location?city=${city_id}`
+    );
+    return {
+      success: true,
+      message: "Berhasil mengambil data provinsi",
+      data: response.data,
+    };
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Failed to get provinsi");
+  }
+};
+
+export const editMerchantAddress = async (
+  data: IEditMerchantAddressProps
+): Promise<IEditMerchantAddress> => {
+  try {
+    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const response = await apiClient.put("/v1/merchant/profile", data, {
+      headers: {
+        Authorization: accessToken ? "Bearer " + accessToken.token : "",
+      },
+    });
+    return {
+      success: true,
+      message: "Berhasil mengubah alamat merchant",
+    };
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message || "Failed to edit merchant address"
+    );
+  }
+};
+
+export const getMerchantMemberHistory = async (
+  memberId: string
+): Promise<IGetMerchantMemberHistory> => {
+  try {
+    const response = await apiClient.get<IGetMerchantMemberHistoryResponse[]>(
+      `/v1/merchant/member-detection-history/${memberId}`
+    );
+    return {
+      success: true,
+      message: "Berhasil mengambil history",
+      data: response.data,
+    };
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Failed to get history");
   }
 };

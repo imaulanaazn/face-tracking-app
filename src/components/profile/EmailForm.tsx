@@ -1,9 +1,9 @@
-
 import { changeEmail } from "@/services/api/merchant";
 import React, { SyntheticEvent, useState } from "react";
 
 export default function EmailForm() {
   const [email, setEmail] = useState("");
+  const [disabled, setDisabled] = useState(true);
 
   const handleChangeEmail = async (e: SyntheticEvent) => {
     e.preventDefault();
@@ -19,7 +19,7 @@ export default function EmailForm() {
     <div className="bg-white p-6 rounded-xl shadow-sm w-full">
       <h2 className="text-xl font-semibold text-gray-800 mb-6">Email</h2>
       <form onSubmit={handleChangeEmail}>
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <label
             className="block text-gray-600 text-sm mb-2"
             htmlFor="old-mail"
@@ -32,7 +32,7 @@ export default function EmailForm() {
             disabled
             className="w-full p-2 bg-gray-100 text-gray-600 border border-gray-300 rounded focus:outline-blue-600"
           />
-        </div>
+        </div> */}
 
         <div className="w-full mb-4">
           <label
@@ -53,7 +53,10 @@ export default function EmailForm() {
 
         <button
           type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded"
+          disabled={disabled}
+          className={`w-full ${
+            disabled ? "bg-gray-400" : "bg-blue-600 hover:bg-blue-700"
+          } text-white py-2 rounded`}
         >
           Save
         </button>

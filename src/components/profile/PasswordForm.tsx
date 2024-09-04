@@ -5,6 +5,7 @@ export default function PasswordForm() {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [disabled, setDisabled] = useState(true);
 
   const handleChangePassword = async (e: SyntheticEvent) => {
     e.preventDefault();
@@ -84,7 +85,10 @@ export default function PasswordForm() {
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded"
+          disabled={disabled}
+          className={`w-full ${
+            disabled ? "bg-gray-400" : "bg-blue-600 hover:bg-blue-700"
+          } text-white py-2 rounded`}
         >
           Save
         </button>

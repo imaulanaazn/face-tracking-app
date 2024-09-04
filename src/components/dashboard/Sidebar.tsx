@@ -35,11 +35,6 @@ const menus = [
     path: "/user/profile",
     icon: faUser,
   },
-  {
-    name: "My Business",
-    path: "/user/business",
-    icon: faShop,
-  },
 ];
 
 const Sidebar = ({

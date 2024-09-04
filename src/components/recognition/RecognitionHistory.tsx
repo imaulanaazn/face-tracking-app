@@ -1,21 +1,26 @@
 "use client";
-import { getRecognitionHistory } from "@/services/api/getRecognitionHistory";
+import { getRecognitionHistory } from "@/services/api/merchant";
+import { RootState } from "@/store";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 interface IHistory {
   id: string;
   name: string;
-  mobileNo: string;
+  timestamp: string;
 }
 
 export default function RecognitionHistory() {
   const [history, setHistory] = useState<IHistory[]>([]);
+  const merchant = useSelector((state: RootState) => state.merchant);
+
   useEffect(() => {
     async function getHistory() {
       try {
-        const data = await getRecognitionHistory();
-        setHistory(data);
+        const response = await getRecognitionHistory(merchant.id);
+        setHistory(response.data.data);
       } catch (error) {
+        setHistory([]);
         console.error(error);
       }
     }
@@ -60,7 +65,7 @@ export default function RecognitionHistory() {
                   {data.name}
                 </td>
                 <td className="text-sm text-gray-500 px-6 py-4 whitespace-nowrap">
-                  {data.mobileNo}
+                  {data.name}
                 </td>
                 <td className="text-sm text-gray-500 px-6 py-4 whitespace-nowrap">
                   {data.id}
