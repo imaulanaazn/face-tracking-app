@@ -1,3 +1,4 @@
+import { IMerchant } from "@/data-types/merchant";
 import apiClient from "@/lib/apiClient";
 
 interface IMerchantResponse {
@@ -165,6 +166,35 @@ export interface IDetectionHistory {
   timestamp: string;
 }
 
+interface IGetMembersByMerchant {
+  success: boolean;
+  message: string;
+  data: IGetMembersByMerchantResponse;
+}
+
+interface IGetMembersByMerchantResponse {
+  data: IMember[];
+  limit: number;
+  sort: string;
+  order: string;
+  totalPages: number;
+  page: number;
+}
+
+interface IMember {
+  id: string;
+  name: string;
+  mobileNumber: string;
+  lastDetection: string;
+  merchant: IMemberMerchant;
+}
+
+interface IMemberMerchant {
+  id: string;
+  name: string;
+  logo: string;
+}
+
 export const getMyMerchant = async (): Promise<IMerchantResponse> => {
   try {
     const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
@@ -180,7 +210,7 @@ export const getMyMerchant = async (): Promise<IMerchantResponse> => {
     const result = {
       success: response.status === 200,
       message: response.data.message || "Berhasil mengambil data",
-      data: response.data || {},
+      data: response.data,
     };
 
     return result;
@@ -437,5 +467,36 @@ export const getMerchantMemberHistory = async (
     };
   } catch (error: any) {
     throw new Error(error.response?.data?.message || "Failed to get history");
+  }
+};
+
+export const getMembersByMerchant = async (query: {
+  page?: string;
+  limit?: string;
+  order?: string;
+  name?: string;
+  transaction?: string;
+  unit?: string;
+}): Promise<IGetMembersByMerchant> => {
+  try {
+    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const response = await apiClient.get<IGetMembersByMerchantResponse>(
+      "/v1/merchant/members?value=1",
+      {
+        headers: {
+          Authorization: accessToken ? "Bearer " + accessToken.token : "",
+        },
+        params: {
+          ...query,
+        },
+      }
+    );
+    return {
+      success: true,
+      message: "Berhasil mengambil member",
+      data: response.data,
+    };
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Failed to get members");
   }
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { SyntheticEvent, useEffect, useState } from "react";
 import {
   faArrowDown,
   faArrowUp,
@@ -7,86 +7,72 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { usePathname, useRouter } from "next/navigation";
 import { Tooltip as ReactTooltip } from "react-tooltip";
+import { getMembersByMerchant } from "@/services/api/merchant";
+import { IFilter } from "@/data-types/merchant";
 
 const column = [
   {
-    id: "nama_depan",
-    name: "Nama Depan",
+    id: "name",
+    name: "Nama",
   },
   {
-    id: "nama_belakang",
-    name: "Nama Belakang",
-  },
-  {
-    id: "mobile_number",
+    id: "mobileNumber",
     name: "No Telp",
   },
-];
-
-const dummyData = [
   {
-    id: "1",
-    nama_depan: "John",
-    nama_belakang: "Doe",
-    handle: "johndoe",
-  },
-  {
-    id: "2",
-    nama_depan: "Jane",
-    nama_belakang: "Smith",
-    handle: "janesmith",
-  },
-  {
-    id: "3",
-    nama_depan: "Michael",
-    nama_belakang: "Johnson",
-    handle: "michaeljohnson",
-  },
-  {
-    id: "4",
-    nama_depan: "Emily",
-    nama_belakang: "Williams",
-    handle: "emilywilliams",
-  },
-  {
-    id: "5",
-    nama_depan: "David",
-    nama_belakang: "Brown",
-    handle: "davidbrown",
-  },
-  {
-    id: "6",
-    nama_depan: "Sarah",
-    nama_belakang: "Jones",
-    handle: "sarahjones",
-  },
-  {
-    id: "7",
-    nama_depan: "Daniel",
-    nama_belakang: "Martinez",
-    handle: "danielmartinez",
-  },
-  {
-    id: "8",
-    nama_depan: "Olivia",
-    nama_belakang: "Lee",
-    handle: "olivialee",
-  },
-  {
-    id: "9",
-    nama_depan: "William",
-    nama_belakang: "Garcia",
-    handle: "williamgarcia",
-  },
-  {
-    id: "10",
-    nama_depan: "Ava",
-    nama_belakang: "Lopez",
-    handle: "avalopez",
+    id: "lastDetection",
+    name: "Kunjungan terakhir",
   },
 ];
 
-export default function ClientTable() {
+interface IGetMemberResponse {
+  data: IMember[];
+  limit: number;
+  sort: string;
+  order: string;
+  totalPages: number;
+  page: number;
+}
+
+interface IMember {
+  id: string;
+  name: string;
+  mobileNumber: string;
+  lastDetection: string;
+  merchant: IMemberMerchant;
+}
+
+interface IMemberMerchant {
+  id: string;
+  name: string;
+  logo: string;
+}
+
+interface IQuery {
+  page?: string;
+  limit?: string;
+  order?: string;
+  name?: string;
+  transaction?: string;
+  unit?: string;
+}
+
+export default function ClientTable({
+  filter,
+  search,
+}: {
+  filter: IFilter;
+  search: string;
+}) {
+  const [members, setMembers] = useState<IGetMemberResponse>({
+    limit: 10,
+    sort: "name",
+    order: "DESC",
+    totalPages: 0,
+    page: 1,
+    data: [],
+  });
+
   const [selectAll, setSelectAll] = useState(false);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
@@ -94,26 +80,19 @@ export default function ClientTable() {
   const path = usePathname();
 
   const [query, setQuery] = useState<{
-    search: {
-      key: string;
-      value: string;
-    }[];
     order: string;
-    mobileNumber: string;
     limit: number;
     page: number;
     sort: string;
   }>({
-    search: [],
-    order: "mobile_number",
-    mobileNumber: "08895501350",
-    limit: 20,
+    order: "DESC",
+    limit: 10,
     page: 1,
-    sort: "DESC",
+    sort: "dateCreated",
   });
 
   useEffect(() => {
-    if (selected.length !== dummyData.length && selectAllChecked) {
+    if (selected.length !== members.data.length && selectAllChecked) {
       setSelectAllChecked(false);
     }
   }, [selectAllChecked, selected.length]);
@@ -121,7 +100,7 @@ export default function ClientTable() {
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
     if (!selectAll) {
-      setSelected(dummyData.map((data) => data.id));
+      setSelected(members.data.map((data) => data.id));
     } else {
       setSelected([]);
     }
@@ -142,6 +121,57 @@ export default function ClientTable() {
       router.push(path + "/compose-message");
     }
   }
+
+  const fetchMembers = async () => {
+    const newQuery: IQuery = {
+      ...query,
+      page: query.page.toString(),
+      ...filter,
+    };
+
+    if (search) {
+      newQuery.name = search;
+    }
+
+    try {
+      const response = await getMembersByMerchant(newQuery);
+      setMembers(response.data);
+    } catch (error) {
+      console.error("Error fetching members:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchMembers();
+  }, [
+    query.page,
+    query.limit,
+    query.sort,
+    query.order,
+    filter.limit,
+    filter.transaction,
+    filter.unit,
+    search,
+  ]);
+
+  const handleSearchChange = (event: any) => {
+    setQuery((prev) => ({ ...query, search: event.target.value }));
+  };
+
+  const handlePageChange = (direction: string) => {
+    if (direction === "next" && members.data.length === query.limit) {
+      setQuery((prev) => ({ ...prev, page: query.page + 1 }));
+    } else if (direction === "prev" && query.page > 0) {
+      setQuery((prev) => ({ ...prev, page: query.page - 1 }));
+    }
+  };
+
+  const handleRowsPerPageChange = (event: any) => {
+    setQuery((prev) => ({ ...prev, limit: parseInt(event.target.value, 10) }));
+    setQuery((prev) => ({ ...prev, page: 0 }));
+  };
+
+  console.log(selected);
 
   return (
     <>
@@ -242,7 +272,7 @@ export default function ClientTable() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {dummyData.map((user) => (
+                  {members.data.map((user) => (
                     <tr
                       key={user.id}
                       onClick={() => handleRowSelect(user.id)}
@@ -268,18 +298,55 @@ export default function ClientTable() {
                         </div>
                       </td>
                       <td className="px-4 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
-                        <p>{user.nama_depan}</p>
+                        <p>{user.name}</p>
                       </td>
                       <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {!user.nama_belakang ? <p>N/A</p> : user.nama_belakang}
+                        {user.mobileNumber}
                       </td>
                       <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {!user.nama_belakang ? <p>N/A</p> : user.handle}
+                        {user.mobileNumber}
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+
+              <div className="flex justify-center items-center mt-4 gap-4">
+                <button
+                  onClick={() => handlePageChange("prev")}
+                  className="px-4 py-2 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
+                  disabled={query.page === 1}
+                >
+                  Prev
+                </button>
+                <input
+                  type="number"
+                  className="py-2 px-4 px-1 border border-gray-400 rounded-md max-w-28 text-center"
+                  min={1}
+                  max={100}
+                  value={query.page}
+                  onChange={(e) => {
+                    setQuery((prev) => ({
+                      ...prev,
+                      page: parseInt(e.target.value),
+                    }));
+                  }}
+                />
+                <button
+                  onClick={() => handlePageChange("next")}
+                  className="px-4 py-2 bg-gray-300 text-gray-700 rounded"
+                  disabled={
+                    Math.ceil(members.totalPages / members.limit) ===
+                    members.page
+                  }
+                >
+                  Next
+                </button>
+              </div>
+
+              <p className="text-center mt-4">
+                total halaman : {members.totalPages}
+              </p>
             </div>
           </div>
         </div>

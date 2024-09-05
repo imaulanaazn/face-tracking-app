@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faUser, faXmark } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import { getMyMerchant } from "@/services/api/merchant";
+import { IMerchant } from "@/data-types/merchant";
 
 const Header = () => {
   const pathname = usePathname();

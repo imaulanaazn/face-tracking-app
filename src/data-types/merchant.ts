@@ -1,4 +1,4 @@
-interface IMerchant {
+export interface IMerchant {
   id: string;
   name: string;
   logo: string | null;
@@ -9,4 +9,10 @@ interface IMerchant {
   country: string | null;
   dateCreated: Date | string;
   lastUpdated: Date | null;
+}
+
+export interface IFilter {
+  limit: string;
+  transaction: string;
+  unit: string;
 }
