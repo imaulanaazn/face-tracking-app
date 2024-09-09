@@ -1,3 +1,5 @@
+import { WhatsAppConnectionStatus } from "@/enum";
+
 export interface IMerchant {
   id: string;
   name: string;
@@ -15,4 +17,32 @@ export interface IFilter {
   limit: string;
   transaction: string;
   unit: string;
+}
+
+export interface IConnectionType {
+  id: string;
+  name: string;
+  cd: string;
+}
+
+export interface IWhatsappConnection {
+  id: string;
+  mobileNumber: string;
+}
+
+export interface IConnection {
+  id: string;
+  name: string;
+  mobileNumber: string;
+  connectionType: string;
+  connectionTypeCd: string;
+  status: WhatsAppConnectionStatus;
+}
+
+export interface IWhatsappStatus {
+  id: string;
+  merchantName: string;
+  merchantId: string;
+  status: WhatsAppConnectionStatus;
+  qr: string;
 }

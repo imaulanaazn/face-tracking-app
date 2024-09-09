@@ -1,9 +1,17 @@
-import { IMerchant } from "@/data-types/merchant";
+import {
+  IConnection,
+  IConnectionType,
+  IMerchant,
+  IWhatsappConnection,
+} from "@/data-types/merchant";
 import apiClient from "@/lib/apiClient";
 
-interface IMerchantResponse {
+interface IAPIResponseTemplate {
   success: boolean;
   message: string;
+}
+
+interface IMerchantResponse extends IAPIResponseTemplate {
   data: IMerchantResponseData;
 }
 
@@ -44,9 +52,7 @@ interface IRegisterFaceData {
   faceDescriptor: number[];
 }
 
-interface IRegisterFaceResponse {
-  success: boolean;
-  message: string;
+interface IRegisterFaceResponse extends IAPIResponseTemplate {
   data: any;
 }
 
@@ -54,9 +60,7 @@ interface IAttendanceData {
   faceDescriptor: number[];
 }
 
-interface ICheckAttendanceResponse {
-  success: boolean;
-  message: string;
+interface ICheckAttendanceResponse extends IAPIResponseTemplate {
   data: ICheckAttendanceResponseData;
 }
 
@@ -69,9 +73,7 @@ interface ICheckAttendanceResponseData {
   lastUpdated: string | null;
 }
 
-interface IRecognitionHistory {
-  success: boolean;
-  message: string;
+interface IRecognitionHistory extends IAPIResponseTemplate {
   data: IHistoryResponse;
 }
 
@@ -89,9 +91,7 @@ interface IHistoryData {
   timestamp: string;
 }
 
-interface IUpdateMerchantProfile {
-  success: boolean;
-  message: string;
+interface IUpdateMerchantProfile extends IAPIResponseTemplate {
   data: IUpdateMerchantProfileResponse;
 }
 
@@ -99,9 +99,7 @@ interface IUpdateMerchantProfileResponse {
   url: string;
 }
 
-interface IGetIndonesiaLocations {
-  success: boolean;
-  message: string;
+interface IGetIndonesiaLocations extends IAPIResponseTemplate {
   data: IGetLocationsResponse[];
 }
 
@@ -110,9 +108,7 @@ interface IGetLocationsResponse {
   name: string;
 }
 
-interface IGetCities {
-  success: boolean;
-  message: string;
+interface IGetCities extends IAPIResponseTemplate {
   data: IGetCitiesResponse[];
 }
 
@@ -122,9 +118,7 @@ interface IGetCitiesResponse {
   name: string;
 }
 
-interface IGetDistricts {
-  success: boolean;
-  message: string;
+interface IGetDistricts extends IAPIResponseTemplate {
   data: IGetDistrictsResponse[];
 }
 
@@ -141,14 +135,9 @@ interface IEditMerchantAddressProps {
   street: string;
 }
 
-interface IEditMerchantAddress {
-  success: boolean;
-  message: string;
-}
+interface IEditMerchantAddress extends IAPIResponseTemplate {}
 
-interface IGetMerchantMemberHistory {
-  success: boolean;
-  message: string;
+interface IGetMerchantMemberHistory extends IAPIResponseTemplate {
   data: IGetMerchantMemberHistoryResponse;
 }
 
@@ -166,9 +155,7 @@ export interface IDetectionHistory {
   timestamp: string;
 }
 
-interface IGetMembersByMerchant {
-  success: boolean;
-  message: string;
+interface IGetMembersByMerchant extends IAPIResponseTemplate {
   data: IGetMembersByMerchantResponse;
 }
 
@@ -193,6 +180,27 @@ interface IMemberMerchant {
   id: string;
   name: string;
   logo: string;
+}
+
+interface IGetListConnectionType extends IAPIResponseTemplate {
+  data: IConnectionType[];
+}
+
+interface IGetAvailableWhatsapp extends IAPIResponseTemplate {
+  data: IWhatsappConnection[];
+}
+
+interface ICreateConnectionData {
+  connectionName: string;
+  connectionTypeId: string;
+  connectionId: string;
+  mobileNumber: string;
+}
+
+interface ICreateConnection extends IAPIResponseTemplate {}
+
+interface IGetMerchantConnections extends IAPIResponseTemplate {
+  data: IConnection[];
 }
 
 export const getMyMerchant = async (): Promise<IMerchantResponse> => {
@@ -498,5 +506,151 @@ export const getMembersByMerchant = async (query: {
     };
   } catch (error: any) {
     throw new Error(error.response?.data?.message || "Failed to get members");
+  }
+};
+
+export const getListConnectionType =
+  async (): Promise<IGetListConnectionType> => {
+    try {
+      const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+      const response = await apiClient.get<IConnectionType[]>(
+        "/v1/merchant/whatsapp-connection-type",
+        {
+          headers: {
+            Authorization: accessToken ? "Bearer " + accessToken.token : "",
+          },
+        }
+      );
+      return {
+        success: true,
+        message: "Berhasil mengambil list tipe koneksi",
+        data: response.data,
+      };
+    } catch (error: any) {
+      throw new Error(
+        error.response?.data?.message || "Failed to get connection type list"
+      );
+    }
+  };
+
+export const getAvailableWhatsapp =
+  async (): Promise<IGetAvailableWhatsapp> => {
+    try {
+      const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+      const response = await apiClient.get<IWhatsappConnection[]>(
+        "/v1/merchant/available-whatsapp-connection",
+        {
+          headers: {
+            Authorization: accessToken ? "Bearer " + accessToken.token : "",
+          },
+        }
+      );
+      return {
+        success: true,
+        message: "Berhasil mengambil list whatsapp tersedia",
+        data: response.data,
+      };
+    } catch (error: any) {
+      throw new Error(
+        error.response?.data?.message || "Failed to get avaliable whatsapp"
+      );
+    }
+  };
+
+export const createConnection = async (
+  data: ICreateConnectionData
+): Promise<ICreateConnection> => {
+  try {
+    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const response = await apiClient.post(
+      "/v1/merchant/create-connection",
+      data,
+      {
+        headers: {
+          Authorization: accessToken ? "Bearer " + accessToken.token : "",
+        },
+      }
+    );
+    return {
+      success: true,
+      message: "Berhasil membuat koneksi",
+    };
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message || "Failed to create new connection"
+    );
+  }
+};
+
+export const getMerchantConnections =
+  async (): Promise<IGetMerchantConnections> => {
+    try {
+      const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+      const response = await apiClient.get<IConnection[]>(
+        "/v1/merchant/connection",
+        {
+          headers: {
+            Authorization: accessToken ? "Bearer " + accessToken.token : "",
+          },
+        }
+      );
+      return {
+        success: true,
+        message: "Berhasil membuat koneksi",
+        data: response.data,
+      };
+    } catch (error: any) {
+      throw new Error(
+        error.response?.data?.message || "Failed to create new connection"
+      );
+    }
+  };
+
+export const connectWhatsapp = async (
+  connectionId: string
+): Promise<IAPIResponseTemplate> => {
+  try {
+    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const response = await apiClient.post(
+      "/v1/merchant/connect-whatsapp",
+      { connectionId },
+      {
+        headers: {
+          Authorization: accessToken ? "Bearer " + accessToken.token : "",
+        },
+      }
+    );
+    return {
+      success: true,
+      message: "Berhasil meminta menghubungkan wahatsapp",
+    };
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message || "Failed to request whatsapp connection"
+    );
+  }
+};
+
+export const deleteWhatsappConnection = async (
+  connectionId: string
+): Promise<IAPIResponseTemplate> => {
+  try {
+    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const response = await apiClient.delete(
+      `/v1/merchant/delete-whatsapp-connection/${connectionId}`,
+      {
+        headers: {
+          Authorization: accessToken ? "Bearer " + accessToken.token : "",
+        },
+      }
+    );
+    return {
+      success: true,
+      message: "Berhasil menghapus koneksi wahatsapp",
+    };
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message || "Failed to delete whatsapp connection"
+    );
   }
 };

@@ -11,7 +11,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 
 import React, { useState } from "react";
-import ClientsChart from "@/components/dashboard/ClientsChart";
+import ClientsChart from "@/components/user/dashboard/ClientsChart";
 
 const breakpoints = {
   0: {

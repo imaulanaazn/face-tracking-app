@@ -1,7 +1,6 @@
 "use client";
 import { Inter } from "next/font/google";
 import "../globals.css";
-import Header from "@/components/global/header/Header";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
@@ -11,8 +10,9 @@ import { startTokenRefresh } from "@/lib/tokenService";
 import { refreshAccessToken } from "@/lib/refreshToken";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import Sidebar from "@/components/dashboard/Sidebar";
+import Sidebar from "@/components/user/Sidebar";
 import LoadingAnimation from "@/components/global/LoadingAnimation";
+import Header from "@/components/user/Header";
 
 export default function RootLayout({
   children,

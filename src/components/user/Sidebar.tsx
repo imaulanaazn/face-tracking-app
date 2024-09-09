@@ -9,6 +9,7 @@ import {
   faShop,
   faArrowLeft,
   faBell,
+  faComputer,
 } from "@fortawesome/free-solid-svg-icons";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
@@ -29,6 +30,11 @@ const menus = [
     name: "User Reminder",
     path: "/user/reminder",
     icon: faBell,
+  },
+  {
+    name: "Device",
+    path: "/user/device",
+    icon: faComputer,
   },
   {
     name: "User Profile",

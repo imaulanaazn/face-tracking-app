@@ -171,8 +171,6 @@ export default function ClientTable({
     setQuery((prev) => ({ ...prev, page: 0 }));
   };
 
-  console.log(selected);
-
   return (
     <>
       {selected.length > 0 && (
