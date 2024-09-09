@@ -1,4 +1,4 @@
-import Success from "@/app/user/success/page";
+import Success from "@/app/merchant/success/page";
 import apiClient from "@/lib/apiClient";
 
 interface LoginData {

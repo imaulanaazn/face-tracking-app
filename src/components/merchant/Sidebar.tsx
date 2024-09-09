@@ -10,6 +10,7 @@ import {
   faArrowLeft,
   faBell,
   faComputer,
+  faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
@@ -27,9 +28,9 @@ const menus = [
     icon: faChartPie,
   },
   {
-    name: "User Reminder",
+    name: "Send Message",
     path: "/merchant/send-message",
-    icon: faBell,
+    icon: faPaperPlane,
   },
   {
     name: "Device",
