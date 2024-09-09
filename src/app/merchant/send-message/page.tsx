@@ -1,7 +1,7 @@
 "use client";
-import ClientTable from "@/components/merchant/reminder/ClientTable";
-import SearchBar from "@/components/merchant/reminder/SearchBar";
-import SearchFilter from "@/components/merchant/reminder/SearchFilter";
+import ClientTable from "@/components/merchant/send-message/ClientTable";
+import SearchBar from "@/components/merchant/send-message/SearchBar";
+import SearchFilter from "@/components/merchant/send-message/SearchFilter";
 import React, { useState } from "react";
 
 export default function UserReminder() {

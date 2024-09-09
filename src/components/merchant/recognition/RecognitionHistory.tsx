@@ -63,7 +63,10 @@ export default function RecognitionHistory({
                   {data.name}
                 </td>
                 <td className="text-sm text-gray-500 px-6 py-4 whitespace-nowrap">
-                  {formatDateToIndonesian(data.timestamp)}
+                  {formatDateToIndonesian({
+                    isoDate: data.timestamp,
+                    includeTime: false,
+                  })}
                 </td>
               </tr>
             ))}

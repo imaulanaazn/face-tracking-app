@@ -654,3 +654,25 @@ export const deleteWhatsappConnection = async (
     );
   }
 };
+
+export const sendMessage = async (data: {
+  connectionId: string;
+  memberIds: string[];
+  message: string;
+  name: string;
+}): Promise<IAPIResponseTemplate> => {
+  try {
+    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const response = await apiClient.post(`/v1/merchant/send-messages`, data, {
+      headers: {
+        Authorization: accessToken ? "Bearer " + accessToken.token : "",
+      },
+    });
+    return {
+      success: true,
+      message: "Pesan berhasil dikirim",
+    };
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Failed to send message");
+  }
+};

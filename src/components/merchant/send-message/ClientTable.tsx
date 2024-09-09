@@ -9,6 +9,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import { getMembersByMerchant } from "@/services/api/merchant";
 import { IFilter } from "@/data-types/merchant";
+import formatDateToIndonesian from "@/lib/formatter";
 
 const column = [
   {
@@ -21,7 +22,7 @@ const column = [
   },
   {
     id: "lastDetection",
-    name: "Kunjungan terakhir",
+    name: "Terakhir berkunjung",
   },
 ];
 
@@ -106,18 +107,18 @@ export default function ClientTable({
     }
   };
 
-  const handleRowSelect = (gameId: string) => {
-    if (selected.includes(gameId)) {
-      setSelected(selected.filter((id) => id !== gameId));
+  const handleRowSelect = (userId: string) => {
+    if (selected.includes(userId)) {
+      setSelected(selected.filter((id) => id !== userId));
     } else {
-      setSelected([...selected, gameId]);
+      setSelected([...selected, userId]);
     }
   };
 
   function handleNextStep() {
     if (selected.length) {
       const jsonData = JSON.stringify(selected);
-      sessionStorage.setItem("users", jsonData);
+      sessionStorage.setItem("members", jsonData);
       router.push(path + "/compose-message");
     }
   }
@@ -186,7 +187,7 @@ export default function ClientTable({
               onClick={handleNextStep}
               className="cursor-pointer"
               data-tooltip-id="tooltip-delete"
-              data-tooltip-content="Kirim Pesan"
+              data-tooltip-content="Tulis Pesan"
             >
               <FontAwesomeIcon
                 icon={faPaperPlane}
@@ -302,7 +303,10 @@ export default function ClientTable({
                         {user.mobileNumber}
                       </td>
                       <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {user.mobileNumber}
+                        {formatDateToIndonesian({
+                          isoDate: user.lastDetection,
+                          includeTime: true,
+                        })}
                       </td>
                     </tr>
                   ))}
