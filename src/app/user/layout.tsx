@@ -10,9 +10,9 @@ import { startTokenRefresh } from "@/lib/tokenService";
 import { refreshAccessToken } from "@/lib/refreshToken";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import Sidebar from "@/components/user/Sidebar";
+import Sidebar from "@/components/merchant/Sidebar";
 import LoadingAnimation from "@/components/global/LoadingAnimation";
-import Header from "@/components/user/Header";
+import Header from "@/components/merchant/Header";
 
 export default function RootLayout({
   children,

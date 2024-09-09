@@ -1,6 +1,6 @@
 "use client";
-import FaceRecognizer from "@/components/user/recognition/FaceRecognizer";
-import RecognitionHistory from "@/components/user/recognition/RecognitionHistory";
+import FaceRecognizer from "@/components/merchant/recognition/FaceRecognizer";
+import RecognitionHistory from "@/components/merchant/recognition/RecognitionHistory";
 import { useState } from "react";
 
 const UserRecognition: React.FC = () => {

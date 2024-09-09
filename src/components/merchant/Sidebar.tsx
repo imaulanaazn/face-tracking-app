@@ -18,27 +18,27 @@ import Link from "next/link";
 const menus = [
   {
     name: "User Recognition",
-    path: "/user/recognition",
+    path: "/merchant/recognition",
     icon: faExpand,
   },
   {
     name: "Dashboard",
-    path: "/user/dashboard",
+    path: "/merchant/dashboard",
     icon: faChartPie,
   },
   {
     name: "User Reminder",
-    path: "/user/reminder",
+    path: "/merchant/send-message",
     icon: faBell,
   },
   {
     name: "Device",
-    path: "/user/device",
+    path: "/merchant/device",
     icon: faComputer,
   },
   {
     name: "User Profile",
-    path: "/user/profile",
+    path: "/merchant/profile",
     icon: faUser,
   },
 ];

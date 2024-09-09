@@ -1,7 +1,7 @@
 "use client";
-import AddressForm from "@/components/user/profile/AddressForm";
-import EmailForm from "@/components/user/profile/EmailForm";
-import PasswordForm from "@/components/user/profile/PasswordForm";
+import AddressForm from "@/components/merchant/profile/AddressForm";
+import EmailForm from "@/components/merchant/profile/EmailForm";
+import PasswordForm from "@/components/merchant/profile/PasswordForm";
 import { updateMerchantProfile } from "@/services/api/merchant";
 import { RootState } from "@/store";
 import { setMerchant } from "@/store/slices/merchantSlice";
