@@ -3,13 +3,15 @@ import {
   faArrowDown,
   faArrowUp,
   faPaperPlane,
+  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { usePathname, useRouter } from "next/navigation";
 import { Tooltip as ReactTooltip } from "react-tooltip";
-import { getMembersByMerchant } from "@/services/api/merchant";
-import { IMemberFIlter } from "@/data-types/merchant";
+import { getMessageHistories } from "@/services/api/merchant";
 import formatDateToIndonesian from "@/lib/formatter";
+import { IMessageHistoryResponse } from "@/data-types/merchant";
+import { toast } from "react-toastify";
 
 const column = [
   {
@@ -17,68 +19,52 @@ const column = [
     name: "Nama",
   },
   {
-    id: "mobileNumber",
-    name: "No Telp",
+    id: "content",
+    name: "Message",
   },
   {
-    id: "lastDetection",
-    name: "Terakhir berkunjung",
+    id: "dateCreated",
+    name: "Tanggal dibuat",
   },
 ];
 
-interface IGetMemberResponse {
-  data: IMember[];
+interface IFilter {
   limit: number;
-  sort: string;
-  order: string;
-  totalPages: number;
-  page: number;
-}
-
-interface IMember {
-  id: string;
-  name: string;
-  mobileNumber: string;
-  lastDetection: string;
-  merchant: IMemberMerchant;
-}
-
-interface IMemberMerchant {
-  id: string;
-  name: string;
-  logo: string;
 }
 
 interface IQuery {
   page?: string;
-  limit?: string;
+  limit?: number;
   order?: string;
   name?: string;
-  transaction?: string;
-  unit?: string;
+  sort?: string;
 }
 
-export default function ClientTable({
+export default function TableHistory({
   filter,
   search,
 }: {
-  filter: IMemberFIlter;
+  filter: IFilter;
   search: string;
 }) {
-  const [members, setMembers] = useState<IGetMemberResponse>({
+  const [histories, setHistories] = useState<IMessageHistoryResponse>({
     limit: 10,
-    sort: "name",
+    sort: "dateCreated",
     order: "DESC",
     totalPages: 0,
     page: 1,
     data: [],
+    totalRecipients: {
+      totalRecipients: "0",
+      totalSent: "0",
+      totalPending: "0",
+      totalFailed: "0",
+    },
   });
 
   const [selectAll, setSelectAll] = useState(false);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
-  const router = useRouter();
-  const path = usePathname();
 
   const [query, setQuery] = useState<{
     order: string;
@@ -87,13 +73,13 @@ export default function ClientTable({
     sort: string;
   }>({
     order: "DESC",
-    limit: 10,
+    limit: filter.limit || 10,
     page: 1,
     sort: "dateCreated",
   });
 
   useEffect(() => {
-    if (selected.length !== members.data.length && selectAllChecked) {
+    if (selected.length !== histories.data.length && selectAllChecked) {
       setSelectAllChecked(false);
     }
   }, [selectAllChecked, selected.length]);
@@ -101,7 +87,7 @@ export default function ClientTable({
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
     if (!selectAll) {
-      setSelected(members.data.map((data) => data.id));
+      setSelected(histories.data.map((data) => data.id));
     } else {
       setSelected([]);
     }
@@ -115,15 +101,7 @@ export default function ClientTable({
     }
   };
 
-  function handleNextStep() {
-    if (selected.length) {
-      const jsonData = JSON.stringify(selected);
-      sessionStorage.setItem("members", jsonData);
-      router.push(path + "/compose-message");
-    }
-  }
-
-  const fetchMembers = async () => {
+  const fetchistories = async () => {
     const newQuery: IQuery = {
       ...query,
       page: query.page.toString(),
@@ -135,41 +113,24 @@ export default function ClientTable({
     }
 
     try {
-      const response = await getMembersByMerchant(newQuery);
-      setMembers(response.data);
-    } catch (error) {
-      console.error("Error fetching members:", error);
+      const response = await getMessageHistories(newQuery);
+      setHistories(response.data);
+    } catch (error: any) {
+      toast.error("Gagal mengamnil riwayat pesan " + error.message);
+      console.error("Error fetching histories:", error);
     }
   };
 
   useEffect(() => {
-    fetchMembers();
-  }, [
-    query.page,
-    query.limit,
-    query.sort,
-    query.order,
-    filter.limit,
-    filter.transaction,
-    filter.unit,
-    search,
-  ]);
-
-  const handleSearchChange = (event: any) => {
-    setQuery((prev) => ({ ...query, search: event.target.value }));
-  };
+    fetchistories();
+  }, [query.page, query.limit, query.sort, query.order, filter.limit, search]);
 
   const handlePageChange = (direction: string) => {
-    if (direction === "next" && members.data.length === query.limit) {
+    if (direction === "next" && histories.data.length === filter.limit) {
       setQuery((prev) => ({ ...prev, page: query.page + 1 }));
     } else if (direction === "prev" && query.page > 0) {
       setQuery((prev) => ({ ...prev, page: query.page - 1 }));
     }
-  };
-
-  const handleRowsPerPageChange = (event: any) => {
-    setQuery((prev) => ({ ...prev, limit: parseInt(event.target.value, 10) }));
-    setQuery((prev) => ({ ...prev, page: 0 }));
   };
 
   return (
@@ -184,15 +145,15 @@ export default function ClientTable({
           </h2>
           <div className="relative">
             <div
-              onClick={handleNextStep}
+              onClick={() => {}}
               className="cursor-pointer"
               data-tooltip-id="tooltip-delete"
-              data-tooltip-content="Tulis Pesan"
+              data-tooltip-content="Hapus History"
             >
               <FontAwesomeIcon
-                icon={faPaperPlane}
+                icon={faTrash}
                 size="lg"
-                className="text-blue-500"
+                className="text-rose-500"
               />
             </div>
             <ReactTooltip
@@ -268,15 +229,47 @@ export default function ClientTable({
                         </div>
                       </th>
                     ))}
+                    <th
+                      scope="col"
+                      className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
+                    >
+                      <div className="flex gap-3 cursor-pointer items-center justify-center">
+                        <p>Berhasil dikirim</p>
+                      </div>
+                    </th>
+                    <th
+                      scope="col"
+                      className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
+                    >
+                      <div className="flex gap-3 cursor-pointer items-center justify-center">
+                        <p>Pending</p>
+                      </div>
+                    </th>
+                    <th
+                      scope="col"
+                      className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
+                    >
+                      <div className="flex gap-3 cursor-pointer items-center justify-center">
+                        <p>Gagal dikirim</p>
+                      </div>
+                    </th>
+                    <th
+                      scope="col"
+                      className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
+                    >
+                      <div className="flex gap-3 cursor-pointer items-center justify-center">
+                        <p>Aksi</p>
+                      </div>
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {members.data.map((user) => (
+                  {histories.data.map((history) => (
                     <tr
-                      key={user.id}
-                      onClick={() => handleRowSelect(user.id)}
+                      key={history.id}
+                      onClick={() => handleRowSelect(history.id)}
                       className={`${
-                        selected.includes(user.id)
+                        selected.includes(history.id)
                           ? "bg-gray-100"
                           : "bg-white hover:bg-gray-100"
                       }`}
@@ -285,10 +278,10 @@ export default function ClientTable({
                         <div className="flex items-center h-5">
                           <input
                             type="checkbox"
-                            name={user.id}
-                            id={user.id}
-                            checked={selected.includes(user.id)}
-                            onChange={() => handleRowSelect(user.id)}
+                            name={history.id}
+                            id={history.id}
+                            checked={selected.includes(history.id)}
+                            onChange={() => handleRowSelect(history.id)}
                             className="h-4 w-4 cursor-pointer"
                           />
                           <label htmlFor="checkbox" className="sr-only">
@@ -297,16 +290,33 @@ export default function ClientTable({
                         </div>
                       </td>
                       <td className="px-4 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
-                        <p>{user.name}</p>
+                        <p>{history.name}</p>
                       </td>
                       <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {user.mobileNumber}
+                        {history.content.slice(10)}
                       </td>
                       <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
                         {formatDateToIndonesian({
-                          isoDate: user.lastDetection,
-                          includeTime: true,
+                          isoDate: history.dateCreated,
+                          includeTime: false,
                         })}
+                      </td>
+                      <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap text-center">
+                        {history.totalRecipients}
+                      </td>
+                      <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap text-center">
+                        {history.totalPending}
+                      </td>
+                      <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap text-center">
+                        {history.totalFailed}
+                      </td>
+                      <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap text-center">
+                        <a
+                          href={`/merchant/message-detail/${history.id}`}
+                          className="py-2 px-4 rounded-md bg-blue-600 text-white"
+                        >
+                          Lihat Pesan
+                        </a>
                       </td>
                     </tr>
                   ))}
@@ -337,17 +347,14 @@ export default function ClientTable({
                 <button
                   onClick={() => handlePageChange("next")}
                   className="px-4 py-2 bg-gray-300 text-gray-700 rounded"
-                  disabled={
-                    Math.ceil(members.totalPages / members.limit) ===
-                    members.page
-                  }
+                  disabled={histories.totalPages === histories.page}
                 >
                   Next
                 </button>
               </div>
 
               <p className="text-center mt-4">
-                total halaman : {members.totalPages}
+                total halaman : {histories.totalPages}
               </p>
             </div>
           </div>

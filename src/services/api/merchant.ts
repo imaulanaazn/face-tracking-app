@@ -2,6 +2,7 @@ import {
   IConnection,
   IConnectionType,
   IMerchant,
+  IMessageHistoryResponse,
   IWhatsappConnection,
 } from "@/data-types/merchant";
 import apiClient from "@/lib/apiClient";
@@ -201,6 +202,10 @@ interface ICreateConnection extends IAPIResponseTemplate {}
 
 interface IGetMerchantConnections extends IAPIResponseTemplate {
   data: IConnection[];
+}
+
+interface IGetMessageHistories extends IAPIResponseTemplate {
+  data: IMessageHistoryResponse;
 }
 
 export const getMyMerchant = async (): Promise<IMerchantResponse> => {
@@ -674,5 +679,35 @@ export const sendMessage = async (data: {
     };
   } catch (error: any) {
     throw new Error(error.response?.data?.message || "Failed to send message");
+  }
+};
+
+export const getMessageHistories = async (query: {
+  page?: string;
+  limit?: number;
+  order?: string;
+  name?: string;
+  sort?: string;
+}): Promise<IGetMessageHistories> => {
+  try {
+    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const response = await apiClient.get<IMessageHistoryResponse>(
+      "/v1/merchant/messages",
+      {
+        headers: {
+          Authorization: accessToken ? "Bearer " + accessToken.token : "",
+        },
+        params: {
+          ...query,
+        },
+      }
+    );
+    return {
+      success: true,
+      message: "Berhasil mengambil hisotry",
+      data: response.data,
+    };
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Failed to get histories");
   }
 };

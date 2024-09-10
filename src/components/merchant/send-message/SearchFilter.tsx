@@ -1,4 +1,4 @@
-import { IFilter } from "@/data-types/merchant";
+import { IMemberFIlter } from "@/data-types/merchant";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
@@ -6,7 +6,7 @@ import { useState } from "react";
 export default function SearchFilter({
   handleApply,
 }: {
-  handleApply: (filter: IFilter) => void;
+  handleApply: (filter: IMemberFIlter) => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [filter, setFilter] = useState({

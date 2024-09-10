@@ -11,6 +11,7 @@ import {
   faBell,
   faComputer,
   faPaperPlane,
+  faClockRotateLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
@@ -31,6 +32,11 @@ const menus = [
     name: "Send Message",
     path: "/merchant/send-message",
     icon: faPaperPlane,
+  },
+  {
+    name: "Message History",
+    path: "/merchant/message-history",
+    icon: faClockRotateLeft,
   },
   {
     name: "Device",

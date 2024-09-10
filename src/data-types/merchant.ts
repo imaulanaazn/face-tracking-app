@@ -13,7 +13,7 @@ export interface IMerchant {
   lastUpdated: Date | null;
 }
 
-export interface IFilter {
+export interface IMemberFIlter {
   limit: string;
   transaction: string;
   unit: string;
@@ -45,4 +45,30 @@ export interface IWhatsappStatus {
   merchantId: string;
   status: WhatsAppConnectionStatus;
   qr: string;
+}
+
+export interface IMessageHistoryResponse {
+  data: IMessageHistory[];
+  limit: number;
+  sort: string;
+  order: string;
+  totalPages: number;
+  page: number;
+  totalRecipients: {
+    totalRecipients: string;
+    totalSent: string;
+    totalPending: string;
+    totalFailed: string;
+  };
+}
+
+export interface IMessageHistory {
+  id: string;
+  name: string;
+  content: string;
+  dateCreated: string;
+  totalRecipients: string;
+  totalSent: string;
+  totalPending: string;
+  totalFailed: string;
 }
