@@ -208,6 +208,25 @@ interface IGetMessageHistories extends IAPIResponseTemplate {
   data: IMessageHistoryResponse;
 }
 
+interface IGetMessageDetail extends IAPIResponseTemplate {
+  data: IGetMessageDetailResponse;
+}
+
+export interface IGetMessageDetailResponse {
+  id: string;
+  name: string;
+  content: string;
+  dateCreated: string;
+  recipients: IRecipent[];
+}
+
+interface IRecipent {
+  id: string;
+  recipientNumber: string;
+  recipientName: string;
+  status: string;
+}
+
 export const getMyMerchant = async (): Promise<IMerchantResponse> => {
   try {
     const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
@@ -709,5 +728,30 @@ export const getMessageHistories = async (query: {
     };
   } catch (error: any) {
     throw new Error(error.response?.data?.message || "Failed to get histories");
+  }
+};
+
+export const getMessageDetail = async (
+  messageId: string
+): Promise<IGetMessageDetail> => {
+  try {
+    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const response = await apiClient.get<IGetMessageDetailResponse>(
+      `/v1/merchant/messages/${messageId}`,
+      {
+        headers: {
+          Authorization: accessToken ? "Bearer " + accessToken.token : "",
+        },
+      }
+    );
+    return {
+      success: true,
+      message: "Berhasil mengambil data message detail",
+      data: response.data,
+    };
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message || "Failed to get message detail"
+    );
   }
 };
