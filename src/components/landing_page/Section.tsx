@@ -1,4 +1,14 @@
+import { ReactElement } from "react";
 import SectionSvg from "../../../public/assets/svg/SectionSvg";
+
+interface ISectionProps {
+  className?: string;
+  id?: string;
+  crosses?: boolean;
+  crossesOffset?: string;
+  customPaddings?: string;
+  children: ReactElement;
+}
 
 const Section = ({
   className,
@@ -7,7 +17,7 @@ const Section = ({
   crossesOffset,
   customPaddings,
   children,
-}) => {
+}: ISectionProps) => {
   return (
     <div
       id={id}

@@ -3,6 +3,7 @@ import {
   IConnectionType,
   IMerchant,
   IMessageHistoryResponse,
+  IPlans,
   IWhatsappConnection,
 } from "@/data-types/merchant";
 import apiClient from "@/lib/apiClient";
@@ -225,6 +226,10 @@ interface IRecipent {
   recipientNumber: string;
   recipientName: string;
   status: string;
+}
+
+interface IGetPlans extends IAPIResponseTemplate {
+  data: IPlans[];
 }
 
 export const getMyMerchant = async (): Promise<IMerchantResponse> => {
@@ -752,6 +757,21 @@ export const getMessageDetail = async (
   } catch (error: any) {
     throw new Error(
       error.response?.data?.message || "Failed to get message detail"
+    );
+  }
+};
+
+export const getPlans = async (): Promise<IGetPlans> => {
+  try {
+    const response = await apiClient.get<IPlans[]>("/v1/plans");
+    return {
+      success: true,
+      message: "Berhasil mengambil data pricing plans",
+      data: response.data,
+    };
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message || "Failed to get pricing plans"
     );
   }
 };

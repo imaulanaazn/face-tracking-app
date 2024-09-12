@@ -1,24 +1,12 @@
 "use client";
-import { IConnection } from "@/data-types/merchant";
 import formatDateToIndonesian from "@/lib/formatter";
 import {
-  getMerchantConnections,
   getMessageDetail,
   IGetMessageDetailResponse,
-  sendMessage,
 } from "@/services/api/merchant";
-import {
-  faEye,
-  faFloppyDisk,
-  faPaperPlane,
-  faTrash,
-  faX,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useParams, usePathname, useRouter } from "next/navigation";
-import React, { SyntheticEvent, useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { Tooltip as ReactTooltip } from "react-tooltip";
 
 const data = [
   {
@@ -71,8 +59,6 @@ export default function MessageDetail() {
 
   const { messageId } = useParams();
 
-  console.log(messageStatus);
-
   async function fetchMerchantConnections() {
     try {
       const response = await getMessageDetail(messageId.toString());
@@ -124,8 +110,6 @@ export default function MessageDetail() {
     setMesageStatus(result);
   }
 
-  console.log();
-
   return (
     <div className="container p-6 md:p-8">
       <div className="wrapper flex flex-col lg:flex-row lg:gap-8 md:gap-6 gap-4">
@@ -152,27 +136,10 @@ export default function MessageDetail() {
           <div className="min-h-28 rounded-lg mt-2">
             <div
               className="whitespace-pre-wrap text-gray-600 font-base"
-              // dangerouslySetInnerHTML={{ __html: formatMessage(message) }}
-            >
-              orem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industrys standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book. It has
-              survived not only five centuries, but also the leap into
-              electronic typesetting, remaining essentially unchanged. It was
-              popularised in the 1960s with the release of Letraset sheets
-              containing Lorem Ipsum passages, and more recently with desktop
-              publishing software like Aldus PageMaker including versions of
-              Lorem Ipsum orem Ipsum is simply dummy text of the printing and
-              typesetting industry. Lorem Ipsum has been the industrys standard
-              dummy text ever since the 1500s, when an unknown printer took a
-              galley of type and scrambled it to make a type specimen book. It
-              has survived not only five centuries, but also the leap into
-              electronic typesetting, remaining essentially unchanged. It was
-              popularised in the 1960s with the release of Letraset sheets
-              containing Lorem Ipsum passages, and more recently with desktop
-              publishing software like Aldus PageMaker including versions of
-            </div>
+              dangerouslySetInnerHTML={{
+                __html: formatMessage(messageDetail?.content || ""),
+              }}
+            />
           </div>
         </div>
 

@@ -118,3 +118,20 @@ canvas {
 .-rotate-360 {
   @apply rotate-[-360deg];
 }
+
+#pricing-cards-wrapper h2 {
+  font-size: 1.2rem;
+  color: #2563eb;
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+}
+
+#pricing-cards-wrapper strong {
+  display: block;
+  margin-top: 1.2rem;
+  color: #111827;
+}
+
+#pricing-cards-wrapper li {
+  /* list-style: circle; */
+}

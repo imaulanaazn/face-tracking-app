@@ -72,3 +72,13 @@ export interface IMessageHistory {
   totalPending: string;
   totalFailed: string;
 }
+
+export interface IPlans {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  maxDevices: number;
+  dateCreated: string;
+  lastUpdated: string;
+}
