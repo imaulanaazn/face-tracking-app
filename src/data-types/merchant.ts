@@ -82,3 +82,11 @@ export interface IPlans {
   dateCreated: string;
   lastUpdated: string;
 }
+
+export interface IMessageThemeCount {
+  themeMessageId: string;
+  themeMessageName: string;
+  maxMessage: number;
+  totalSent: number;
+  remainingMessage: number;
+}

@@ -89,7 +89,7 @@ const Header = () => {
             ))}
             {merchantData ? (
               <a
-                href={"/user/dashboard"}
+                href={"/merchant/dashboard"}
                 className={`block lg:hidden relative font-code text-2xl uppercase text-gray-700 transition-colors hover:text-blue-400 px-6 py-6 md:py-8 lg:-mr-0.25 lg:text-xs lg:font-semibold  lg:leading-5 lg:hover:text-blue-600 xl:px-12`}
               >
                 Dashboard
@@ -117,7 +117,7 @@ const Header = () => {
 
         {merchantData ? (
           <div className="relative hidden lg:block">
-            <Link href={"/user/dashboard"} className="hover:cursor-pointer">
+            <Link href={"/merchant/dashboard"} className="hover:cursor-pointer">
               {merchantData.logo ? (
                 <Image
                   width={50}

@@ -3,6 +3,7 @@ import {
   IConnectionType,
   IMerchant,
   IMessageHistoryResponse,
+  IMessageThemeCount,
   IPlans,
   IWhatsappConnection,
 } from "@/data-types/merchant";
@@ -230,6 +231,10 @@ interface IRecipent {
 
 interface IGetPlans extends IAPIResponseTemplate {
   data: IPlans[];
+}
+
+interface IGetMessageThemeCount extends IAPIResponseTemplate {
+  data: IMessageThemeCount[];
 }
 
 export const getMyMerchant = async (): Promise<IMerchantResponse> => {
@@ -772,6 +777,31 @@ export const getPlans = async (): Promise<IGetPlans> => {
   } catch (error: any) {
     throw new Error(
       error.response?.data?.message || "Failed to get pricing plans"
+    );
+  }
+};
+
+export const getThemeMessageCount = async (
+  connectionId: string
+): Promise<IGetMessageThemeCount> => {
+  try {
+    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const response = await apiClient.get<IMessageThemeCount[]>(
+      `/v1/merchant/theme-messages-count/${connectionId}`,
+      {
+        headers: {
+          Authorization: accessToken ? "Bearer " + accessToken.token : "",
+        },
+      }
+    );
+    return {
+      success: true,
+      message: "Berhasil mengambil message theme count",
+      data: response.data,
+    };
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message || "Failed to get message theme count"
     );
   }
 };

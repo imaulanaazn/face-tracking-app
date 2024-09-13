@@ -2,8 +2,6 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import io, { Socket } from "socket.io-client";
 
-const SOCKET_URL = `https://3c16-114-122-116-106.ngrok-free.app/merchant`;
-
 import {
   faLink,
   faLinkSlash,
@@ -15,19 +13,29 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "swiper/css";
-import AddDeviceModal from "@/components/device/AddDeviceModal";
-import Summary from "@/components/device/Summary";
+import AddDeviceModal from "@/components/merchant/device/AddDeviceModal";
+import Summary from "@/components/merchant/device/Summary";
 import { toast } from "react-toastify";
 import {
   connectWhatsapp,
   deleteWhatsappConnection,
   getMerchantConnections,
+  getThemeMessageCount,
 } from "@/services/api/merchant";
-import { IConnection, IWhatsappStatus } from "@/data-types/merchant";
+import {
+  IConnection,
+  IMessageThemeCount,
+  IWhatsappStatus,
+} from "@/data-types/merchant";
 import { WhatsAppConnectionStatus } from "@/enum";
-import WhatsappSetupModal from "@/components/device/WhatsappSetupModal";
+import WhatsappSetupModal from "@/components/merchant/device/WhatsappSetupModal";
 
+const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL || "";
 let socket: Socket;
+
+interface IConnectionWithMessageTheme extends IConnection {
+  messageTheme?: IMessageThemeCount[];
+}
 
 export default function Device() {
   const [addDeviceModalOpen, setAddDeviceModalOpen] = useState(false);
@@ -35,10 +43,40 @@ export default function Device() {
     isOpen: false,
     connectId: "",
   });
-  const [connections, setConnections] = useState<IConnection[]>([]);
+  const [connections, setConnections] = useState<IConnectionWithMessageTheme[]>(
+    []
+  );
   const [whatsappStatus, setWhatsappStatus] = useState<IWhatsappStatus[]>([]);
 
   useEffect(() => {
+    async function fetchMessageThemes(connectionId: string) {
+      try {
+        const response = await getThemeMessageCount(connectionId);
+        const tempConnections = connections.map((connection) =>
+          connection.id === connection.id
+            ? { ...connection, messageTheme: response.data || [] }
+            : connection
+        );
+        setConnections(tempConnections);
+      } catch (error: any) {
+        console.error(error.message);
+      }
+    }
+
+    connections.forEach((connection) => fetchMessageThemes(connection.id));
+  }, [connections.length]);
+
+  useEffect(() => {
+    async function fetchMerchantConnections() {
+      try {
+        const response = await getMerchantConnections();
+        setConnections(response.data);
+      } catch (error: any) {
+        console.error(error.message);
+        toast.error("Gagal mengambil data connections" + error.message);
+      }
+    }
+
     fetchMerchantConnections();
   }, []);
 
@@ -76,16 +114,6 @@ export default function Device() {
     );
 
     setConnections(tempConnections);
-  }
-
-  async function fetchMerchantConnections() {
-    try {
-      const response = await getMerchantConnections();
-      setConnections(response.data);
-    } catch (error: any) {
-      console.error(error.message);
-      toast.error("Gagal mengambil data connections" + error.message);
-    }
   }
 
   async function disconnectWhatsapp(connectionId: string) {
@@ -165,12 +193,12 @@ export default function Device() {
         />
       )}
 
-      <Summary />
+      <Summary connections={connections} />
 
       <div className="p-6 mt-6 bg-white rounded-xl">
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold text-gray-800">Device</h2>
+          <h2 className="text-xl font-semibold text-gray-800">Devices</h2>
           <button
             onClick={() => {
               setAddDeviceModalOpen(true);
@@ -190,6 +218,15 @@ export default function Device() {
                 <th className="text-left p-3 text-gray-800 font-medium">
                   Device
                 </th>
+
+                {connections[0]?.messageTheme?.map((theme) => (
+                  <th
+                    key={theme.themeMessageId}
+                    className="text-left p-3 text-gray-800 font-medium"
+                  >
+                    {theme.themeMessageName}
+                  </th>
+                ))}
 
                 <th className="text-right p-3 text-gray-800 font-medium">
                   Action
@@ -221,6 +258,20 @@ export default function Device() {
                     </div>
                   </td>
 
+                  {connection.messageTheme?.map((theme) => (
+                    <td key={theme.themeMessageId} className="p-3">
+                      <div className="text-sm text-gray-600 w-max">
+                        Max : {theme.maxMessage}
+                      </div>
+                      <div className="text-sm text-gray-600 w-max">
+                        Total Sent : {theme.totalSent}
+                      </div>
+                      <div className="text-sm text-gray-600 w-max">
+                        Remaining : {theme.remainingMessage}
+                      </div>
+                    </td>
+                  ))}
+
                   <td className="p-3 flex gap-4 justify-end">
                     {connection.status === WhatsAppConnectionStatus.READY && (
                       <button
@@ -231,7 +282,7 @@ export default function Device() {
                             pending: "Loading",
                           });
                         }}
-                        className="bg-red-500 text-sm text-white py-2 px-4 rounded-md flex items-center gap-2"
+                        className="bg-red-500 text-sm text-white  py-2 px-4 rounded-md flex items-center gap-2"
                       >
                         <FontAwesomeIcon icon={faLinkSlash} />
                         Disconnect

@@ -45,25 +45,32 @@ export default function ProfilePopover() {
   }, [open]);
 
   function handleEditProfile() {
-    router.push("/user/profile");
+    setOpen(false);
+    router.push("/merchant/profile");
   }
 
   return (
     <div className="relative">
-      <div ref={imgRef} onClick={toggleMenu} className="hover:cursor-pointer">
-        {merchant.logo ? (
-          <Image
-            width={50}
-            height={50}
-            alt="tania andrew"
-            src={merchant.logo}
-            className="h-12 w-12  rounded-full object-cover object-center"
-          />
-        ) : (
-          <div className="h-12 w-12 rounded-full bg-slate-200 flex items-center justify-center">
-            <FontAwesomeIcon icon={faUser} className="text-gray-400 text-xl" />
-          </div>
-        )}
+      <div className="flex items-center gap-4">
+        <div ref={imgRef} onClick={toggleMenu} className="hover:cursor-pointer">
+          {merchant.logo ? (
+            <Image
+              width={40}
+              height={40}
+              alt="tania andrew"
+              src={merchant.logo}
+              className="h-12 w-12  rounded-full object-cover object-center"
+            />
+          ) : (
+            <div className="h-12 w-12 rounded-full bg-slate-200 flex items-center justify-center">
+              <FontAwesomeIcon
+                icon={faUser}
+                className="text-gray-400 text-xl"
+              />
+            </div>
+          )}
+        </div>
+        <p>{merchant.name}</p>
       </div>
 
       {open && (
