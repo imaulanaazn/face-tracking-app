@@ -7,7 +7,7 @@ export default function ClientsChart() {
   return (
     <div className="graphic rounded-xl md:rounded-2xl bg-white p-4 md:p-6 md:p-8 mt-6 md:mt-8">
       <h2 className="text-xl font-semibold text-gray-800">
-        Grafik pelanggan bulan ini
+        Members graphic this month
       </h2>
       <SplineChart />
     </div>
