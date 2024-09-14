@@ -33,9 +33,9 @@ export default function RecognitionHistory({
   }, [memberId]);
 
   return (
-    <div className="w-full lg:w-2/5 history bg-white h-auto rounded-xl md:rounded-2xl p-4 md:p-6 lg:p-8">
+    <div className="w-full lg:w-2/5 max-w-96 bg-white h-auto  rounded-xl md:rounded-2xl">
       <h2 className="text-xl font-semibold text-gray-800 mb-4">History</h2>
-      <div className="tables">
+      <div className="tables lg:max-h-[80vh] overflow-y-auto">
         <table className="min-w-full">
           <thead className="bg-slate-100 border-b">
             <tr>
@@ -53,7 +53,7 @@ export default function RecognitionHistory({
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="">
             {history.map((data) => (
               <tr
                 key={data.timestamp}

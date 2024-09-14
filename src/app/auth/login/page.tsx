@@ -33,7 +33,7 @@ export default function LoginPage() {
       localStorage.setItem("refreshToken", JSON.stringify(refreshToken));
 
       startTokenRefresh();
-      router.push("/user/dashboard");
+      router.push("/merchant/dashboard");
     } catch (err: any) {
       console.error("Login failed:", err);
       setError(err.message || "Login failed. Please try again.");

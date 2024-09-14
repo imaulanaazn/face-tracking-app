@@ -43,7 +43,7 @@ const Header = ({
       </div>
 
       <div className="flex items-center gap-x-6">
-        <form action="#" method="GET" className="pl-2 md:hidden">
+        {/* <form action="#" method="GET" className="pl-2 md:hidden">
           <div className="w-52 mt-1 relative">
             <button className="pl-3 flex items-center absolute top-0 right-2 bottom-0 h-full w-auto aspect-square group">
               <FontAwesomeIcon
@@ -59,7 +59,7 @@ const Header = ({
               placeholder="Search"
             />
           </div>
-        </form>
+        </form> */}
         <ProfilePopover />
       </div>
     </header>

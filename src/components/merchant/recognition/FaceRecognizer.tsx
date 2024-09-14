@@ -267,7 +267,7 @@ const FaceRecognizer = ({ handleDetectionHistory }: IFaceRecognizerProps) => {
   };
 
   return (
-    <div className="attendance-wrapper w-full lg:w-3/5 p-4 md:p-6 lg:p-8 bg-white rounded-xl md:rounded-2xl">
+    <div className="attendance-wrapper w-full lg:w-3/5 bg-white rounded-xl md:rounded-2xl">
       <div className="header flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold text-gray-800">
           Face Recognition

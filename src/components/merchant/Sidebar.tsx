@@ -19,8 +19,8 @@ import Link from "next/link";
 
 const menus = [
   {
-    name: "User Recognition",
-    path: "/merchant/recognition",
+    name: "Members Recognition",
+    path: "/recognition",
     icon: faExpand,
   },
   {
@@ -44,7 +44,7 @@ const menus = [
     icon: faComputer,
   },
   {
-    name: "User Profile",
+    name: "Merchant Profile",
     path: "/merchant/profile",
     icon: faUser,
   },
@@ -96,6 +96,7 @@ const Sidebar = ({
           <Link
             key={menu.path}
             href={menu.path}
+            target={menu.path === "/recognition" ? "_blank" : undefined}
             className={`flex items-center gap-3 py-3 px-4 rounded-full ${
               currentPath.includes(menu.path)
                 ? "bg-blue-500 text-white"

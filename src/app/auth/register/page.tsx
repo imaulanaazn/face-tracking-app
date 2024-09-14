@@ -41,20 +41,20 @@ export default function RegisterPage() {
       };
       const response = await register(data);
 
-      // const accessToken = {
-      //   token: response.data.accessToken,
-      //   expiredAt: response.data.accessTokenExpiredAt,
-      // };
+      const accessToken = {
+        token: response.data.accessToken,
+        expiredAt: response.data.accessTokenExpiredAt,
+      };
 
-      // const refreshToken = {
-      //   token: response.data.refreshToken,
-      //   expiredAt: response.data.refreshTokenExpiredAt,
-      // };
+      const refreshToken = {
+        token: response.data.refreshToken,
+        expiredAt: response.data.refreshTokenExpiredAt,
+      };
 
-      // localStorage.setItem("accessToken", JSON.stringify(accessToken));
-      // localStorage.setItem("refreshToken", JSON.stringify(refreshToken));
+      localStorage.setItem("accessToken", JSON.stringify(accessToken));
+      localStorage.setItem("refreshToken", JSON.stringify(refreshToken));
 
-      // startTokenRefresh();
+      startTokenRefresh();
       router.push("/auth/login");
     } catch (err: any) {
       console.error("Register failed:", err);
