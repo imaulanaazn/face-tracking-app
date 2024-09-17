@@ -8,49 +8,9 @@ import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-const data = [
-  {
-    id: "1",
-    title: "Welcome",
-    message:
-      "Thank you for visiting our platform. We are committed to providing you with the best experience possible. Ourr.",
-  },
-  {
-    id: "2",
-    title: "Reminder",
-    message:
-      "This is just a friendly reminder to check out our latest offers and deals! Our current promotions include discounts on",
-  },
-  {
-    id: "3",
-    title: "Update",
-    message:
-      "We are excited to announce that our app has been updated with several new features designed to enhance your experience. From ",
-  },
-  {
-    id: "4",
-    title: "Alert",
-    message:
-      "Your account password is set to expire in the next 10 days. To ensure uninterrupted access to your account, please update your secure.",
-  },
-  {
-    id: "5",
-    title: "Promotion",
-    message:
-      "We’re thrilled to offer you a special 20% discount on your next purchase! Whether you’re looking to upgrade your current setup or try .",
-  },
-  {
-    id: "6",
-    title: "Survey",
-    message:
-      "Your opinion matters to us! We would greatly appreciate it if you could take a few minutes to complete our.",
-  },
-];
-
 export default function MessageDetail() {
   const [messageDetail, setMessageDetail] =
     useState<IGetMessageDetailResponse | null>(null);
-  const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
   const [messageStatus, setMesageStatus] = useState({
     success: 0,
     pending: 0,
@@ -72,15 +32,6 @@ export default function MessageDetail() {
 
   useEffect(() => {
     fetchMerchantConnections();
-  }, []);
-
-  useEffect(() => {
-    const users = sessionStorage.getItem("members");
-
-    if (users?.length) {
-      const parsedUsers: string[] = JSON.parse(users);
-      setSelectedMembers(parsedUsers);
-    }
   }, []);
 
   const formatMessage = (text: string) => {
