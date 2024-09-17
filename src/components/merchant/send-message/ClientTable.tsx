@@ -118,7 +118,7 @@ export default function ClientTable({
   function handleNextStep() {
     if (selected.length) {
       const jsonData = JSON.stringify(selected);
-      sessionStorage.setItem("members", jsonData);
+      localStorage.setItem("members", jsonData);
       router.push(path + "/compose-message");
     }
   }

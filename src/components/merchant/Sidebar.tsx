@@ -6,9 +6,7 @@ import {
   faFilePdf,
   faChartPie,
   faExpand,
-  faShop,
   faArrowLeft,
-  faBell,
   faComputer,
   faPaperPlane,
   faClockRotateLeft,
@@ -89,7 +87,7 @@ const Sidebar = ({
         </button>
       </div>
 
-      <div className="divider w-full h-px bg-sky-600 mb-6"></div>
+      <div className="divider w-full h-px bg-gray-400 mb-6"></div>
 
       <nav className="flex flex-col gap-y-3">
         {menus.map((menu) => (
@@ -113,7 +111,7 @@ const Sidebar = ({
       </nav>
 
       <div className="absolute bottom-0 left-0 w-full px-8 pb-8">
-        <div className="divider w-full h-px bg-sky-600 mt-4 mb-6"></div>
+        <div className="divider w-full h-px bg-gray-400 mt-4 mb-6"></div>
         <span className="block font-medium">PDF Report</span>
         <span className="block text-gray-500 mb-4">
           Download monthly report

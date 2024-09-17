@@ -694,6 +694,7 @@ export const sendMessage = async (data: {
   memberIds: string[];
   message: string;
   name: string;
+  themeMessageId: string;
 }): Promise<IAPIResponseTemplate> => {
   try {
     const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
