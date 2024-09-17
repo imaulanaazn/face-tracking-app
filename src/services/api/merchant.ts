@@ -514,7 +514,7 @@ export const getMerchantMemberHistory = async (
 
 export const getMembersByMerchant = async (query: {
   page?: string;
-  limit?: string;
+  limit?: number;
   order?: string;
   name?: string;
   transaction?: string;

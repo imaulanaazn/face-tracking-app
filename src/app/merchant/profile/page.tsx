@@ -61,27 +61,28 @@ export default function Profile() {
     <div className="flex flex-col lg:flex-row gap-6 md:gap-8 p-6 md:p-8 ">
       <div className="w-full lg:w-5/12 xl:w-2/5">
         <div className="p-6 bg-white rounded-xl shadow-sm">
-          <div className="flex flex-col lg:flex-row items-start">
-            <div>
+          <div className="flex flex-col gap-4 items-center">
+            <div className="relative group">
               {previewImage || merchant.logo ? (
                 <Image
                   height={50}
                   width={50}
-                  className="w-24 h-24 rounded-full lg:rounded-lg object-cover"
+                  className="w-20 h-20 lg:w-28 lg:h-28 rounded-full object-cover"
                   src={previewImage || merchant.logo || ""}
                   alt="Profile"
                 />
               ) : (
-                <div className="w-20 h-20 lg:w-24 lg:h-24 bg-slate-200 flex items-center justify-center rounded-full lg:rounded-lg">
+                <div className="w-20 h-20 lg:w-28 lg:h-28 bg-slate-200 flex items-center justify-center rounded-full lg:rounded-lg">
                   <FontAwesomeIcon
                     icon={faUser}
                     className="text-3xl text-gray-600"
                   />
                 </div>
               )}
-              <button
+
+              <div
                 onClick={handleChangeClick}
-                className="mt-3 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md flex items-center gap-2 text-sm w-full"
+                className="absolute top-0 left-0 w-20 h-20 lg:w-28 lg:h-28 rounded-full flex items-center gap-2 justify-center group-hover:bg-gray-800/60 hover:cursor-pointer opacity-0 group-hover:opacity-100 text-white"
               >
                 <FontAwesomeIcon icon={faUpload} />
                 Ubah
@@ -91,10 +92,11 @@ export default function Profile() {
                   ref={inputFile}
                   onChange={handleFileChange}
                 />
-              </button>
+              </div>
             </div>
+
             <div className="lg:ml-4 mt-4 lg:mt-0">
-              <h2 className="text-xl font-semibold text-gray-800 text-center lg:text-left">
+              <h2 className="text-xl font-semibold text-gray-800 text-center">
                 {merchant.name}
               </h2>
               <p className="text-gray-600 text-sm text-center lg:text-left mt-2">

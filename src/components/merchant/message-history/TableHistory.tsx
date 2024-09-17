@@ -116,7 +116,7 @@ export default function TableHistory({
       const response = await getMessageHistories(newQuery);
       setHistories(response.data);
     } catch (error: any) {
-      toast.error("Gagal mengamnil riwayat pesan " + error.message);
+      toast.error(error.message);
       console.error("Error fetching histories:", error);
     }
   };
@@ -346,7 +346,7 @@ export default function TableHistory({
                 />
                 <button
                   onClick={() => handlePageChange("next")}
-                  className="px-4 py-2 bg-gray-300 text-gray-700 rounded"
+                  className="px-4 py-2 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
                   disabled={histories.totalPages === histories.page}
                 >
                   Next

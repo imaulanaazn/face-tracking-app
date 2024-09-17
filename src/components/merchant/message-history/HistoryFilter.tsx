@@ -2,6 +2,7 @@ import { IMemberFIlter } from "@/data-types/merchant";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function HistoryFilter({
   handleApply,
@@ -62,7 +63,11 @@ export default function HistoryFilter({
 
             <button
               onClick={() => {
-                handleApply(filter);
+                if (!filter.limit) {
+                  toast.error("Filter limit harus diisi");
+                } else {
+                  handleApply(filter);
+                }
               }}
               className="py-2 px-3 rounded-md bg-blue-600 text-white hover:bg-blue-500 w-full mt-4"
             >

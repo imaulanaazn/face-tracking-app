@@ -6,7 +6,7 @@ import React, { useState } from "react";
 
 export default function UserReminder() {
   const [filter, setFilter] = useState({
-    limit: "10",
+    limit: 10,
     transaction: "true",
     unit: "month",
   });

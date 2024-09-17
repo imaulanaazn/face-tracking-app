@@ -51,7 +51,7 @@ interface IMemberMerchant {
 
 interface IQuery {
   page?: string;
-  limit?: string;
+  limit?: number;
   order?: string;
   name?: string;
   transaction?: string;
@@ -160,7 +160,7 @@ export default function ClientTable({
   };
 
   const handlePageChange = (direction: string) => {
-    if (direction === "next" && members.data.length === query.limit) {
+    if (direction === "next" && members.data.length === filter.limit) {
       setQuery((prev) => ({ ...prev, page: query.page + 1 }));
     } else if (direction === "prev" && query.page > 0) {
       setQuery((prev) => ({ ...prev, page: query.page - 1 }));

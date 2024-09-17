@@ -14,7 +14,7 @@ export interface IMerchant {
 }
 
 export interface IMemberFIlter {
-  limit: string;
+  limit: number;
   transaction: string;
   unit: string;
 }

@@ -2,6 +2,7 @@ import { IMemberFIlter } from "@/data-types/merchant";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function SearchFilter({
   handleApply,
@@ -10,7 +11,7 @@ export default function SearchFilter({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [filter, setFilter] = useState({
-    limit: "10",
+    limit: 10,
     transaction: "true",
     unit: "month",
   });
@@ -22,6 +23,7 @@ export default function SearchFilter({
   const closeDropdown = () => {
     setIsOpen(false);
   };
+
   return (
     <div className="relative inline-block text-left">
       <div
@@ -56,7 +58,7 @@ export default function SearchFilter({
                 onChange={(e) => {
                   setFilter((prev) => ({
                     ...prev,
-                    limit: e.target.value,
+                    limit: parseInt(e.target.value),
                   }));
                 }}
               />
@@ -168,7 +170,11 @@ export default function SearchFilter({
 
             <button
               onClick={() => {
-                handleApply(filter);
+                if (!filter.limit) {
+                  toast.error("Limit harus diisi");
+                } else {
+                  handleApply(filter);
+                }
               }}
               className="py-2 px-3 rounded-md bg-blue-600 text-white hover:bg-blue-500 w-full mt-4"
             >
