@@ -1,4 +1,3 @@
-import { IMemberFIlter } from "@/data-types/merchant";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";

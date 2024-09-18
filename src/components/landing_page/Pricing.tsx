@@ -1,11 +1,11 @@
-import { IPlans } from "@/data-types/merchant";
+import { IPlan } from "@/data-types/merchant";
 import Heading from "./Heading";
 import PricingList from "./PricingList";
 import Section from "./Section";
 import { LeftLine, RightLine } from "./design/Pricing";
 import Image from "next/image";
 
-const Pricing = ({ pricingList }: { pricingList: IPlans[] }) => {
+const Pricing = ({ pricingList }: { pricingList: IPlan[] }) => {
   return (
     <Section className="overflow-hidden" id="pricing">
       <div className="container relative z-2">

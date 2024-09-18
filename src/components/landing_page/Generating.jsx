@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 const Generating = ({ className }) => {
   return (
     <div
@@ -5,7 +7,13 @@ const Generating = ({ className }) => {
         className || ""
       } text-base`}
     >
-      <img className="w-5 h-5 mr-4" src={"/assets/loading.png"} alt="Loading" />
+      <Image
+        width={4}
+        height={4}
+        className="w-5 h-5 mr-4"
+        src={"/assets/loading.png"}
+        alt="Loading"
+      />
       <span className="text-white">Remind User</span>
     </div>
   );

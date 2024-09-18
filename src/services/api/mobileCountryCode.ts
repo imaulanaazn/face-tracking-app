@@ -1,12 +1,11 @@
+import { IAPIResponseTemplate } from "@/data-types/merchant";
 import apiClient from "@/lib/apiClient";
 
-interface IMobileCodeResponse {
-  success: boolean;
-  message: string;
-  data: IMobileCodeResponseData[];
+interface IMobileCodeResponse extends IAPIResponseTemplate {
+  data: IMobileCode[];
 }
 
-export interface IMobileCodeResponseData {
+export interface IMobileCode {
   name: string;
   code: string;
   flag: string;
@@ -16,7 +15,7 @@ export interface IMobileCodeResponseData {
 
 export const getMobileCountryCode = async (): Promise<IMobileCodeResponse> => {
   try {
-    const response = await apiClient.get<IMobileCodeResponseData[]>(
+    const response = await apiClient.get<IMobileCode[]>(
       "/v1/mobile-country-code"
     );
 

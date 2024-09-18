@@ -1,9 +1,7 @@
 "use client";
+import { IDetectionHistory } from "@/data-types/merchant";
 import formatDateToIndonesian from "@/lib/formatter";
-import {
-  getMerchantMemberHistory,
-  IDetectionHistory,
-} from "@/services/api/merchant";
+import { getMerchantMemberHistory } from "@/services/api/merchantMembers";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";

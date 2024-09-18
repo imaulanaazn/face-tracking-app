@@ -34,6 +34,7 @@ const breakpoints = {
     spaceBetween: 30,
   },
 };
+
 export default function Summary({
   connections,
 }: {

@@ -1,7 +1,6 @@
 "use client";
 import HistoryFilter from "@/components/merchant/message-history/HistoryFilter";
 import TableHistory from "@/components/merchant/message-history/TableHistory";
-import ClientTable from "@/components/merchant/send-message/ClientTable";
 import SearchBar from "@/components/merchant/send-message/SearchBar";
 import React, { useState } from "react";
 

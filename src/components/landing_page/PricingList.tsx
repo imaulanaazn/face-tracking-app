@@ -1,11 +1,7 @@
+import { IPlan } from "@/data-types/merchant";
 import CornerAccent from "../../../public/assets/pricing/CornerAccent";
-import { IPlans } from "@/data-types/merchant";
 
-export default function PricingList({
-  pricingList,
-}: {
-  pricingList: IPlans[];
-}) {
+export default function PricingList({ pricingList }: { pricingList: IPlan[] }) {
   return (
     <section
       className="

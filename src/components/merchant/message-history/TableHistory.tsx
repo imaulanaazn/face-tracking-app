@@ -1,17 +1,15 @@
-import React, { SyntheticEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   faArrowDown,
   faArrowUp,
-  faPaperPlane,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { usePathname, useRouter } from "next/navigation";
 import { Tooltip as ReactTooltip } from "react-tooltip";
-import { getMessageHistories } from "@/services/api/merchant";
 import formatDateToIndonesian from "@/lib/formatter";
 import { IMessageHistoryResponse } from "@/data-types/merchant";
 import { toast } from "react-toastify";
+import { getMessageHistories } from "@/services/api/merchantMessage";
 
 const column = [
   {

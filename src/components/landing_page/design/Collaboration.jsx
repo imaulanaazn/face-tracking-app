@@ -1,5 +1,3 @@
-import { curve1, curve2 } from "../../../../public/assets";
-
 export const RightCurve = () => {
   return (
     <div className="hidden absolute top-1/2 left-full w-[10.125rem] -mt-1 ml-10 pointer-events-none xl:block">

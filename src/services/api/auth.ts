@@ -1,4 +1,4 @@
-import Success from "@/app/merchant/success/page";
+import { IAPIResponseTemplate } from "@/data-types/merchant";
 import apiClient from "@/lib/apiClient";
 
 interface LoginData {
@@ -6,13 +6,11 @@ interface LoginData {
   password: string;
 }
 
-interface IAuthResponse {
-  success: boolean;
-  message: string;
-  data: IAuthResponseData;
+interface IAuthResponse extends IAPIResponseTemplate {
+  data: IAuthApiResponse;
 }
 
-interface IAuthResponseData {
+interface IAuthApiResponse {
   accessToken: string;
   refreshToken: string;
   accessTokenExpiredAt: Date;
@@ -31,7 +29,7 @@ interface RegisterData {
 
 export const login = async (data: LoginData): Promise<IAuthResponse> => {
   try {
-    const response = await apiClient.post<IAuthResponseData>(
+    const response = await apiClient.post<IAuthApiResponse>(
       "/v1/merchant/login",
       data
     );
@@ -50,7 +48,7 @@ export const login = async (data: LoginData): Promise<IAuthResponse> => {
 
 export const register = async (data: RegisterData) => {
   try {
-    const response = await apiClient.post<IAuthResponseData>(
+    const response = await apiClient.post<IAuthApiResponse>(
       "/v1/merchant/registration",
       data
     );

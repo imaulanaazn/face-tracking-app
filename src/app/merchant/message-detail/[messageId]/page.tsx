@@ -1,16 +1,14 @@
 "use client";
+import { IGetMessageAPIResponse } from "@/data-types/merchant";
 import formatDateToIndonesian from "@/lib/formatter";
-import {
-  getMessageDetail,
-  IGetMessageDetailResponse,
-} from "@/services/api/merchant";
+import { getMessageDetail } from "@/services/api/merchantMessage";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 export default function MessageDetail() {
   const [messageDetail, setMessageDetail] =
-    useState<IGetMessageDetailResponse | null>(null);
+    useState<IGetMessageAPIResponse | null>(null);
   const [messageStatus, setMesageStatus] = useState({
     success: 0,
     pending: 0,
@@ -44,7 +42,7 @@ export default function MessageDetail() {
     return formatted;
   };
 
-  function countStatus(data: IGetMessageDetailResponse) {
+  function countStatus(data: IGetMessageAPIResponse) {
     const result = data.recipients.reduce(
       (acc, obj) => {
         if (obj.status === "SUCCESS") {

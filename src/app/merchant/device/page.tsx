@@ -17,18 +17,18 @@ import AddDeviceModal from "@/components/merchant/device/AddDeviceModal";
 import Summary from "@/components/merchant/device/Summary";
 import { toast } from "react-toastify";
 import {
-  connectWhatsapp,
-  deleteWhatsappConnection,
-  getMerchantConnections,
-  getThemeMessageCount,
-} from "@/services/api/merchant";
-import {
   IConnection,
   IMessageThemeCount,
   IWhatsappStatus,
 } from "@/data-types/merchant";
 import { WhatsAppConnectionStatus } from "@/enum";
 import WhatsappSetupModal from "@/components/merchant/device/WhatsappSetupModal";
+import { getThemeMessageCount } from "@/services/api/merchantMessage";
+import {
+  connectWhatsapp,
+  deleteWhatsappConnection,
+  getMerchantConnections,
+} from "@/services/api/merchantConnections";
 
 const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL || "";
 let socket: Socket;

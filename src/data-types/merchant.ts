@@ -73,7 +73,7 @@ export interface IMessageHistory {
   totalFailed: string;
 }
 
-export interface IPlans {
+export interface IPlan {
   id: string;
   name: string;
   description: string;
@@ -89,4 +89,47 @@ export interface IMessageThemeCount {
   maxMessage: number;
   totalSent: number;
   remainingMessage: number;
+}
+
+export interface IAPIResponseTemplate {
+  success: boolean;
+  message: string;
+}
+
+export interface IGetMessageAPIResponse {
+  id: string;
+  name: string;
+  content: string;
+  dateCreated: string;
+  recipients: IRecipent[];
+}
+
+interface IRecipent {
+  id: string;
+  recipientNumber: string;
+  recipientName: string;
+  status: string;
+}
+
+export interface IProvince {
+  id: string;
+  name: string;
+}
+
+export interface ICitie {
+  id: string;
+  province_id: string;
+  name: string;
+}
+
+export interface IDistrict {
+  id: string;
+  regency_id: string;
+  name: string;
+}
+
+export interface IDetectionHistory {
+  id: string;
+  name: string;
+  timestamp: string;
 }

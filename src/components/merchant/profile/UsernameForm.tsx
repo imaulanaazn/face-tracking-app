@@ -1,4 +1,4 @@
-import { changeUsername } from "@/services/api/merchant";
+import { changeMerchantName } from "@/services/api/merchant";
 import React, { SyntheticEvent, useState } from "react";
 
 export default function UsernameForm() {
@@ -9,7 +9,7 @@ export default function UsernameForm() {
     e.preventDefault();
     try {
       const data = { firstName, lastName };
-      const response = await changeUsername(data);
+      const response = await changeMerchantName(data);
     } catch (err: any) {
       console.error(err.message);
     }

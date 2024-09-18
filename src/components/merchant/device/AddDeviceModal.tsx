@@ -4,13 +4,8 @@ import {
   createConnection,
   getAvailableWhatsapp,
   getListConnectionType,
-} from "@/services/api/merchant";
-import {
-  faComputer,
-  faPhone,
-  faUser,
-  faX,
-} from "@fortawesome/free-solid-svg-icons";
+} from "@/services/api/merchantConnections";
+import { faComputer, faPhone, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";

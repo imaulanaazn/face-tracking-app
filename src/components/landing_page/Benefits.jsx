@@ -4,6 +4,7 @@ import Section from "./Section";
 import Arrow from "../../../public/assets/svg/Arrow";
 import { GradientLight } from "./design/Benefits";
 import ClipPath from "../../../public/assets/svg/ClipPath";
+import Image from "next/image";
 
 const Benefits = () => {
   return (
@@ -33,7 +34,7 @@ const Benefits = () => {
                 <h5 className="h5 mb-5">{item.title}</h5>
                 <p className="body-2 mb-6 text-n-3">{item.text}</p>
                 <div className="flex items-center mt-auto">
-                  <img
+                  <Image
                     src={item.iconUrl}
                     width={48}
                     height={48}

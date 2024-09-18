@@ -1,9 +1,8 @@
 import Link from "next/link";
-import { brainwaveSymbol, check } from "../../../public/assets";
 import { collabApps, collabContent, collabText } from "../../lib/statics";
-import Button from "./Button";
 import Section from "./Section";
 import { LeftCurve, RightCurve } from "./design/Collaboration";
+import Image from "next/image";
 
 const Collaboration = () => {
   return (
@@ -18,7 +17,7 @@ const Collaboration = () => {
             {collabContent.map((item) => (
               <li className="mb-3 py-3" key={item.id}>
                 <div className="flex items-center">
-                  <img
+                  <Image
                     src={"/assets/check.svg"}
                     width={24}
                     height={24}
@@ -49,7 +48,7 @@ const Collaboration = () => {
             <div className="flex w-56 lg:w-60 aspect-square m-auto border border-blue-600 rounded-full">
               <div className="w-[6rem] aspect-square m-auto p-[0.2rem] bg-conic-gradient rounded-full">
                 <div className="flex items-center justify-center w-full h-full bg-white rounded-full">
-                  <img
+                  <Image
                     src={"/assets/brainwave-symbol.svg"}
                     width={48}
                     height={48}
@@ -72,7 +71,7 @@ const Collaboration = () => {
                       index * 45
                     }`}
                   >
-                    <img
+                    <Image
                       className="m-auto"
                       width={app.width}
                       height={app.height}

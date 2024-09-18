@@ -3,7 +3,7 @@ import { startTokenRefresh } from "@/lib/tokenService";
 import { register } from "@/services/api/auth";
 import {
   getMobileCountryCode,
-  IMobileCodeResponseData,
+  IMobileCode,
 } from "@/services/api/mobileCountryCode";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -22,9 +22,9 @@ export default function RegisterPage() {
 
   const [error, setError] = useState("");
 
-  const [mobileCountryCodes, setMobileCountryCodes] = useState<
-    IMobileCodeResponseData[]
-  >([]);
+  const [mobileCountryCodes, setMobileCountryCodes] = useState<IMobileCode[]>(
+    []
+  );
 
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);

@@ -10,6 +10,7 @@ import {
 } from "./design/Services";
 
 import Generating from "./Generating";
+import Image from "next/image";
 
 const Services = () => {
   return (
@@ -23,7 +24,7 @@ const Services = () => {
         <div className="relative">
           <div className="relative z-1 flex items-center h-[39rem] mb-5 p-8 border border-n-1/10 rounded-3xl overflow-hidden lg:p-20 xl:h-[46rem]">
             <div className="absolute top-0 left-0 w-full h-full pointer-events-none md:w-3/5 xl:w-auto">
-              <img
+              <Image
                 className="w-full h-full object-cover md:object-right"
                 width={800}
                 alt="Smartest AI"
@@ -43,7 +44,12 @@ const Services = () => {
                     key={index}
                     className="flex items-start py-4 border-t border-n-6"
                   >
-                    <img width={24} height={24} src={"/assets/check.svg"} />
+                    <Image
+                      width={24}
+                      height={24}
+                      src={"/assets/check.svg"}
+                      alt="check icon"
+                    />
                     <p className="ml-4">{item}</p>
                   </li>
                 ))}
@@ -56,7 +62,7 @@ const Services = () => {
           <div className="relative z-1 grid gap-5 lg:grid-cols-2">
             <div className="relative min-h-[39rem] border border-n-1/10 rounded-3xl overflow-hidden">
               <div className="absolute inset-0">
-                <img
+                <Image
                   src={"/assets/services/service-2.png"}
                   className="h-full w-full object-cover"
                   width={630}
@@ -101,7 +107,7 @@ const Services = () => {
                             : ""
                         }
                       >
-                        <img src={item} width={24} height={24} alt={item} />
+                        <Image src={item} width={24} height={24} alt={item} />
                       </div>
                     </li>
                   ))}
@@ -109,7 +115,7 @@ const Services = () => {
               </div>
 
               <div className="relative h-[20rem] bg-n-8 rounded-xl overflow-hidden md:h-[25rem]">
-                <img
+                <Image
                   src={"/assets/services/service-3.png"}
                   className="w-full h-full object-cover"
                   width={520}

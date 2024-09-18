@@ -1,3 +1,4 @@
+import { ICitie, IDistrict, IProvince } from "@/data-types/merchant";
 import {
   editMerchantAddress,
   getCities,
@@ -10,23 +11,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
-interface IProvince {
-  id: string;
-  name: string;
-}
-
-interface ICities {
-  id: string;
-  province_id: string;
-  name: string;
-}
-
-interface IDistricts {
-  id: string;
-  regency_id: string;
-  name: string;
-}
-
 const initialUserAddress = {
   province: "",
   city: "",
@@ -37,8 +21,8 @@ const initialUserAddress = {
 export default function AddressForm() {
   const [userAddress, setUserAddress] = useState(initialUserAddress);
   const [provinces, setProvinces] = useState<IProvince[]>([]);
-  const [cities, setCities] = useState<ICities[]>([]);
-  const [districs, setDistrics] = useState<IDistricts[]>([]);
+  const [cities, setCities] = useState<ICitie[]>([]);
+  const [districs, setDistrics] = useState<IDistrict[]>([]);
   const merchant = useSelector((state: RootState) => state.merchant);
   const dispatch = useDispatch();
 

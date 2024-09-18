@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   faArrowDown,
   faArrowUp,
@@ -7,9 +7,9 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { usePathname, useRouter } from "next/navigation";
 import { Tooltip as ReactTooltip } from "react-tooltip";
-import { getMembersByMerchant } from "@/services/api/merchant";
 import { IMemberFIlter } from "@/data-types/merchant";
 import formatDateToIndonesian from "@/lib/formatter";
+import { getMembersByMerchant } from "@/services/api/merchantMembers";
 
 const column = [
   {

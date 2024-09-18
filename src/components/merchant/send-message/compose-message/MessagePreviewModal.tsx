@@ -1,9 +1,10 @@
 import { IConnection, IMessageThemeCount } from "@/data-types/merchant";
+import { getMerchantConnections } from "@/services/api/merchantConnections";
 import {
-  getMerchantConnections,
   getThemeMessageCount,
   sendMessage,
-} from "@/services/api/merchant";
+} from "@/services/api/merchantMessage";
+
 import { faPaperPlane, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/navigation";

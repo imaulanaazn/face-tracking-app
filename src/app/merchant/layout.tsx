@@ -1,9 +1,7 @@
 "use client";
-import { Inter } from "next/font/google";
 import "../globals.css";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/store";
+import { useDispatch } from "react-redux";
 import { setMerchant } from "@/store/slices/merchantSlice";
 import { getMyMerchant } from "@/services/api/merchant";
 import { startTokenRefresh } from "@/lib/tokenService";

@@ -1,4 +1,3 @@
-// import ButtonSvg from "../../../../../../ /assets/svg/ButtonSvg";
 import ButtonSvg from "../../../public/assets/svg/ButtonSvg";
 
 const Button = ({ className, href, onClick, children, px, white }) => {

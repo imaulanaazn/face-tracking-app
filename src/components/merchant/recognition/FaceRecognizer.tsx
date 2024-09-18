@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPause, faPlay } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 import RegisterUserModal from "./RegisterUserModal";
-import { checkAttendance } from "@/services/api/merchant";
+import { checkAttendance } from "@/services/api/memberRecognition";
 
 interface IFaceRecognizerProps {
   handleDetectionHistory: (memberId: string) => void;
