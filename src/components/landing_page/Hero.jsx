@@ -22,7 +22,7 @@ const Hero = () => {
     >
       <div className="container relative" ref={parallaxRef}>
         <div className="relative z-1 max-w-[62rem] mx-auto text-center mb-[3.875rem] md:mb-20 lg:mb-[6.25rem]">
-          <h1 className="h1 mb-6">
+          <h1 className="h1 mb-6 font-bold">
             Kelola Kebutuhan Bisnismu Dengan Mudah Melalui {` `}
             <span className="inline-block relative">
               BOLO{" "}
@@ -39,23 +39,63 @@ const Hero = () => {
             Rasakan kemudahan mengelola pelanggan, mencatat keuangan dan beragam
             fitur lainnya dengan bolo
           </p>
-          <Link href="/auth/register">
-            <span className="button text-blue-600 hover:text-blue-400">
-              Mulai Mendaftar
-            </span>
+          <Link
+            className="button relative inline-flex items-center justify-center h-11 px-7 text-n-8 transition-colors hover:text-color-1 "
+            href="/auth/register"
+          >
+            <span className="relative z-10 text-white">Get started</span>
+            <svg
+              className="absolute top-0 left-0"
+              width="21"
+              height="44"
+              viewBox="0 0 21 44"
+            >
+              <path
+                fill="#2563eb"
+                stroke="#2563eb"
+                stroke-width="2"
+                d="M21,43.00005 L8.11111,43.00005 C4.18375,43.00005 1,39.58105 1,35.36365 L1,8.63637 C1,4.41892 4.18375,1 8.11111,1 L21,1"
+              ></path>
+            </svg>
+            <svg
+              className="absolute top-0 left-[1.3125rem] w-[calc(100%-2.625rem)]"
+              height="44"
+              viewBox="0 0 100 44"
+              preserveAspectRatio="none"
+              fill="#2563eb"
+            >
+              <polygon
+                fill="#2563eb"
+                fill-rule="nonzero"
+                points="100 0 100 44 0 44 0 0"
+              ></polygon>
+            </svg>
+            <svg
+              className="absolute top-0 right-0"
+              width="21"
+              height="44"
+              viewBox="0 0 21 44"
+            >
+              <path
+                fill="#2563eb"
+                stroke="#2563eb"
+                stroke-width="2"
+                d="M0,43.00005 L5.028,43.00005 L12.24,43.00005 C16.526,43.00005 20,39.58105 20,35.36365 L20,16.85855 C20,14.59295 18.978,12.44425 17.209,10.99335 L7.187,2.77111 C5.792,1.62675 4.034,1 2.217,1 L0,1"
+              ></path>
+            </svg>
           </Link>
         </div>
         <div className="relative max-w-[23rem] mx-auto md:max-w-5xl xl:mb-24">
           <div className="relative z-1 p-0.5 rounded-xl md:rounded-2xl bg-conic-gradient">
             <div className="relative bg-white rounded-[1rem]">
-              <div className="h-[1.4rem] bg-slate-200 rounded-t-[0.9rem]" />
+              <div className="h-[1.4rem] bg-white rounded-t-[0.9rem]" />
 
               <div className="aspect-[33/40] rounded-b-[0.9rem] overflow-hidden md:aspect-[688/490] lg:aspect-[1024/490]">
                 <Image
                   src={"/assets/hero/finance.jpg"}
                   className="w-full scale-[1.7] translate-y-[8%] md:scale-[1] md:-translate-y-[10%] lg:-translate-y-0 object-contain"
-                  width={1024}
-                  height={490}
+                  width={1440}
+                  height={600}
                   alt="AI"
                 />
 
@@ -84,8 +124,8 @@ const Hero = () => {
           </div>
           <div className="absolute -top-[54%] left-1/2 w-[234%] -translate-x-1/2 md:-top-[46%] md:w-[138%] lg:-top-[104%]">
             <Image
-              className="opacity-20 w-full"
-              src={"/assets/hero/hero-background-1.png"}
+              className="opacity-40 w-full"
+              src={"/assets/hero/hero-background.jpg"}
               width={1440}
               height={1800}
               alt="hero"
@@ -95,7 +135,7 @@ const Hero = () => {
           <BackgroundCircles />
         </div>
 
-        <CompanyLogos className="hidden relative z-10 mt-20 lg:block" />
+        {/* <CompanyLogos className="hidden relative z-10 mt-20 lg:block" /> */}
       </div>
 
       {/* <BottomLine /> */}

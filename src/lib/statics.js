@@ -1,10 +1,13 @@
 import {
-  chromecast,
-  disc02,
-  recording01,
-  recording03,
-  sliders04,
-} from "../../public/assets";
+  faAd,
+  faBullhorn,
+  faChartSimple,
+  faMessage,
+  faNewspaper,
+  faTag,
+  faTags,
+  faUsersRays,
+} from "@fortawesome/free-solid-svg-icons";
 
 export const navigation = [
   {
@@ -14,13 +17,13 @@ export const navigation = [
   },
   {
     id: "1",
-    title: "Pricing",
-    url: "#pricing",
+    title: "Benefits",
+    url: "#the-benefits",
   },
   {
     id: "2",
-    title: "How to use",
-    url: "#how-to-use",
+    title: "Pricing",
+    url: "#pricing",
   },
   {
     id: "3",
@@ -109,7 +112,7 @@ export const collabText =
 export const collabContent = [
   {
     id: "0",
-    title: "User Friendly",
+    title: "Mudah digunakan",
     text: collabText,
   },
   {
@@ -119,6 +122,10 @@ export const collabContent = [
   {
     id: "2",
     title: "Menjaga Privasi Pengguna",
+  },
+  {
+    id: "3",
+    title: "Harga terjangkau",
   },
 ];
 
@@ -223,7 +230,7 @@ export const benefits = [
     title: "Pesan Otomatis",
     text: "Kirim pesan peringatan kepada pelanggan secara otomatis dengan jadwal yang bisa diatur sendiri",
     backgroundUrl: "/assets/benefits/card-1.svg",
-    iconUrl: "/assets/benefits/icon-1.svg",
+    iconUrl: faMessage,
     imageUrl: "/assets/benefits/card-bg-3.png",
   },
   {
@@ -231,7 +238,7 @@ export const benefits = [
     title: "Analisa dan Pelaporan",
     text: "Dapatkan laporan hasil analisa terkait bisnis anda dalam kurun waktu tertentu",
     backgroundUrl: "/assets/benefits/card-2.svg",
-    iconUrl: "/assets/benefits/icon-2.svg",
+    iconUrl: faChartSimple,
     imageUrl: "/assets/benefits/card-bg-3.png",
     light: true,
   },
@@ -240,32 +247,32 @@ export const benefits = [
     title: "Feedback Customer",
     text: "Dapatkan umpan balik dari pelanggan tentang produk anda agar menjadi bahan evaluasi dari bisnis anda",
     backgroundUrl: "/assets/benefits/card-3.svg",
-    iconUrl: "/assets/benefits/icon-3.svg",
+    iconUrl: faUsersRays,
     imageUrl: "/assets/benefits/card-bg-3.png",
   },
   {
     id: "3",
-    title: "Aman dan Menjaga Privasi",
-    text: "Kami menjamin keamanan data dari para pelanggan kami dan selalu memantau sistem keamanan kami secara berkala",
+    title: "Promotion",
+    text: "Kirim pesan promosi dari merchant mu semudah pilih pelanggan > tulis pesan > lalu kirim",
     backgroundUrl: "/assets/benefits/card-4.svg",
-    iconUrl: "/assets/benefits/icon-4.svg",
+    iconUrl: faBullhorn,
     imageUrl: "/assets/benefits/card-bg-3.png",
     light: true,
   },
   {
     id: "4",
-    title: "Paket Lengkap",
-    text: "Berbagai paket tersedia mulai dari basic hingga kebutuhan lanjutan, menjamin kebutuhan pengelolaan bisnis anda terpenuhi",
+    title: "News",
+    text: "Kirim berita pada pelangganmu dengan mudah hanya dengan BOLO, pilih pelanggan > tulis pesan > lalu kirim",
     backgroundUrl: "/assets/benefits/card-5.svg",
-    iconUrl: "/assets/benefits/icon-2.svg",
+    iconUrl: faNewspaper,
     imageUrl: "/assets/benefits/card-bg-3.png",
   },
   {
     id: "5",
-    title: "Harga Terjangkau",
-    text: "Kami menyediakan paket langganan dengan harga terjangkau agar pelanggan kami merasa puas. Anda bisa berlangganan jasa kami mulai dari Rp. 20.000 saja",
+    title: "Event",
+    text: "Kirim informasi event pada pelangganmu dengan mudah hanya dengan BOLO, pilih pelanggan > tulis pesan > lalu kirim",
     backgroundUrl: "/assets/benefits/card-6.svg",
-    iconUrl: "/assets/benefits/icon-2.svg",
+    iconUrl: faTags,
     imageUrl: "/assets/benefits/card-bg-3.png",
   },
 ];

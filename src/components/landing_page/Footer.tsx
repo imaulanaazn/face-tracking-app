@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Footer() {
   return (
-    <footer className="w-full">
+    <footer className="w-full" id="contacts">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="py-14 grid grid-cols-12 gap-x-5 gap-y-8">
           <div className="col-span-full xl:col-span-3 relative bg-gradient-to-tr from-blue-600 to-violet-600 rounded-2xl gap-12 p-6 xl:w-72 h-96 flex flex-col justify-center items-center">
@@ -259,7 +259,7 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div className="py-4 bg-blue-50">
+      <div className="py-4">
         <div className="flex items-center justify-center">
           <span className="text-sm text-gray-800 ">
             Copyright@2024 All Right Reserved by{" "}

@@ -6,6 +6,8 @@ import Pricing from "@/components/landing_page/Pricing";
 import Footer from "@/components/landing_page/Footer";
 import { Metadata } from "next";
 import { getPlans } from "@/services/api/subscriptionPlans";
+import Image from "next/image";
+import RegisterNow from "@/components/landing_page/RegisterNow";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -24,6 +26,7 @@ export default async function Home() {
         {/* <Services /> */}
         <Pricing pricingList={response.data} />
         {/* <Roadmap /> */}
+        <RegisterNow />
         <Footer />
       </div>
       {/* <ButtonGradient /> */}

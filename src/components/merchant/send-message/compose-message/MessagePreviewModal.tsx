@@ -68,7 +68,6 @@ export default function MessagePreviewModal({
       toast.success("Berhasil mengirim pesan ke pelanggan");
       clearForm();
       router.push("/merchant/send-message");
-      console.log(data);
     } catch (error: any) {
       toast.error(error.message);
       console.error;

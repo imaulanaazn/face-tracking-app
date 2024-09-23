@@ -6,7 +6,7 @@ const TagLine = ({ className, children }) => {
       className={`tagline flex items-center justify-center ${className || ""}`}
     >
       {brackets("left")}
-      <div className="mx-3 text-gray-600">{children}</div>
+      <div className="mx-3 text-gray-800">{children}</div>
       {brackets("right")}
     </div>
   );

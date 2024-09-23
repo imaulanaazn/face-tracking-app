@@ -7,9 +7,9 @@ import Image from "next/image";
 const Collaboration = () => {
   return (
     <Section>
-      <div className="container lg:flex">
+      <div id="the-benefits" className="container lg:flex">
         <div className="max-w-[25rem]">
-          <h2 className="h2 mb-4 md:mb-8">
+          <h2 className="h2 mb-4 md:mb-8 font-semibold text-gray-800">
             BOLO, Pantau Bisnis Dalam Genggaman
           </h2>
 
@@ -23,10 +23,12 @@ const Collaboration = () => {
                     height={24}
                     alt="check"
                   />
-                  <h6 className="body-2 ml-5">{item.title}</h6>
+                  <h6 className="body-2 ml-5 font-medium text-gray-700">
+                    {item.title}
+                  </h6>
                 </div>
                 {item.text && (
-                  <p className="body-2 mt-3 text-n-4">{item.text}</p>
+                  <p className="body-2 mt-3 text-gray-500">{item.text}</p>
                 )}
               </li>
             ))}

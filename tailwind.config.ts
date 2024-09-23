@@ -44,9 +44,10 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ["var(--font-sora)", ...fontFamily.sans],
-        code: "var(--font-code)",
-        grotesk: "var(--font-grotesk)",
+        // sans: ["var(--font-sora)", ...fontFamily.sans],
+        // code: "var(--font-code)",
+        // grotesk: "var(--font-grotesk)",
+        notosans: "var(--font-notosans)",
       },
       letterSpacing: {
         tagline: ".15em",
@@ -116,14 +117,14 @@ const config: Config = {
           "@apply text-sm": {},
         },
         ".tagline": {
-          "@apply font-grotesk font-light text-xs tracking-tagline uppercase":
+          "@apply font-notosans font-light text-xs tracking-tagline uppercase":
             {},
         },
         ".quote": {
-          "@apply font-code text-lg leading-normal": {},
+          "@apply font-notosans text-lg leading-normal": {},
         },
         ".button": {
-          "@apply font-code text-xs font-bold uppercase tracking-wider": {},
+          "@apply font-notosans text-xs font-bold uppercase tracking-wider": {},
         },
       });
       addUtilities({

@@ -11,7 +11,7 @@ const Pricing = ({ pricingList }: { pricingList: IPlan[] }) => {
       <div className="container relative z-2">
         <div className="hidden relative justify-center mb-[6.5rem] lg:flex">
           <Image
-            src={"/assets/4-small.png"}
+            src={"/assets/sphere.png"}
             className="relative z-1"
             width={255}
             height={255}
@@ -31,6 +31,7 @@ const Pricing = ({ pricingList }: { pricingList: IPlan[] }) => {
         <Heading
           tag="Mulai Berlangganan Sekarang"
           title="Tersedia beragam paket"
+          className="font-semibold text-gray-800"
         />
 
         <div className="relative">
