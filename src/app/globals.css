@@ -140,3 +140,13 @@ canvas {
 #pricing-cards-wrapper li {
   /* list-style: circle; */
 }
+
+.custom-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: lightgray;
+}

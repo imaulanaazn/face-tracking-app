@@ -11,7 +11,7 @@ const Benefits = () => {
   return (
     <Section id="features">
       <div
-        className="container relative z-2 pt-10 xl:pb-20"
+        className="container relative pt-10 xl:pb-20"
         style={{
           background:
             "linear-gradient(180deg, rgba(255,255,255,0.2884803579634979) 0%, rgba(224,240,255,1) 66%, rgba(255,255,255,1) 100%)",

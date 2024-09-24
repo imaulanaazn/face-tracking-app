@@ -1,25 +1,41 @@
+"use client";
 import { IPlan } from "@/data-types/merchant";
 import CornerAccent from "../../../public/assets/pricing/CornerAccent";
+import CheckoutModal from "./CheckoutModal";
+import { useState } from "react";
 
 export default function PricingList({ pricingList }: { pricingList: IPlan[] }) {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<IPlan | null>(null);
   return (
-    <section
-      className="
+    <>
+      {selectedPlan && (
+        <CheckoutModal
+          modalVisible={modalVisible}
+          handleCloseModal={() => {
+            setModalVisible(false);
+          }}
+          plan={selectedPlan}
+        />
+      )}
+
+      <section
+        className="
       bg-white
       relative
       z-20
       overflow-hidden
     "
-    >
-      <div className="w-full">
-        <div
-          id="pricing-cards-wrapper"
-          className="flex flex-wrap lg:flex-nowrap justify-center items-center mb-6 gap-6 md:gap-8"
-        >
-          {pricingList.map((pricing: any, index: number) => (
-            <div key={pricing.id} className="w-full md:w-1/2 lg:w-full">
-              <div
-                className="
+      >
+        <div className="w-full">
+          <div
+            id="pricing-cards-wrapper"
+            className="flex flex-wrap lg:flex-nowrap justify-center items-center mb-6 gap-6 md:gap-8"
+          >
+            {pricingList.map((pricing: any, index: number) => (
+              <div key={pricing.id} className="w-full md:w-1/2 lg:w-full">
+                <div
+                  className="
                bg-white
                rounded-xl
                relative
@@ -33,8 +49,8 @@ export default function PricingList({ pricingList }: { pricingList: IPlan[] }) {
                lg:py-10 lg:px-6
                xl:p-12
                "
-              >
-                {/* <span className="text-blue-600 font-semibold text-lg block mb-4">
+                >
+                  {/* <span className="text-blue-600 font-semibold text-lg block mb-4">
                   {pricing.name}
                 </span>
                 <h2 className="font-bold text-dark mb-5 text-[42px]">
@@ -53,7 +69,7 @@ export default function PricingList({ pricingList }: { pricingList: IPlan[] }) {
                 >
                   Perfect for using in a personal website or a client project.
                 </p> */}
-                {/* <div className="mb-7">
+                  {/* <div className="mb-7">
                   <p className="text-base text-body-color leading-loose mb-1">
                     1 User
                   </p>
@@ -73,13 +89,16 @@ export default function PricingList({ pricingList }: { pricingList: IPlan[] }) {
                     3 Months support
                   </p>
                 </div> */}
-                <div
-                  className="whitespace-pre-wrap text-gray-600"
-                  dangerouslySetInnerHTML={{ __html: pricing.description }}
-                />
-                <a
-                  href=""
-                  className={`
+                  <div
+                    className="whitespace-pre-wrap text-gray-600"
+                    dangerouslySetInnerHTML={{ __html: pricing.description }}
+                  />
+                  <button
+                    onClick={() => {
+                      setModalVisible(true);
+                      setSelectedPlan(pricing);
+                    }}
+                    className={`
                     w-full
                     block
                     text-base
@@ -97,52 +116,53 @@ export default function PricingList({ pricingList }: { pricingList: IPlan[] }) {
                     transition
                     mt-8
                     `}
-                >
-                  Choose {pricing.name}
-                </a>
-                <div>
-                  <span className="absolute right-0 top-7 z-[-1]">
-                    <svg
-                      width="77"
-                      height="172"
-                      viewBox="0 0 77 172"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <circle
-                        cx="86"
-                        cy="86"
-                        r="86"
-                        fill="url(#paint0_linear)"
-                      />
-                      <defs>
-                        <linearGradient
-                          id="paint0_linear"
-                          x1="86"
-                          y1="0"
-                          x2="86"
-                          y2="172"
-                          gradientUnits="userSpaceOnUse"
-                        >
-                          <stop stopColor="#3056D3" stopOpacity="0.09" />
-                          <stop
-                            offset="1"
-                            stopColor="#C4C4C4"
-                            stopOpacity="0"
-                          />
-                        </linearGradient>
-                      </defs>
-                    </svg>
-                  </span>
-                  <span className="absolute right-4 top-4 z-[-1]">
-                    <CornerAccent />
-                  </span>
+                  >
+                    Choose {pricing.name}
+                  </button>
+                  <div>
+                    <span className="absolute right-0 top-7 z-[-1]">
+                      <svg
+                        width="77"
+                        height="172"
+                        viewBox="0 0 77 172"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <circle
+                          cx="86"
+                          cy="86"
+                          r="86"
+                          fill="url(#paint0_linear)"
+                        />
+                        <defs>
+                          <linearGradient
+                            id="paint0_linear"
+                            x1="86"
+                            y1="0"
+                            x2="86"
+                            y2="172"
+                            gradientUnits="userSpaceOnUse"
+                          >
+                            <stop stopColor="#3056D3" stopOpacity="0.09" />
+                            <stop
+                              offset="1"
+                              stopColor="#C4C4C4"
+                              stopOpacity="0"
+                            />
+                          </linearGradient>
+                        </defs>
+                      </svg>
+                    </span>
+                    <span className="absolute right-4 top-4 z-[-1]">
+                      <CornerAccent />
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }

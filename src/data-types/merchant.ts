@@ -133,3 +133,19 @@ export interface IDetectionHistory {
   name: string;
   timestamp: string;
 }
+
+export interface IPaymentMethod {
+  id: string;
+  name: string;
+  logo: string | null;
+  disabled: boolean;
+  price: number;
+  fee: number;
+  totalPrice: number;
+}
+
+export interface IPaymentMethodWithCategory {
+  categoryId: string;
+  categoryName: string;
+  paymentMethods: IPaymentMethod[];
+}
