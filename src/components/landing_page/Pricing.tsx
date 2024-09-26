@@ -7,7 +7,7 @@ import Image from "next/image";
 
 const Pricing = ({ pricingList }: { pricingList: IPlan[] }) => {
   return (
-    <Section className="overflow-hidden" id="pricing">
+    <Section className="overflow-hidden">
       <div className="container relative">
         <div className="hidden relative justify-center mb-[6.5rem] lg:flex">
           <Image
@@ -34,7 +34,7 @@ const Pricing = ({ pricingList }: { pricingList: IPlan[] }) => {
           className="font-semibold text-gray-800"
         />
 
-        <div className="relative">
+        <div className="relative" id="pricing">
           <PricingList pricingList={pricingList} />
           <LeftLine />
           <RightLine />

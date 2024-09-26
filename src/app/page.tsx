@@ -1,4 +1,4 @@
-import Header from "@/components/landing_page/Header";
+import Header from "@/components/global/Header";
 import Hero from "@/components/landing_page/Hero";
 import Benefits from "@/components/landing_page/Benefits";
 import Collaboration from "@/components/landing_page/Collaboration";
@@ -6,7 +6,6 @@ import Pricing from "@/components/landing_page/Pricing";
 import Footer from "@/components/landing_page/Footer";
 import { Metadata } from "next";
 import { getPlans } from "@/services/api/subscriptionPlans";
-import Image from "next/image";
 import RegisterNow from "@/components/landing_page/RegisterNow";
 
 export const metadata: Metadata = {

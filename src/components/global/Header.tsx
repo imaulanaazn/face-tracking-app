@@ -2,8 +2,8 @@
 import { usePathname } from "next/navigation";
 
 import { navigation } from "../../lib/statics";
-import Button from "./Button";
-import { HamburgerMenu } from "./design/Header";
+import Button from "../landing_page/Button";
+import { HamburgerMenu } from "../landing_page/design/Header";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,11 +11,14 @@ import { faBars, faUser, faXmark } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import { getMyMerchant } from "@/services/api/merchant";
 import { IMerchant } from "@/data-types/merchant";
+import { useDispatch } from "react-redux";
+import { setMerchant } from "@/store/slices/merchantSlice";
 
 const Header = () => {
   const pathname = usePathname();
   const [openNavigation, setOpenNavigation] = useState(false);
   const [merchantData, setMerchantData] = useState<IMerchant | null>(null);
+  const dispatch = useDispatch();
 
   const toggleNavigation = () => {
     if (openNavigation) {
@@ -36,19 +39,14 @@ const Header = () => {
       try {
         const response = await getMyMerchant();
         localStorage.setItem("user", JSON.stringify(response.data));
+        dispatch(setMerchant(response.data));
         setMerchantData(response.data);
       } catch (err: any) {
         console.error(err);
       }
     }
 
-    const userFromLocal = JSON.parse(localStorage.getItem("user")!);
-
-    if (userFromLocal) {
-      setMerchantData(userFromLocal);
-    } else {
-      getMe();
-    }
+    getMe();
   }, []);
 
   return (
@@ -58,14 +56,14 @@ const Header = () => {
       }`}
     >
       <div className="flex items-center px-5 lg:px-7.5 xl:px-10 max-lg:py-4">
-        <a className="block w-[12rem] xl:mr-8" href="#hero">
+        <Link className="block w-[12rem] xl:mr-8" href="/">
           <Image
             src={"/assets/brainwave.svg"}
             width={190}
             height={40}
             alt="Brainwave"
           />
-        </a>
+        </Link>
 
         <nav
           className={`${

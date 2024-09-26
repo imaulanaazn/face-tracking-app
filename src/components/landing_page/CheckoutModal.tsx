@@ -17,6 +17,9 @@ import {
 import { toast } from "react-toastify";
 import { Router } from "next/router";
 import { useRouter } from "next/navigation";
+import { IDRRupiah } from "@/lib/formatter";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
 
 interface ICheckoutModal {
   handleCloseModal: () => void;
@@ -37,6 +40,7 @@ export default function CheckoutModal({
   );
   const [formStep, setFormStep] = useState(1);
   const router = useRouter();
+  const merchant = useSelector((state: RootState) => state.merchant);
 
   useEffect(() => {
     async function fetchPaymentMethods() {
@@ -61,11 +65,6 @@ export default function CheckoutModal({
     });
     setPaymentMethods(paymentMethodsTemp);
   }
-
-  let IDRRupiah = new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-  });
 
   function validatePeriode(unit: string, periode: number) {
     if (!periode) {
@@ -97,13 +96,13 @@ export default function CheckoutModal({
         return;
       }
 
+      if (!merchant.id) {
+        toast.error("Please login to continue");
+        return;
+      }
       setFormStep(2);
     } else {
-      toast.promise(handleCheckout(), {
-        success: "Create Order Successfully",
-        pending: "Creating Order",
-        error: "Failed To Create Order",
-      });
+      handleCheckout();
     }
   }
 
@@ -121,13 +120,25 @@ export default function CheckoutModal({
       unit,
       value: periode,
     };
+    const orderToast = toast.loading("Creating Order");
     try {
       const response = await subscribePlan(data);
-      toast.success(response.message);
       handleCloseModal();
       clearForm();
+      toast.update(orderToast, {
+        render: "Order Created",
+        type: "success",
+        isLoading: false,
+        autoClose: 3000,
+      });
       router.push(`/payment/${response.data.invoiceId}`);
     } catch (error: any) {
+      toast.update(orderToast, {
+        render: "Order Failed " + error.message,
+        type: "error",
+        autoClose: 3000,
+        isLoading: false,
+      });
       console.error(error.message);
     }
   }

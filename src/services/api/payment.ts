@@ -1,5 +1,6 @@
 import {
   IAPIResponseTemplate,
+  IOrderDetail,
   IPaymentMethod,
   IPaymentMethodWithCategory,
 } from "@/data-types/merchant";
@@ -83,6 +84,39 @@ export const subscribePlan = async ({
   } catch (error: any) {
     throw new Error(
       error.response?.data?.message || "Failed to order subscribtion"
+    );
+  }
+};
+
+interface IGetOrderDetail extends IAPIResponseTemplate {
+  data: IOrderDetail;
+}
+
+export const getOrderDetail = async (
+  invoiceId: string
+): Promise<IGetOrderDetail> => {
+  try {
+    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const response = await apiClient.get<IOrderDetail>(
+      `/v1/merchant/order/${invoiceId}`,
+      {
+        headers: {
+          Authorization: accessToken ? "Bearer " + accessToken.token : "",
+        },
+      }
+    );
+
+    const result = {
+      success: response.status === 200,
+      message: "Successfully get order detail",
+      data: response.data,
+    };
+
+    return result;
+  } catch (error: any) {
+    console.error(error);
+    throw new Error(
+      error.response?.data?.message || "Failed to get order detail"
     );
   }
 };

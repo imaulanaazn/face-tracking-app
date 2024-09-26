@@ -37,4 +37,9 @@ function formatDateToIndonesian({
   return `${day} ${month} ${year}`;
 }
 
+export let IDRRupiah = new Intl.NumberFormat("id-ID", {
+  style: "currency",
+  currency: "IDR",
+});
+
 export default formatDateToIndonesian;

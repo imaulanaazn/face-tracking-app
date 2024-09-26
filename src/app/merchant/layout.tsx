@@ -30,21 +30,21 @@ export default function RootLayout({
         const response = await getMyMerchant();
         dispatch(setMerchant(response.data));
         setIsLoading(false);
-      } catch (error) {
-        toast.error("Pemilik merchant tidak terdaftar");
+      } catch (error: any) {
+        toast.error("Please login with valid credential");
         router.push("/auth/login");
       }
     };
 
-    refreshAccessToken()
-      .then(() => {
-        fetchMerchantData();
-        startTokenRefresh();
-      })
-      .catch(() => {
-        toast.error("Sesi anda berakhir, silahkan login");
-        router.push("/auth/login");
-      });
+    fetchMerchantData();
+    // refreshAccessToken()
+    //   .then(() => {
+    //     startTokenRefresh();
+    //   })
+    //   .catch(() => {
+    //     toast.error("Sesi anda berakhir, silahkan login");
+    //     router.push("/auth/login");
+    //   });
   }, [dispatch, router]);
 
   if (loading) {

@@ -149,3 +149,62 @@ export interface IPaymentMethodWithCategory {
   categoryName: string;
   paymentMethods: IPaymentMethod[];
 }
+
+export interface IOrderDetail {
+  orderId: string;
+  invoiceId: string;
+  status: string;
+  paymentMethod: {
+    name: string;
+    logo: string | null;
+    cd: string;
+    category: string;
+    action: Action;
+  };
+  plan: {
+    name: string;
+    price: number;
+  };
+  amount: number;
+  feeAmount: number;
+  discAmount: number;
+  totalAmount: number;
+  periodeSubscription: string;
+  periodeOnMonth: number;
+  orderTimeline: [
+    {
+      status: string;
+      desc: string;
+    }
+  ];
+}
+
+interface CheckoutUrlAction {
+  checkoutUrl: string;
+}
+
+interface QrStringAction {
+  qrString: string;
+}
+
+interface PaymentCodeAction {
+  paymentCode: string;
+}
+
+interface MobileNumberAction {
+  mobileNumber: string;
+}
+
+interface CashTagAction {
+  cashtag: string;
+}
+
+interface EmptyAction {}
+
+type Action =
+  | CheckoutUrlAction
+  | QrStringAction
+  | PaymentCodeAction
+  | EmptyAction
+  | CashTagAction
+  | MobileNumberAction;
