@@ -1,10 +1,10 @@
 "use client";
 import HistoryFilter from "@/components/merchant/message-history/HistoryFilter";
 import TableHistory from "@/components/merchant/message-history/TableHistory";
-import SearchBar from "@/components/merchant/send-message/SearchBar";
+import SearchBar from "@/components/merchant/SearchBar";
 import React, { useState } from "react";
 
-export default function UserReminder() {
+export default function MessageHistory() {
   const [filter, setFilter] = useState({
     limit: 10,
   });
@@ -23,6 +23,7 @@ export default function UserReminder() {
               }}
             />
             <SearchBar
+              placeHolder="Search Name"
               onChange={(keyword: string) => {
                 setSearch(keyword);
               }}

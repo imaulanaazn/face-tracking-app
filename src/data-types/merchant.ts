@@ -179,6 +179,40 @@ export interface IOrderDetail {
   ];
 }
 
+export interface IPaymentHistoryResponse {
+  data: IOrder[];
+  limit: number;
+  sort: string;
+  order: string;
+  totalPages: number;
+  page: number;
+  totalData: number;
+}
+
+export interface IOrder {
+  orderId: string;
+  invoiceId: string;
+  status: string;
+  paymentMethod: {
+    name: string;
+    logo: string | null;
+    cd: string;
+    category: string;
+    action: Action;
+  };
+  plan: {
+    id: string;
+    name: string;
+    price: number;
+  };
+  amount: number;
+  feeAmount: number;
+  discAmount: number;
+  totalAmount: number;
+  periodeSubscription: string;
+  periodeOnMonth: number;
+}
+
 interface CheckoutUrlAction {
   checkoutUrl: string;
 }

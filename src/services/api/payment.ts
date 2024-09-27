@@ -1,6 +1,7 @@
 import {
   IAPIResponseTemplate,
   IOrderDetail,
+  IPaymentHistoryResponse,
   IPaymentMethod,
   IPaymentMethodWithCategory,
 } from "@/data-types/merchant";
@@ -117,6 +118,70 @@ export const getOrderDetail = async (
     console.error(error);
     throw new Error(
       error.response?.data?.message || "Failed to get order detail"
+    );
+  }
+};
+
+interface IGetPaymentHistories extends IAPIResponseTemplate {
+  data: IPaymentHistoryResponse;
+}
+
+export const getPaymentHistories = async (query: {
+  page?: string;
+  limit?: number;
+  order?: string;
+  name?: string;
+  sort?: string;
+}): Promise<IGetPaymentHistories> => {
+  try {
+    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const response = await apiClient.get<IPaymentHistoryResponse>(
+      "/v1/merchant/order",
+      {
+        headers: {
+          Authorization: accessToken ? "Bearer " + accessToken.token : "",
+        },
+        params: {
+          ...query,
+        },
+      }
+    );
+    return {
+      success: true,
+      message: "Berhasil mengambil hisotry",
+      data: response.data,
+    };
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Failed to get histories");
+  }
+};
+
+interface IGetPaymentStatus extends IAPIResponseTemplate {
+  data: {
+    cd: string;
+    name: string;
+  }[];
+}
+
+export const getPaymentStatuses = async (): Promise<IGetPaymentStatus> => {
+  try {
+    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const response = await apiClient.get<{ name: string; cd: string }[]>(
+      "/v1/order-statuses",
+      {
+        headers: {
+          Authorization: accessToken ? "Bearer " + accessToken.token : "",
+        },
+      }
+    );
+    return {
+      success: true,
+      message: "Berhasil mengambil payment statuses",
+      data: response.data,
+    };
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message || "Failed to get payment statuses"
     );
   }
 };

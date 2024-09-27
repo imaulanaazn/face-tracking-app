@@ -1,6 +1,6 @@
 "use client";
+import SearchBar from "@/components/merchant/SearchBar";
 import ClientTable from "@/components/merchant/send-message/ClientTable";
-import SearchBar from "@/components/merchant/send-message/SearchBar";
 import SearchFilter from "@/components/merchant/send-message/SearchFilter";
 import React, { useState } from "react";
 
@@ -25,6 +25,7 @@ export default function UserReminder() {
               }}
             />
             <SearchBar
+              placeHolder="Search Name"
               onChange={(keyword: string) => {
                 setSearch(keyword);
               }}
