@@ -106,14 +106,14 @@ export default function LoginPage() {
               />
             </div>
 
-            {/* <div className="text-right mt-2">
-              <a
-                href="#"
+            <div className="text-right mt-2">
+              <Link
+                href="/auth/forgot-password"
                 className="text-sm font-semibold text-gray-700 hover:text-blue-700 focus:text-blue-700"
               >
                 Lupa Password?
-              </a>
-            </div> */}
+              </Link>
+            </div>
 
             <button
               type="submit"

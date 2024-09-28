@@ -65,6 +65,30 @@ export const register = async (data: RegisterData) => {
   }
 };
 
+interface ITokenResetPassword extends IAPIResponseTemplate {}
+
+export const tokenResetPassword = async (
+  identifier: string
+): Promise<ITokenResetPassword> => {
+  try {
+    const response = await apiClient.post<{ message: string }>(
+      "/v1/token-reset-password",
+      {
+        identifier,
+      }
+    );
+
+    const result = {
+      success: response.status === 200,
+      message: response.data.message || "Reset password url has been sent",
+    };
+
+    return result;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message);
+  }
+};
+
 export const logout = () => {
   localStorage.removeItem("accessToken");
   localStorage.removeItem("refreshToken");
