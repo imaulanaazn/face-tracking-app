@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import Sidebar from "@/components/merchant/Sidebar";
 import LoadingAnimation from "@/components/global/LoadingAnimation";
 import Header from "@/components/merchant/Header";
+import Loading from "@/components/global/Loading";
 
 export default function RootLayout({
   children,
@@ -68,15 +69,5 @@ export default function RootLayout({
         {children}
       </div>
     </main>
-  );
-}
-
-function Loading() {
-  return (
-    <div className="w-full h-[100vh] flex items-center justify-center">
-      <div className="w-40">
-        <LoadingAnimation />
-      </div>
-    </div>
   );
 }

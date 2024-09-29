@@ -7,7 +7,7 @@ import Link from "next/link";
 import React, { SyntheticEvent, useState } from "react";
 import { toast } from "react-toastify";
 
-export default function LoginPage() {
+export default function ForgotPassword() {
   const [identifier, setIdentifier] = useState("");
   const [error, setError] = useState("");
 

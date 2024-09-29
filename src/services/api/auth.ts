@@ -95,3 +95,51 @@ export const logout = () => {
   localStorage.removeItem("user");
   window.location.href = "/auth/login";
 };
+
+export const validateTokenReset = async (
+  token: string
+): Promise<ITokenResetPassword> => {
+  try {
+    const response = await apiClient.get<{ message: string }>(
+      `/v1/token-reset-password/${token}`
+    );
+
+    const result = {
+      success: response.status === 200,
+      message: response.data.message || "Reset token is valid",
+    };
+
+    return result;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message);
+  }
+};
+
+interface IResetPassword extends IAPIResponseTemplate {}
+
+export const resetPassword = async ({
+  newPassword,
+  token,
+}: {
+  newPassword: string;
+  token: string;
+}): Promise<IResetPassword> => {
+  try {
+    const response = await apiClient.post<{ message: string }>(
+      `/v1/reset-password`,
+      {
+        newPassword,
+        token,
+      }
+    );
+
+    const result = {
+      success: response.status === 200,
+      message: response.data.message || "Password updated. Please login",
+    };
+
+    return result;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message);
+  }
+};
