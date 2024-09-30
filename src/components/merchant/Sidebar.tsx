@@ -11,6 +11,7 @@ import {
   faPaperPlane,
   faClockRotateLeft,
   faCreditCard,
+  faBolt,
 } from "@fortawesome/free-solid-svg-icons";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
@@ -36,6 +37,11 @@ const menus = [
     name: "Message History",
     path: "/merchant/message-history",
     icon: faClockRotateLeft,
+  },
+  {
+    name: "Subscriptions",
+    path: "/merchant/subscriptions",
+    icon: faBolt,
   },
   {
     name: "Payment History",

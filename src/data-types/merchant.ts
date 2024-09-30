@@ -242,3 +242,26 @@ type Action =
   | EmptyAction
   | CashTagAction
   | MobileNumberAction;
+
+export interface IGetSubscriptionsResponse {
+  data: IMerchantSubscription[];
+  limit: number;
+  sort: string;
+  order: string;
+  totalPages: number;
+  totalData: number;
+  page: number;
+}
+
+export interface IMerchantSubscription {
+  id: string;
+  startDate: string;
+  endDate: string;
+  remainPeriode: string;
+  isActive: boolean;
+  plan: {
+    id: string;
+    name: string;
+  };
+  deviceLimit: number;
+}
