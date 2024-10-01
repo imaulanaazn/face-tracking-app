@@ -265,3 +265,25 @@ export interface IMerchantSubscription {
   };
   deviceLimit: number;
 }
+
+export interface ISubscriptionDetail {
+  id: string;
+  startDate: string;
+  endDate: string;
+  remainPeriode: string;
+  isActive: boolean;
+  plan: {
+    id: string;
+    name: string;
+  };
+  deviceLimit: number;
+  subscriptionTimeline: SubscriptionTimeline[];
+}
+
+export interface SubscriptionTimeline {
+  periodeSubscription: string;
+  periodeOnMonth: number;
+  type: string;
+  status: string;
+  dateCreated: string;
+}

@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { getMerchantSubscriptions } from "@/services/api/subscriptionPlans";
 import formatDateToIndonesian from "@/lib/formatter";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import Link from "next/link";
 
 interface IFilter {
   limit: number;
@@ -198,12 +199,12 @@ export default function TableSubscriptions({
                         {subs.isActive ? "Active" : "Not Active"}
                       </td>
                       <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap text-center">
-                        <a
+                        <Link
                           href={`/merchant/subscriptions/${subs.id}`}
                           className="py-2 px-4 rounded-md bg-blue-600 text-white w-max mx-auto flex gap-2 items-center justify-center"
                         >
                           Details <FontAwesomeIcon icon={faArrowRight} />
-                        </a>
+                        </Link>
                       </td>
                     </tr>
                   ))}

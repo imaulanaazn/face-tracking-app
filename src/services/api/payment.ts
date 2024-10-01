@@ -37,7 +37,7 @@ export const getListPaymentMethod = async (
   }
 };
 
-interface ISubscripePlanProps {
+interface ISubscribePlanProps {
   planId: string;
   paymentMethodId: string;
   unit: "month" | "year";
@@ -55,7 +55,7 @@ export const subscribePlan = async ({
   paymentMethodId,
   unit,
   value,
-}: ISubscripePlanProps): Promise<ISubscribePlan> => {
+}: ISubscribePlanProps): Promise<ISubscribePlan> => {
   try {
     const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
     const response = await apiClient.post<{ invoiceId: string }>(
@@ -77,15 +77,59 @@ export const subscribePlan = async ({
 
     const result = {
       success: response.status === 200,
-      message: "Order Subscribtion Success",
+      message: "Order Subscription Success",
       data: response.data,
     };
 
     return result;
   } catch (error: any) {
     throw new Error(
-      error.response?.data?.message || "Failed to order subscribtion"
+      error.response?.data?.message || "Failed to order subscription"
     );
+  }
+};
+
+interface IRenewalPlanProps {
+  subscriptionId: string;
+  paymentMethodId: string;
+  unit: "month" | "year";
+  value: number;
+}
+
+export const renewalPlan = async ({
+  subscriptionId,
+  paymentMethodId,
+  unit,
+  value,
+}: IRenewalPlanProps): Promise<ISubscribePlan> => {
+  try {
+    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const response = await apiClient.post<{ invoiceId: string }>(
+      "/v1/subscription/renewal",
+      {
+        subscriptionId,
+        paymentMethodId,
+        periode: {
+          unit,
+          value,
+        },
+      },
+      {
+        headers: {
+          Authorization: accessToken ? "Bearer " + accessToken.token : "",
+        },
+      }
+    );
+
+    const result = {
+      success: response.status === 200,
+      message: "Order Renewal Success",
+      data: response.data,
+    };
+
+    return result;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Failed to order Renewal");
   }
 };
 

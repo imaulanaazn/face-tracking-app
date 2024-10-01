@@ -2,6 +2,7 @@ import {
   IAPIResponseTemplate,
   IGetSubscriptionsResponse,
   IPlan,
+  ISubscriptionDetail,
 } from "@/data-types/merchant";
 import apiClient from "@/lib/apiClient";
 
@@ -60,13 +61,17 @@ export const getMerchantSubscriptions = async (query: {
   }
 };
 
-export const getSubscriptionsDetail = async (
-  subscription: string
-): Promise<IGetMerchantSubscriptions> => {
+interface IGetSubscriptionDetail extends IAPIResponseTemplate {
+  data: ISubscriptionDetail;
+}
+
+export const getSubscriptionDetail = async (
+  subscriptionId: string
+): Promise<IGetSubscriptionDetail> => {
   try {
     const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
-    const response = await apiClient.get<IGetSubscriptionsResponse>(
-      `/v1/merchant/subscriptions`,
+    const response = await apiClient.get<ISubscriptionDetail>(
+      `/v1/merchant/subscriptions/${subscriptionId}`,
       {
         headers: {
           Authorization: accessToken ? "Bearer " + accessToken.token : "",
@@ -75,12 +80,12 @@ export const getSubscriptionsDetail = async (
     );
     return {
       success: true,
-      message: "Berhasil mengambil subscriptions list",
+      message: "Berhasil mengambil subscription detail",
       data: response.data,
     };
   } catch (error: any) {
     throw new Error(
-      error.response?.data?.message || "Failed to get subscriptions list"
+      error.response?.data?.message || "Failed to get subscription details"
     );
   }
 };

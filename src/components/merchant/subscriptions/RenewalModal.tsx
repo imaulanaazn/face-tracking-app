@@ -1,12 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import CloseButton from "../global/CloseButton";
 import {
   IPaymentMethod,
   IPaymentMethodWithCategory,
-  IPlan,
 } from "@/data-types/merchant";
-import { getListPaymentMethod, subscribePlan } from "@/services/api/payment";
+import { getListPaymentMethod, renewalPlan } from "@/services/api/payment";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -17,20 +15,26 @@ import {
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { IDRRupiah } from "@/lib/formatter";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store";
+import CloseButton from "@/components/global/CloseButton";
 
-interface ICheckoutModal {
+interface ICheckoutModalProps {
   handleCloseModal: () => void;
   modalVisible: boolean;
-  plan: IPlan;
+  subscriptionId: string;
+  plan:
+    | {
+        id: string;
+        name: string;
+      }
+    | undefined;
 }
 
-export default function CheckoutModal({
+export default function RenewalModal({
   handleCloseModal,
   modalVisible,
+  subscriptionId,
   plan,
-}: ICheckoutModal) {
+}: ICheckoutModalProps) {
   const [paymentMethods, setPaymentMethods] = useState<IPaymentMethod[]>([]);
   const [unit, setUnit] = useState<"month" | "year">("month");
   const [periode, setPeriode] = useState(1);
@@ -39,19 +43,21 @@ export default function CheckoutModal({
   );
   const [formStep, setFormStep] = useState(1);
   const router = useRouter();
-  const merchant = useSelector((state: RootState) => state.merchant);
 
   useEffect(() => {
     async function fetchPaymentMethods() {
-      try {
-        const response = await getListPaymentMethod(plan.id);
-        getPaymentMethodsWithoutCategory(response.data);
-      } catch (error: any) {
-        console.error(error.message);
+      if (plan) {
+        try {
+          const response = await getListPaymentMethod(plan.id);
+          getPaymentMethodsWithoutCategory(response.data);
+        } catch (error: any) {
+          console.error(error.message);
+        }
       }
     }
+
     fetchPaymentMethods();
-  }, []);
+  }, [plan?.id]);
 
   function getPaymentMethodsWithoutCategory(
     methods: IPaymentMethodWithCategory[]
@@ -95,10 +101,6 @@ export default function CheckoutModal({
         return;
       }
 
-      if (!merchant.id) {
-        toast.error("Please login to continue");
-        return;
-      }
       setFormStep(2);
     } else {
       handleCheckout();
@@ -114,18 +116,19 @@ export default function CheckoutModal({
 
   async function handleCheckout() {
     const data = {
-      planId: plan.id,
+      subscriptionId: subscriptionId,
       paymentMethodId: selectedPayment?.id || "",
       unit,
       value: periode,
     };
+
     const orderToast = toast.loading("Creating Order");
     try {
-      const response = await subscribePlan(data);
+      const response = await renewalPlan(data);
       handleCloseModal();
       clearForm();
       toast.update(orderToast, {
-        render: "Order Created",
+        render: "Order Renewal Created",
         type: "success",
         isLoading: false,
         autoClose: 3000,
@@ -133,7 +136,7 @@ export default function CheckoutModal({
       router.push(`/payment/${response.data.invoiceId}`);
     } catch (error: any) {
       toast.update(orderToast, {
-        render: "Order Failed " + error.message,
+        render: "Order Renewal Failed " + error.message,
         type: "error",
         autoClose: 3000,
         isLoading: false,
@@ -266,8 +269,8 @@ export default function CheckoutModal({
             </div>
             <div className="w-full md:min-w-80 self-start">
               <div className="flex justify-between gap-4 lg:gap-6 mt-3 text-gray-600">
-                <span>Selected plan </span>
-                <span>{plan.name}</span>
+                <span>Subscription Plan </span>
+                <span>{plan?.name}</span>
               </div>
               <div className="flex justify-between gap-4 lg:gap-6 mt-3 text-gray-600">
                 <span>Duration </span>

@@ -37,6 +37,11 @@ function formatDateToIndonesian({
   return `${day} ${month} ${year}`;
 }
 
+export function formatDate(isoDate: string): string {
+  const date = new Date(isoDate);
+  return date.toLocaleDateString();
+}
+
 export let IDRRupiah = new Intl.NumberFormat("id-ID", {
   style: "currency",
   currency: "IDR",
