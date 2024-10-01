@@ -1,15 +1,12 @@
 "use client";
-import "../globals.css";
+
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setMerchant } from "@/store/slices/merchantSlice";
 import { getMyMerchant } from "@/services/api/merchant";
-import { startTokenRefresh } from "@/lib/tokenService";
-import { refreshAccessToken } from "@/lib/refreshToken";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import Sidebar from "@/components/merchant/Sidebar";
-import LoadingAnimation from "@/components/global/LoadingAnimation";
 import Header from "@/components/merchant/Header";
 import Loading from "@/components/global/Loading";
 

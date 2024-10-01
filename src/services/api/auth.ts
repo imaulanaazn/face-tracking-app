@@ -143,3 +143,29 @@ export const resetPassword = async ({
     throw new Error(error.response?.data?.message || error.message);
   }
 };
+
+interface IAdminLoginData {
+  username: string;
+  password: string;
+}
+
+export const adminLogin = async (
+  data: IAdminLoginData
+): Promise<IAuthResponse> => {
+  try {
+    const response = await apiClient.post<IAuthApiResponse>(
+      "/v1/admin/login",
+      data
+    );
+
+    const result = {
+      success: response.status === 200,
+      message: response.data.message || "Berhasil Login",
+      data: response.data || {},
+    };
+
+    return result;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message);
+  }
+};
