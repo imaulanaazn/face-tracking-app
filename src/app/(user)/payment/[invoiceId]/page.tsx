@@ -430,7 +430,9 @@ export default function OrderDetail({ params }: IParams) {
                           "#"
                         }
                       >
-                        Lanjutkan Pembayaran
+                        <div className="w-full py-2 px-4 text-center bg-blue-600 rounded-md font-medium text-white">
+                          Lanjutkan Pembayaran
+                        </div>
                       </a>
                     )}
 
