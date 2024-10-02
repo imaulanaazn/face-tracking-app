@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import Sidebar from "@/components/merchant/Sidebar";
 import Header from "@/components/merchant/Header";
 import Loading from "@/components/global/Loading";
+import { merchantNavigation } from "@/lib/statics";
 
 export default function RootLayout({
   children,
@@ -52,6 +53,7 @@ export default function RootLayout({
   return (
     <main className="flex bg-slate-100 justify-end">
       <Sidebar
+        navigations={merchantNavigation}
         sidebarOpen={sidebarOpen}
         setSidebarOpen={(params) => {
           setSidebarOpen(params);

@@ -1,11 +1,20 @@
 import {
   faAd,
+  faBolt,
   faBullhorn,
+  faChartPie,
   faChartSimple,
+  faClockRotateLeft,
+  faComputer,
+  faCreditCard,
+  faExpand,
+  faLink,
   faMessage,
   faNewspaper,
+  faPaperPlane,
   faTag,
   faTags,
+  faUser,
   faUsersRays,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -32,6 +41,57 @@ export const navigation = [
   },
 ];
 
+export const merchantNavigation = [
+  {
+    name: "Members Recognition",
+    path: "/recognition",
+    icon: faExpand,
+  },
+  {
+    name: "Dashboard",
+    path: "/merchant/dashboard",
+    icon: faChartPie,
+  },
+  {
+    name: "Send Message",
+    path: "/merchant/send-message",
+    icon: faPaperPlane,
+  },
+  {
+    name: "Message History",
+    path: "/merchant/message-history",
+    icon: faClockRotateLeft,
+  },
+  {
+    name: "Subscriptions",
+    path: "/merchant/subscriptions",
+    icon: faBolt,
+  },
+  {
+    name: "Payment History",
+    path: "/merchant/payment-history",
+    icon: faCreditCard,
+  },
+  {
+    name: "Device",
+    path: "/merchant/device",
+    icon: faComputer,
+  },
+  {
+    name: "Merchant Profile",
+    path: "/merchant/profile",
+    icon: faUser,
+  },
+];
+
+export const adminNavigation = [
+  {
+    name: "Connections",
+    path: "/admin/dashboard/connections",
+    icon: faLink,
+  },
+];
+
 export const heroIcons = [
   "/assets/home-smile.svg",
   "/assets/file-02.svg",
@@ -43,67 +103,6 @@ export const notificationImages = [
   "/assets/notification/image-1.png",
   "/assets/notification/image-2.png",
   "/assets/notification/image-2.png",
-];
-
-export const companyLogos = [
-  "/assets/yourlogo.svg",
-  "/assets/yourlogo.svg",
-  "/assets/yourlogo.svg",
-  "/assets/yourlogo.svg",
-  "/assets/yourlogo.svg",
-];
-
-export const brainwaveServices = [
-  "Photo generating",
-  "Photo enhance",
-  "Seamless Integration",
-];
-
-export const brainwaveServicesIcons = [
-  "/assets/recording-03.svg",
-  "/assets/recording-01.svg",
-  "/assets/disc-02.svg",
-  "/assets/chrome-cast.svg",
-  "/assets/sliders-04.svg",
-];
-
-export const roadmap = [
-  {
-    id: "0",
-    title: "Voice recognition",
-    text: "Enable the chatbot to understand and respond to voice commands, making it easier for users to interact with the app hands-free.",
-    date: "May 2023",
-    status: "done",
-    imageUrl: "/assets/roadmap/image-1.png",
-    colorful: true,
-  },
-  {
-    id: "1",
-    title: "Gamification",
-    text: "Add game-like elements, such as badges or leaderboards, to incentivize users to engage with the chatbot more frequently.",
-    date: "May 2023",
-    status: "progress",
-    imageUrl: "/assets/roadmap/image-2.png",
-    colorful: true,
-  },
-  {
-    id: "2",
-    title: "Chatbot customization",
-    text: "Allow users to customize the chatbot's appearance and behavior, making it more engaging and fun to interact with.",
-    date: "May 2023",
-    status: "done",
-    imageUrl: "/assets/roadmap/image-3.png",
-    colorful: true,
-  },
-  {
-    id: "3",
-    title: "Integration with APIs",
-    text: "Allow the chatbot to access external data sources, such as weather APIs or news APIs, to provide more relevant recommendations.",
-    date: "May 2023",
-    status: "progress",
-    imageUrl: "/assets/roadmap/image-4.png",
-    colorful: true,
-  },
 ];
 
 export const collabText =

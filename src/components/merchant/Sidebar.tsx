@@ -12,59 +12,24 @@ import {
   faClockRotateLeft,
   faCreditCard,
   faBolt,
+  IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-
-const menus = [
-  {
-    name: "Members Recognition",
-    path: "/recognition",
-    icon: faExpand,
-  },
-  {
-    name: "Dashboard",
-    path: "/merchant/dashboard",
-    icon: faChartPie,
-  },
-  {
-    name: "Send Message",
-    path: "/merchant/send-message",
-    icon: faPaperPlane,
-  },
-  {
-    name: "Message History",
-    path: "/merchant/message-history",
-    icon: faClockRotateLeft,
-  },
-  {
-    name: "Subscriptions",
-    path: "/merchant/subscriptions",
-    icon: faBolt,
-  },
-  {
-    name: "Payment History",
-    path: "/merchant/payment-history",
-    icon: faCreditCard,
-  },
-  {
-    name: "Device",
-    path: "/merchant/device",
-    icon: faComputer,
-  },
-  {
-    name: "Merchant Profile",
-    path: "/merchant/profile",
-    icon: faUser,
-  },
-];
+import { merchantNavigation } from "@/lib/statics";
 
 const Sidebar = ({
   sidebarOpen,
   setSidebarOpen,
+  navigations,
 }: {
   sidebarOpen: boolean;
+  navigations: {
+    name: string;
+    path: string;
+    icon: any;
+  }[];
   setSidebarOpen: (params: boolean) => void;
 }) => {
   const currentPath = usePathname();
@@ -102,7 +67,7 @@ const Sidebar = ({
       <div className="divider w-full h-px bg-gray-400 mb-6"></div>
 
       <nav className="flex flex-col gap-y-3">
-        {menus.map((menu) => (
+        {navigations.map((menu) => (
           <Link
             key={menu.path}
             href={menu.path}
@@ -122,7 +87,7 @@ const Sidebar = ({
         ))}
       </nav>
 
-      <div className="absolute bottom-0 left-0 w-full px-8 pb-8">
+      {/* <div className="absolute bottom-0 left-0 w-full px-8 pb-8">
         <div className="divider w-full h-px bg-gray-400 mt-4 mb-6"></div>
         <span className="block font-medium">PDF Report</span>
         <span className="block text-gray-500 mb-4">
@@ -135,7 +100,7 @@ const Sidebar = ({
           <FontAwesomeIcon icon={faFilePdf} className="w-5 h-5 object-cover" />
           <span className="ml-2">Download</span>
         </a>
-      </div>
+      </div> */}
     </div>
   );
 };

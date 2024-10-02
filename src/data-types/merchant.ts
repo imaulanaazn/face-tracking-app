@@ -287,3 +287,20 @@ export interface SubscriptionTimeline {
   status: string;
   dateCreated: string;
 }
+
+export interface IGetAdminConnectionsAPIResponse {
+  page: number;
+  limit: number;
+  totalData: number;
+  sort: string;
+  order: string;
+  totalPages: number;
+  data: IBoloNumber[];
+}
+
+interface IBoloNumber {
+  id: string;
+  mobileNumber: string;
+  status: string;
+  usedBy: string[] | null;
+}

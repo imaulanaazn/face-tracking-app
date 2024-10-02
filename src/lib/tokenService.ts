@@ -1,8 +1,8 @@
-import { refreshAccessToken } from "./refreshToken";
+import { refreshAccessToken, refreshAdminAccessToken } from "./refreshToken";
 
 let refreshTimeout: NodeJS.Timeout | null = null;
 
-export const startTokenRefresh = () => {
+export const startTokenRefresh = (user: "merchant" | "admin") => {
   const scheduleRefresh = (expiresIn: number) => {
     if (refreshTimeout) {
       clearTimeout(refreshTimeout);
@@ -11,7 +11,10 @@ export const startTokenRefresh = () => {
     const refreshTime = (expiresIn - 11 * 60) * 1000; // Refresh 1 minute before expiration
 
     refreshTimeout = setTimeout(async () => {
-      const newAccessToken = await refreshAccessToken();
+      const newAccessToken =
+        user === "admin"
+          ? await refreshAdminAccessToken()
+          : await refreshAccessToken();
 
       const newExpiredAt = newAccessToken?.expiredAt;
 
@@ -39,7 +42,7 @@ export const startTokenRefresh = () => {
     scheduleRefresh(expiresIn);
   } else {
     clearToken("refreshToken");
-    console.error("Refresh token is missing or invalid.");
+    console.error("Refresh token is invalid.");
   }
 };
 

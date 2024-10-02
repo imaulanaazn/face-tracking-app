@@ -16,7 +16,7 @@ export default function RootLayout({
   useEffect(() => {
     refreshAccessToken()
       .then(() => {
-        startTokenRefresh();
+        startTokenRefresh("merchant");
       })
       .catch(() => {
         console.error("failed to refresh token");

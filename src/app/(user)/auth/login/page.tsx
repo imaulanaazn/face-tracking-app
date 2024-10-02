@@ -32,7 +32,7 @@ export default function LoginPage() {
       localStorage.setItem("accessToken", JSON.stringify(accessToken));
       localStorage.setItem("refreshToken", JSON.stringify(refreshToken));
 
-      startTokenRefresh();
+      startTokenRefresh("merchant");
       router.push("/merchant/dashboard");
     } catch (err: any) {
       console.error("Login failed:", err);

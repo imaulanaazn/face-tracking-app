@@ -7,7 +7,6 @@ interface IAuthResponseData {
 
 export const refreshAccessToken = async () => {
   const refreshToken = JSON.parse(localStorage.getItem("refreshToken")!);
-
   try {
     if (!refreshToken) {
       throw new Error("refresh token cannot be not found");
@@ -26,6 +25,31 @@ export const refreshAccessToken = async () => {
     localStorage.setItem("accessToken", JSON.stringify(newAccessToken));
     return newAccessToken;
   } catch (error: any) {
-    throw new Error("Cannot refres token " + error);
+    throw new Error("Failed to refresh access token " + error);
+  }
+};
+
+export const refreshAdminAccessToken = async () => {
+  const refreshToken = JSON.parse(localStorage.getItem("refreshToken")!);
+
+  try {
+    if (!refreshToken) {
+      throw new Error("refresh token cannot be not found");
+    }
+
+    const response = await apiClient.post<IAuthResponseData>(
+      "/v1/admin/token",
+      { refreshToken: refreshToken.token }
+    );
+
+    const newAccessToken = {
+      token: response.data.accessToken,
+      expiredAt: response.data.accessTokenExpiredAt,
+    };
+
+    localStorage.setItem("accessToken", JSON.stringify(newAccessToken));
+    return newAccessToken;
+  } catch (error: any) {
+    throw new Error("Failed to refresh access token " + error);
   }
 };

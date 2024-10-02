@@ -1,5 +1,4 @@
 "use client";
-import { startTokenRefresh } from "@/lib/tokenService";
 import { register } from "@/services/api/auth";
 import {
   getMobileCountryCode,
@@ -54,7 +53,6 @@ export default function RegisterPage() {
       localStorage.setItem("accessToken", JSON.stringify(accessToken));
       localStorage.setItem("refreshToken", JSON.stringify(refreshToken));
 
-      startTokenRefresh();
       router.push("/auth/login");
     } catch (err: any) {
       console.error("Register failed:", err);
