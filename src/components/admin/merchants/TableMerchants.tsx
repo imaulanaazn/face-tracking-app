@@ -152,7 +152,7 @@ export default function TableMerchants({
                       </td>
                       <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
                         <Link
-                          href={`/admin/dashboard/merchant/${merchant.id}`}
+                          href={`/admin/dashboard/merchants/${merchant.id}`}
                           className="py-2 px-4 rounded-md bg-blue-600 text-white"
                         >
                           See Details

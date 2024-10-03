@@ -1,4 +1,6 @@
 "use client";
+import Loading from "@/components/global/Loading";
+import NotFound from "@/components/global/NotFound";
 import RenewalModal from "@/components/merchant/subscriptions/RenewalModal";
 import { ISubscriptionDetail } from "@/data-types/merchant";
 import { ORDER_STATUS } from "@/enum";
@@ -60,8 +62,8 @@ export default function SubsciptionDetail() {
     }
   }
 
-  // if (isLoading) return <Loading />;
-  // if (!subscription && !isLoading) return <NotFound />;
+  if (isLoading) return <Loading />;
+  if (!subscription && !isLoading) return <NotFound />;
 
   return (
     <>

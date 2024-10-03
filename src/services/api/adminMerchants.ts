@@ -1,5 +1,6 @@
 import {
   IAPIResponseTemplate,
+  IBoloMerchantDetail,
   IGetBoloMerchantsAPIResponse,
 } from "@/data-types/merchant";
 import apiClient from "@/lib/apiClient";
@@ -35,6 +36,35 @@ export const getBoloMerchants = async (query: {
   } catch (error: any) {
     throw new Error(
       error.response?.data?.message || "Failed to retreive bolo merchants"
+    );
+  }
+};
+
+interface IGetBoloMerchantDetail extends IAPIResponseTemplate {
+  data: IBoloMerchantDetail;
+}
+
+export const getBoloMerchantDetail = async (
+  merchantId: string
+): Promise<IGetBoloMerchantDetail> => {
+  try {
+    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const response = await apiClient.get<IBoloMerchantDetail>(
+      `/v1/admin/merchants/${merchantId}`,
+      {
+        headers: {
+          Authorization: accessToken ? "Bearer " + accessToken.token : "",
+        },
+      }
+    );
+    return {
+      success: true,
+      message: "Retreive bolo merchant detail success",
+      data: response.data,
+    };
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message || "Failed to retreive bolo merchant detail"
     );
   }
 };

@@ -322,3 +322,42 @@ interface IBoloMerchant {
   mobileNumber: string;
   email: string;
 }
+
+export interface IBoloMerchantDetail {
+  id: string;
+  name: string;
+  logo: string | null;
+  mobileNumber: string;
+  email: string;
+  address: {
+    street: string;
+    district: string;
+    city: string;
+    province: string;
+  };
+  subscriptions: IMerchantPlan[];
+}
+
+export interface IMerchantPlan {
+  id: string;
+  startDate: string;
+  endDate: string;
+  remainPeriode: string;
+  isActive: boolean;
+  plan: {
+    id: string;
+    name: string;
+  };
+  device: {
+    limit: number;
+    used: number;
+    remain: number;
+    data: [];
+  };
+  planLimits: {
+    name: string;
+    messageLimit: number;
+    usedMessageLimit: number;
+    remainMessageLimit: number;
+  }[];
+}
