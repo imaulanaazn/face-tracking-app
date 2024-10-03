@@ -6,7 +6,7 @@ import { setMerchant } from "@/store/slices/merchantSlice";
 import { getMyMerchant } from "@/services/api/merchant";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import Sidebar from "@/components/merchant/Sidebar";
+import Sidebar from "@/components/global/Sidebar";
 import Header from "@/components/merchant/Header";
 import Loading from "@/components/global/Loading";
 import { merchantNavigation } from "@/lib/statics";

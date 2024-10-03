@@ -304,3 +304,21 @@ interface IBoloNumber {
   status: string;
   usedBy: string[] | null;
 }
+
+export interface IGetBoloMerchantsAPIResponse {
+  data: IBoloMerchant[];
+  page: number;
+  limit: number;
+  totalData: number;
+  sort: string;
+  order: string;
+  totalPages: number;
+}
+
+interface IBoloMerchant {
+  id: string;
+  name: string;
+  logo: string | null;
+  mobileNumber: string;
+  email: string;
+}

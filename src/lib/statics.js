@@ -12,6 +12,7 @@ import {
   faMessage,
   faNewspaper,
   faPaperPlane,
+  faStore,
   faTag,
   faTags,
   faUser,
@@ -89,6 +90,11 @@ export const adminNavigation = [
     name: "Connections",
     path: "/admin/dashboard/connections",
     icon: faLink,
+  },
+  {
+    name: "Merchants",
+    path: "/admin/dashboard/merchants",
+    icon: faStore,
   },
 ];
 

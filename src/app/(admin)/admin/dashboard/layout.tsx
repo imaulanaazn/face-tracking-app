@@ -1,6 +1,6 @@
 "use client";
 import Header from "@/components/merchant/Header";
-import Sidebar from "@/components/merchant/Sidebar";
+import Sidebar from "@/components/global/Sidebar";
 import { refreshAdminAccessToken } from "@/lib/refreshToken";
 import { adminNavigation } from "@/lib/statics";
 import { startTokenRefresh } from "@/lib/tokenService";
