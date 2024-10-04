@@ -189,7 +189,7 @@ export default function Dashboard() {
         </SwiperSlide>
       </Swiper>
 
-      <ClientsChart />
+      <ClientsChart data={[]} />
     </div>
   );
 }

@@ -76,7 +76,7 @@ export default function ProfilePopover() {
       {open && (
         <ul
           ref={menuRef}
-          className="absolute z-10 right-0 flex min-w-[180px] flex-col gap-2 overflow-auto rounded-md border border-blue-gray-50 bg-white p-3 text-sm text-blue-gray-500 shadow-md shadow-blue-gray-500/10"
+          className="absolute z-50 right-0 flex min-w-[180px] flex-col gap-2 overflow-auto rounded-md border border-blue-gray-50 bg-white p-3 text-sm text-blue-gray-500 shadow-md shadow-blue-gray-500/10"
         >
           <MenuItem
             icon={faGear}
