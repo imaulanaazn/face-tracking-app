@@ -8,6 +8,7 @@ import {
   faComputer,
   faCreditCard,
   faExpand,
+  faHouse,
   faLink,
   faMessage,
   faNewspaper,
@@ -86,6 +87,11 @@ export const merchantNavigation = [
 ];
 
 export const adminNavigation = [
+  {
+    name: "Dashboard",
+    path: "/admin/dashboard",
+    icon: faHouse,
+  },
   {
     name: "Connections",
     path: "/admin/dashboard/connections",

@@ -1,4 +1,4 @@
-function formatDateToIndonesian({
+function formateDateIntr({
   isoDate,
   includeTime,
 }: {
@@ -6,18 +6,18 @@ function formatDateToIndonesian({
   includeTime: boolean;
 }): string {
   const indonesianMonths = [
-    "Januari",
-    "Februari",
-    "Maret",
-    "April",
-    "Mei",
-    "Juni",
-    "Juli",
-    "Agustus",
-    "September",
-    "Oktober",
-    "November",
-    "Desember",
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "June",
+    "July",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
 
   const date = new Date(isoDate);
@@ -47,4 +47,4 @@ export let IDRRupiah = new Intl.NumberFormat("id-ID", {
   currency: "IDR",
 });
 
-export default formatDateToIndonesian;
+export default formateDateIntr;

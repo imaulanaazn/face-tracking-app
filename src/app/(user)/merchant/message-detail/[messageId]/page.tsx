@@ -1,6 +1,6 @@
 "use client";
 import { IGetMessageAPIResponse } from "@/data-types/merchant";
-import formatDateToIndonesian from "@/lib/formatter";
+import formateDateIntr from "@/lib/formatter";
 import { getMessageDetail } from "@/services/api/merchantMessage";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -71,7 +71,7 @@ export default function MessageDetail() {
               </span>
             </p>
             <p className="text-gray-700 font-normal text-sm">
-              {formatDateToIndonesian({
+              {formateDateIntr({
                 isoDate: messageDetail?.dateCreated || "",
                 includeTime: true,
               })}

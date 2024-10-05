@@ -6,7 +6,7 @@ import {
 } from "@/data-types/merchant";
 import { toast } from "react-toastify";
 import { getMerchantSubscriptions } from "@/services/api/subscriptionPlans";
-import formatDateToIndonesian from "@/lib/formatter";
+import formateDateIntr from "@/lib/formatter";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 
@@ -180,13 +180,13 @@ export default function TableSubscriptions({
                         {subs.remainPeriode}
                       </td>
                       <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {formatDateToIndonesian({
+                        {formateDateIntr({
                           isoDate: subs.startDate,
                           includeTime: true,
                         })}
                       </td>
                       <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {formatDateToIndonesian({
+                        {formateDateIntr({
                           isoDate: subs.endDate,
                           includeTime: true,
                         })}

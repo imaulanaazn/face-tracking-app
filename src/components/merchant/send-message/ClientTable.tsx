@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { usePathname, useRouter } from "next/navigation";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import { IMemberFIlter } from "@/data-types/merchant";
-import formatDateToIndonesian from "@/lib/formatter";
+import formateDateIntr from "@/lib/formatter";
 import { getMembersByMerchant } from "@/services/api/merchantMembers";
 
 const column = [
@@ -303,7 +303,7 @@ export default function ClientTable({
                         {user.mobileNumber}
                       </td>
                       <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {formatDateToIndonesian({
+                        {formateDateIntr({
                           isoDate: user.lastDetection,
                           includeTime: true,
                         })}

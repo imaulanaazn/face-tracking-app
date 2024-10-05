@@ -46,3 +46,59 @@ export async function getTransactionChart(
     throw error;
   }
 }
+
+import axios from "axios";
+
+// Define the types for the response data
+interface TotalNewMerchant {
+  startDate: string;
+  endDate: string;
+  total: number;
+}
+
+interface TotalTransactions {
+  startDate: string;
+  endDate: string;
+  total: {
+    total: number;
+    totalPendingPayment: number;
+    totalProcessing: number;
+    totalCompleted: number;
+    totalFailed: number;
+  };
+}
+
+interface TotalDevices {
+  total: number;
+  totalBoloDevices: number;
+  totalUserDevices: number;
+}
+
+interface StatisticsResponse {
+  totalMerchants: number;
+  totalNewMerchant: TotalNewMerchant;
+  totalTransactions: TotalTransactions;
+  totalDevices: TotalDevices;
+}
+
+// API call to get the statistics data
+export async function getStatistics(
+  startDate: string,
+  endDate: string
+): Promise<StatisticsResponse> {
+  try {
+    const response = await apiClient.get<StatisticsResponse>(
+      "/v1/admin/statistics",
+      {
+        params: {
+          startDate: startDate,
+          endDate: endDate,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching statistics:", error);
+    throw error;
+  }
+}

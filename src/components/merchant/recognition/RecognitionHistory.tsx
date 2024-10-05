@@ -1,6 +1,6 @@
 "use client";
 import { IDetectionHistory } from "@/data-types/merchant";
-import formatDateToIndonesian from "@/lib/formatter";
+import formateDateIntr from "@/lib/formatter";
 import { getMerchantMemberHistory } from "@/services/api/merchantMembers";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -61,7 +61,7 @@ export default function RecognitionHistory({
                   {data.name}
                 </td>
                 <td className="text-sm text-gray-500 px-6 py-4 whitespace-nowrap">
-                  {formatDateToIndonesian({
+                  {formateDateIntr({
                     isoDate: data.timestamp,
                     includeTime: false,
                   })}

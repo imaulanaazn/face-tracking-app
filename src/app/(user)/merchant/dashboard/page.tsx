@@ -13,7 +13,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 
 import React, { useEffect, useRef, useState } from "react";
-import ClientsChart from "@/components/merchant/dashboard/ClientsChart";
+import ClientsChart from "@/components/admin/dashboard/TransactionLineChart";
 
 const breakpoints = {
   0: {
@@ -50,6 +50,79 @@ const statsTimeRange = [
   {
     id: 4,
     name: "This Year",
+  },
+];
+
+const dummyChart = [
+  {
+    timestamp: "2024-08-31T17:00:00.000Z",
+    totalTransaction: 0,
+    totalAmount: 0,
+  },
+  {
+    timestamp: "2024-09-01T17:00:00.000Z",
+    totalTransaction: 0,
+    totalAmount: 0,
+  },
+  {
+    timestamp: "2024-09-02T17:00:00.000Z",
+    totalTransaction: 0,
+    totalAmount: 0,
+  },
+  {
+    timestamp: "2024-09-03T17:00:00.000Z",
+    totalTransaction: 0,
+    totalAmount: 0,
+  },
+  {
+    timestamp: "2024-09-04T17:00:00.000Z",
+    totalTransaction: 0,
+    totalAmount: 0,
+  },
+  {
+    timestamp: "2024-09-05T17:00:00.000Z",
+    totalTransaction: 0,
+    totalAmount: 0,
+  },
+  {
+    timestamp: "2024-09-06T17:00:00.000Z",
+    totalTransaction: 0,
+    totalAmount: 0,
+  },
+  {
+    timestamp: "2024-09-07T17:00:00.000Z",
+    totalTransaction: 0,
+    totalAmount: 0,
+  },
+  {
+    timestamp: "2024-09-08T17:00:00.000Z",
+    totalTransaction: 0,
+    totalAmount: 0,
+  },
+  {
+    timestamp: "2024-09-09T17:00:00.000Z",
+    totalTransaction: 0,
+    totalAmount: 0,
+  },
+  {
+    timestamp: "2024-09-10T17:00:00.000Z",
+    totalTransaction: 0,
+    totalAmount: 0,
+  },
+  {
+    timestamp: "2024-09-11T17:00:00.000Z",
+    totalTransaction: 0,
+    totalAmount: 0,
+  },
+  {
+    timestamp: "2024-09-12T17:00:00.000Z",
+    totalTransaction: 0,
+    totalAmount: 0,
+  },
+  {
+    timestamp: "2024-09-13T17:00:00.000Z",
+    totalTransaction: 0,
+    totalAmount: 0,
   },
 ];
 
@@ -189,7 +262,7 @@ export default function Dashboard() {
         </SwiperSlide>
       </Swiper>
 
-      <ClientsChart data={[]} />
+      <ClientsChart data={dummyChart} time={"This Month"} />
     </div>
   );
 }

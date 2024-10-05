@@ -6,7 +6,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tooltip as ReactTooltip } from "react-tooltip";
-import formatDateToIndonesian from "@/lib/formatter";
+import formateDateIntr from "@/lib/formatter";
 import { IMessageHistoryResponse } from "@/data-types/merchant";
 import { toast } from "react-toastify";
 import { getMessageHistories } from "@/services/api/merchantMessage";
@@ -294,7 +294,7 @@ export default function TableHistory({
                         {history.content.slice(10)}
                       </td>
                       <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {formatDateToIndonesian({
+                        {formateDateIntr({
                           isoDate: history.dateCreated,
                           includeTime: false,
                         })}

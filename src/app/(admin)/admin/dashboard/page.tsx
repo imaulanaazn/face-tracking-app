@@ -13,15 +13,19 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 
 import React, { useEffect, useRef, useState } from "react";
-import ClientsChart from "@/components/merchant/dashboard/ClientsChart";
+import ClientsChart from "@/components/admin/dashboard/TransactionLineChart";
 import {
   ChartResponse,
   getCurrentEndDate,
   getPreviousMonthStartDate,
+  getStatistics,
   getTransactionChart,
 } from "@/services/api/adminStatistic";
 import Loading from "@/components/global/Loading";
 import Dropdown from "@/components/global/SimpleDropDown";
+import { toast } from "react-toastify";
+import formateDateIntr from "@/lib/formatter";
+import TransactionBarChart from "@/components/admin/dashboard/TransactionBarChart";
 
 const breakpoints = {
   0: {
@@ -84,6 +88,37 @@ const statsTimeFreq = [
   },
 ];
 
+interface TotalNewMerchant {
+  startDate: string;
+  endDate: string;
+  total: number;
+}
+
+interface TotalTransactions {
+  startDate: string;
+  endDate: string;
+  total: {
+    total: number;
+    totalPendingPayment: number;
+    totalProcessing: number;
+    totalCompleted: number;
+    totalFailed: number;
+  };
+}
+
+interface TotalDevices {
+  total: number;
+  totalBoloDevices: number;
+  totalUserDevices: number;
+}
+
+interface StatisticsResponse {
+  totalMerchants: number;
+  totalNewMerchant: TotalNewMerchant;
+  totalTransactions: TotalTransactions;
+  totalDevices: TotalDevices;
+}
+
 export default function Dashboard() {
   const [chartData, setChartData] = useState<ChartResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -96,6 +131,7 @@ export default function Dashboard() {
     value: "day",
     text: "Day",
   });
+  const [statistics, setStatistics] = useState<StatisticsResponse | null>(null);
 
   const [selectedOption, setSelectedOption] = useState<{
     value: string;
@@ -154,6 +190,24 @@ export default function Dashboard() {
   }
 
   useEffect(() => {
+    async function fetchStatistics() {
+      try {
+        const response = await getStatistics(
+          getStartAndEndDates(selectedOption.value).startDate,
+          getStartAndEndDates(selectedOption.value).endDate
+        );
+        setStatistics(response);
+      } catch (err) {
+        toast.error("Failed to fetch statistics");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchStatistics();
+  }, [selectedOption.value]);
+
+  useEffect(() => {
     const dates = getStartAndEndDates(selectedOption.value);
     fetchChartData({ frequency: frequency.value, ...dates });
   }, [selectedOption.value, frequency]);
@@ -209,10 +263,10 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard-wrapper w-full p-6 md:p-8">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col md:flex-row justify-between items-center">
         <h2 className="text-xl font-semibold text-gray-800">Summary</h2>
-        <div className="flex gap-6">
-          <div className="relative inline-block text-left z-30 flex items-center gap-4">
+        <div className="w-full md:w-max flex flex-col md:flex-row gap-4 md:gap-6 mt-8 md:mt-0">
+          <div className="relative inline-block text-left z-30 flex items-center justify-between gap-4">
             <span className="text-gray-600">Time Range :</span>
             <Dropdown
               options={statsTimeRange}
@@ -220,7 +274,7 @@ export default function Dashboard() {
               onOptionSelect={handleOptionRangeSelect}
             />
           </div>
-          <div className="relative inline-block text-left z-30 flex items-center gap-4">
+          <div className="relative inline-block text-left z-30 flex items-center justify-between gap-4">
             <span className="text-gray-600">Frequency :</span>
             <Dropdown
               options={frequencies}
@@ -232,7 +286,7 @@ export default function Dashboard() {
       </div>
 
       <Swiper
-        className="mt-4"
+        className="mt-8"
         slidesPerView={1.5}
         breakpoints={breakpoints}
         onSlideChange={() => {}}
@@ -242,58 +296,90 @@ export default function Dashboard() {
           <div className="bg-blue-600 h-full rounded-xl md:rounded-2xl flex-1 text-white p-6">
             <div className="flex items-center gap-4">
               <FontAwesomeIcon icon={faUserGroup} className="text-xl" />
-              <h3 className="">Members</h3>
+              <h3 className="">Merchants</h3>
             </div>
             <div className="flex items-end gap-2 mt-4">
-              <h4 className="text-4xl font-bold">10</h4>
-              <div className="flex items-center gap-2 text-emerald-400">
+              <h4 className="text-4xl font-bold">
+                {statistics?.totalMerchants}
+              </h4>
+              {/* <div className="flex items-center gap-2 text-emerald-400">
                 <span className="text-sm">+20%</span>
                 <FontAwesomeIcon
                   icon={faArrowUp}
                   className="text-xs font-light"
                 />
-              </div>
+              </div> */}
             </div>
-            <span className="text-sm font-light ">
-              Compared with previous month
-            </span>
           </div>
         </SwiperSlide>
         <SwiperSlide style={{ height: "auto" }}>
           <div className="bg-white h-full rounded-xl md:rounded-2xl flex-1 text-gray-700 p-6">
             <div className="flex items-center gap-4">
               <FontAwesomeIcon icon={faPaperPlane} className="text-xl" />
-              <h3 className="">Message Sent</h3>
+              <h3 className="">Transactions</h3>
             </div>
             <div className="flex items-end gap-2 mt-4">
-              <h4 className="text-4xl font-bold">120</h4>
+              <h4 className="text-4xl font-bold">
+                {statistics?.totalTransactions.total.total}
+              </h4>
             </div>
+            <span className="text-sm font-light ">
+              {formateDateIntr({
+                isoDate: statistics?.totalTransactions.startDate || "",
+                includeTime: false,
+              })}{" "}
+              -{" "}
+              {formateDateIntr({
+                isoDate: statistics?.totalTransactions.endDate || "",
+                includeTime: false,
+              })}
+            </span>
           </div>
         </SwiperSlide>
         <SwiperSlide style={{ height: "auto" }}>
           <div className="bg-white h-full rounded-xl md:rounded-2xl flex-1 text-gray-700 p-6">
             <div className="flex items-center gap-4">
               <FontAwesomeIcon icon={faUserPlus} className="text-xl" />
-              <h3 className="">New Members</h3>
+              <h3 className="">New Merchants</h3>
             </div>
             <div className="flex items-end gap-2 mt-4">
-              <h4 className="text-4xl font-bold">10</h4>
-              <div className="flex items-center gap-2 text-rose-600">
+              <h4 className="text-4xl font-bold">
+                {statistics?.totalNewMerchant.total}
+              </h4>
+              {/* <div className="flex items-center gap-2 text-rose-600">
                 <span className="text-sm">-20%</span>
                 <FontAwesomeIcon
                   icon={faArrowDown}
                   className="text-xs font-light"
                 />
-              </div>
+              </div> */}
             </div>
             <span className="text-sm font-light ">
-              Compared with previous month
+              {formateDateIntr({
+                isoDate: statistics?.totalNewMerchant.startDate || "",
+                includeTime: false,
+              })}{" "}
+              -{" "}
+              {formateDateIntr({
+                isoDate: statistics?.totalNewMerchant.endDate || "",
+                includeTime: false,
+              })}
             </span>
           </div>
         </SwiperSlide>
       </Swiper>
 
-      {chartData?.data && <ClientsChart data={chartData?.data} />}
+      <div className="w-full flex flex-col xl:flex-row gap-6 md:gap-8 mt-6 md:mt-8">
+        {chartData?.data && (
+          <ClientsChart data={chartData?.data} time={selectedOption.text} />
+        )}
+        {statistics?.totalTransactions && (
+          <TransactionBarChart
+            data={statistics.totalTransactions.total}
+            time={selectedOption.text}
+          />
+        )}
+      </div>
     </div>
   );
 }

@@ -1,23 +1,10 @@
 "use client";
 "use client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faUser,
-  faFilePdf,
-  faChartPie,
-  faExpand,
-  faArrowLeft,
-  faComputer,
-  faPaperPlane,
-  faClockRotateLeft,
-  faCreditCard,
-  faBolt,
-  IconDefinition,
-} from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { merchantNavigation } from "@/lib/statics";
 
 const Sidebar = ({
   sidebarOpen,
@@ -73,7 +60,7 @@ const Sidebar = ({
             href={menu.path}
             target={menu.path === "/recognition" ? "_blank" : undefined}
             className={`flex items-center gap-3 py-3 px-4 rounded-full ${
-              currentPath.includes(menu.path)
+              currentPath === menu.path
                 ? "bg-blue-500 text-white"
                 : "bg-white text-gray-500 hover:bg-sky-100 hover:text-blue-600"
             }`}
