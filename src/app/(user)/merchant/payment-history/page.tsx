@@ -3,9 +3,11 @@ import HistoryFilter from "@/components/merchant/payment-history/HistoryFilter";
 import TableHistory from "@/components/merchant/payment-history/TableHistory";
 import SearchBar from "@/components/merchant/SearchBar";
 import { IPlan } from "@/data-types/merchant";
+import { ORDER_STATUS } from "@/enum";
 import { getPaymentStatuses } from "@/services/api/payment";
 import { getPlans } from "@/services/api/subscriptionPlans";
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function PaymentHistory() {
   const [filter, setFilter] = useState({
@@ -27,6 +29,7 @@ export default function PaymentHistory() {
         const response = await getPlans();
         setPlans(response.data);
       } catch (error: any) {
+        toast.error(error.message);
         console.error(error.message);
       }
     }
@@ -39,6 +42,7 @@ export default function PaymentHistory() {
         const response = await getPaymentStatuses();
         setStatuses(response.data);
       } catch (error: any) {
+        toast.error(error.message);
         console.error(error.message);
       }
     }
@@ -50,7 +54,7 @@ export default function PaymentHistory() {
       <div className="lg:p-8 md:p-6 p-4 bg-white rounded-xl">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4">
           <h2 className="text-xl font-semibold text-gray-800">
-            Riwayat Pembayaran
+            Payment Histories
           </h2>
           <div className="flex gap-6 items-center">
             <HistoryFilter
