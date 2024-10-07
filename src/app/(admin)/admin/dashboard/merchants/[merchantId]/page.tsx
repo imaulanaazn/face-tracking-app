@@ -88,22 +88,26 @@ export default function MerchantDetail() {
             <div className="w-full flex justify-between mt-8">
               <span className="text-gray-600">Province </span>
               <span className="text-gray-500">
-                {merchant?.address.province}
+                {merchant?.address.province || "-"}
               </span>
             </div>
             <div className="w-full flex justify-between mt-4">
               <span className="text-gray-600">City </span>
-              <span className="text-gray-500">{merchant?.address.city}</span>
+              <span className="text-gray-500">
+                {merchant?.address.city || "-"}
+              </span>
             </div>
             <div className="w-full flex justify-between mt-4">
               <span className="text-gray-600">District </span>
               <span className="text-gray-500">
-                {merchant?.address.district}
+                {merchant?.address.district || "-"}
               </span>
             </div>
             <div className="w-full flex justify-between mt-4">
               <span className="text-gray-600">Street </span>
-              <span className="text-gray-500">{merchant?.address.street}</span>
+              <span className="text-gray-500">
+                {merchant?.address.street || "-"}
+              </span>
             </div>
           </div>
         </div>
@@ -203,7 +207,11 @@ export default function MerchantDetail() {
               </tbody>
             </table>
           </div>
+          {!merchant?.subscriptions.length && !isLoading && (
+            <p className="text-gray-800 text-center mt-6">Data is Empty</p>
+          )}
         </div>
+
         {subscriptionDetail && <PlanDetail plan={subscriptionDetail} />}
       </div>
     </>
