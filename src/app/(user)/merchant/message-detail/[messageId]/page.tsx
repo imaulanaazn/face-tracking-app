@@ -24,7 +24,7 @@ export default function MessageDetail() {
       countStatus(response.data);
     } catch (error: any) {
       console.error(error.message);
-      toast.error("Gagal mengambil message detail " + error.message);
+      toast.error(error.message);
     }
   }
 
@@ -65,7 +65,7 @@ export default function MessageDetail() {
         <div className="message w-full lg:w-7/12 bg-white rounded-lg shadow-sm p-4 md:p-6 lg:p-8">
           <div className="flex flex-col xl:flex-row gap-2 justify-between">
             <p className="text-gray-800 font-semibold">
-              Label Pesan :{" "}
+              Message Label :{" "}
               <span className="text-gray-700 font-normal">
                 {messageDetail?.name}
               </span>
@@ -80,7 +80,7 @@ export default function MessageDetail() {
 
           <hr className="my-4" />
 
-          <p className="text-gray-800 font-semibold">Pesan :</p>
+          <p className="text-gray-800 font-semibold">Message :</p>
 
           <div className="min-h-28 rounded-lg mt-2">
             <div
@@ -108,7 +108,7 @@ export default function MessageDetail() {
             </p>
           </div>
 
-          <p className="text-gray-800 font-semibold mb-4">Penerima :</p>
+          <p className="text-gray-800 font-semibold mb-4">Members :</p>
           <div>
             {messageDetail?.recipients.map((receipent) => (
               <div
