@@ -246,13 +246,17 @@ export default function HistoryFilter({
                 } else {
                   handleApply(filter);
                 }
+                closeDropdown();
               }}
               className="py-2 px-3 rounded-md bg-blue-600 text-white hover:bg-blue-500 w-full mt-4"
             >
               Apply Filter
             </button>
             <button
-              onClick={handleClearFilter}
+              onClick={() => {
+                handleClearFilter();
+                closeDropdown();
+              }}
               className="py-2 px-3 rounded-md bg-rose-600 text-white hover:bg-rose-500 w-full mt-2"
             >
               Clear Filter
