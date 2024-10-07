@@ -78,7 +78,8 @@ export default function OrderDetail({ params }: IParams) {
         ) {
           setIsFinished(true);
         }
-      } catch (error) {
+      } catch (error: any) {
+        toast.error(error.message);
         console.error("Error fetching order:", error);
       }
     };
@@ -240,7 +241,18 @@ export default function OrderDetail({ params }: IParams) {
             Order Created
           </span>
           <span className="text-gray-600 text-sm absolute top-0 left-1/2 -translate-x-1/2 text-center">
-            Waiting For Payment
+            {orderDetail?.status === ORDER_STATUS.PENDING_PAYMENT && (
+              <p>Waiting For Payment</p>
+            )}
+            {orderDetail?.status === ORDER_STATUS.CANCELED && (
+              <p>Order Was Canceled</p>
+            )}
+            {orderDetail?.status === ORDER_STATUS.FAILED && (
+              <p>Order Was Failed</p>
+            )}
+            {orderDetail?.status === ORDER_STATUS.PAYMENT_EXPIRED && (
+              <p>Order Was Expired</p>
+            )}
           </span>
           <span className="text-gray-600 text-sm absolute top-0 right-0 translate-x-1/3">
             Order Completed
@@ -326,7 +338,7 @@ export default function OrderDetail({ params }: IParams) {
               <span>{orderDetail?.invoiceId} </span>
             </div>
             <div className="flex justify-between items-center gap-6 mt-3 text-gray-600">
-              <span> Metode Pembayaran </span>
+              <span> Payment Method </span>
               <span>{orderDetail?.paymentMethod.name} </span>
             </div>
             {(orderDetail?.paymentMethod.cd === "ID_OVO" ||
