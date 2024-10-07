@@ -2,7 +2,7 @@ import React from "react";
 
 export default function TableSkeleton() {
   return (
-    <div className="animate-pulse">
+    <div className="animate-pulse mt-6">
       <div className="overflow-hidden border border-gray-200 rounded-lg shadow-md">
         <div className="bg-gray-200 p-2">
           <div className="h-4 bg-gray-300 rounded w-1/4"></div>

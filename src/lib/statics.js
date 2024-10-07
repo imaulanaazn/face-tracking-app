@@ -98,7 +98,7 @@ export const adminNavigation = [
     icon: faHouse,
   },
   {
-    name: "Connections",
+    name: "Bolo Numbers",
     path: "/admin/dashboard/connections",
     icon: faLink,
   },

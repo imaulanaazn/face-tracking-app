@@ -5,6 +5,7 @@ import {
   createNewBoloNumber,
   getAdminConnections,
 } from "@/services/api/adminConnections";
+import TableSkeleton from "../skeleton/TableSkeleton";
 
 interface IFilter {
   limit: number;
@@ -39,7 +40,7 @@ export default function TableConnections({
 }) {
   const [connections, setConnections] =
     useState<IGetAdminConnectionsAPIResponse>(initiaConnections);
-
+  const [loading, setLoading] = useState(true);
   const [newPhoneNumber, setNewPhoneNumber] = useState("");
 
   const [query, setQuery] = useState<{
@@ -70,6 +71,8 @@ export default function TableConnections({
     } catch (error: any) {
       toast.error(error.message);
       console.error("Error fetching connections:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -105,6 +108,7 @@ export default function TableConnections({
           autoClose: 3000,
         });
         fetchConnections();
+        setNewPhoneNumber("");
       } catch (error: any) {
         toast.update(toastId, {
           type: "error",
@@ -128,7 +132,7 @@ export default function TableConnections({
           placeholder="Type Mobile Number"
           id="new-password"
           type="number"
-          className="w-full py-2 px-4 bg-white text-gray-600 border border-gray-300 rounded focus:outline-blue-600"
+          className="w-full py-2 px-4 bg-white text-gray-600 border border-gray-300 rounded focus:outline-blue-600 rounded-md"
         />
         <button
           onClick={handleNewBoloNumber}
@@ -137,90 +141,101 @@ export default function TableConnections({
           Add Number
         </button>
       </div>
-      <div className="flex flex-col mt-6">
-        <div className="overflow-x-auto">
-          <div className="w-full inline-block align-middle">
-            <div className="overflow-hidden overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-slate-100">
-                  <tr>
-                    <th
-                      scope="col"
-                      className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
-                    >
-                      <p>Mobile Number</p>
-                    </th>
-                    <th
-                      scope="col"
-                      className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
-                    >
-                      <p>Connection Status</p>
-                    </th>
-                    <th
-                      scope="col"
-                      className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
-                    >
-                      <p>User</p>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {connections.data.map((connection) => (
-                    <tr
-                      key={connection.id}
-                      className="bg-white hover:bg-gray-100"
-                    >
-                      <td className="px-4 py-4 text-sm text-gray-800 whitespace-nowrap font-medium ">
-                        {connection.mobileNumber}
-                      </td>
-                      <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                        <p>{connection.status}</p>
-                      </td>
-                      <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {connection.usedBy}
-                      </td>
+
+      {loading && <TableSkeleton />}
+
+      {!loading && (
+        <div className="flex flex-col mt-6">
+          <div className="overflow-x-auto">
+            <div className="w-full inline-block align-middle">
+              <div className="overflow-hidden overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-slate-100">
+                    <tr>
+                      <th
+                        scope="col"
+                        className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
+                      >
+                        <p>Mobile Number</p>
+                      </th>
+                      <th
+                        scope="col"
+                        className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
+                      >
+                        <p>Connection Status</p>
+                      </th>
+                      <th
+                        scope="col"
+                        className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
+                      >
+                        <p>User</p>
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {connections.data.map((connection) => (
+                      <tr
+                        key={connection.id}
+                        className="bg-white hover:bg-gray-100"
+                      >
+                        <td className="px-4 py-4 text-sm text-gray-800 whitespace-nowrap font-medium ">
+                          {connection.mobileNumber}
+                        </td>
+                        <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
+                          <p>{connection.status}</p>
+                        </td>
+                        <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
+                          {connection.usedBy}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
 
-              <div className="flex justify-center items-center mt-4 gap-4">
-                <button
-                  onClick={() => handlePageChange("prev")}
-                  className="px-4 py-2 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
-                  disabled={query.page === 1}
-                >
-                  Prev
-                </button>
-                <input
-                  type="number"
-                  className="py-2 px-4 px-1 border border-gray-400 rounded-md max-w-28 text-center"
-                  min={1}
-                  max={100}
-                  value={query.page}
-                  onChange={(e) => {
-                    setQuery((prev) => ({
-                      ...prev,
-                      page: parseInt(e.target.value),
-                    }));
-                  }}
-                />
-                <button
-                  onClick={() => handlePageChange("next")}
-                  className="px-4 py-2 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
-                  disabled={connections.totalPages === connections.page}
-                >
-                  Next
-                </button>
+                {!connections.data.length && !loading && (
+                  <p className="text-gray-800 text-center mt-6">
+                    Data is Empty
+                  </p>
+                )}
+
+                <div className="flex justify-center items-center mt-4 gap-4">
+                  <button
+                    onClick={() => handlePageChange("prev")}
+                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
+                    disabled={query.page === 1}
+                  >
+                    Prev
+                  </button>
+                  <input
+                    type="number"
+                    className="py-2 px-4 px-1 border border-gray-400 rounded-md max-w-28 text-center"
+                    min={1}
+                    max={100}
+                    value={query.page}
+                    onChange={(e) => {
+                      setQuery((prev) => ({
+                        ...prev,
+                        page: parseInt(e.target.value),
+                      }));
+                    }}
+                  />
+                  <button
+                    onClick={() => handlePageChange("next")}
+                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
+                    disabled={connections.totalPages === connections.page}
+                  >
+                    Next
+                  </button>
+                </div>
+
+                <p className="text-center mt-4">
+                  total halaman : {connections.totalPages}
+                </p>
               </div>
-
-              <p className="text-center mt-4">
-                total halaman : {connections.totalPages}
-              </p>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 }
