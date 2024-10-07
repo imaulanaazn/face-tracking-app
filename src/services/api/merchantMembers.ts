@@ -74,7 +74,7 @@ export const getMembersByMerchant = async (query: {
   try {
     const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
     const response = await apiClient.get<IGetMembersByMerchantResponse>(
-      "/v1/merchant/members?value=1",
+      "/v1/merchant/members",
       {
         headers: {
           Authorization: accessToken ? "Bearer " + accessToken.token : "",

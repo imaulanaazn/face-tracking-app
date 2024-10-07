@@ -10,19 +10,16 @@ import { Tooltip as ReactTooltip } from "react-tooltip";
 import { IMemberFIlter } from "@/data-types/merchant";
 import formateDateIntr from "@/lib/utils/formatter";
 import { getMembersByMerchant } from "@/services/api/merchantMembers";
+import { toast } from "react-toastify";
 
 const column = [
   {
     id: "name",
-    name: "Nama",
+    name: "Name",
   },
   {
     id: "mobileNumber",
-    name: "No Telp",
-  },
-  {
-    id: "lastDetection",
-    name: "Terakhir berkunjung",
+    name: "Phone Number",
   },
 ];
 
@@ -56,6 +53,7 @@ interface IQuery {
   name?: string;
   transaction?: string;
   unit?: string;
+  value: string;
 }
 
 export default function ClientTable({
@@ -137,7 +135,8 @@ export default function ClientTable({
     try {
       const response = await getMembersByMerchant(newQuery);
       setMembers(response.data);
-    } catch (error) {
+    } catch (error: any) {
+      toast.error(error.message);
       console.error("Error fetching members:", error);
     }
   };
@@ -149,6 +148,7 @@ export default function ClientTable({
     query.limit,
     query.sort,
     query.order,
+    filter.value,
     filter.limit,
     filter.transaction,
     filter.unit,
@@ -180,14 +180,14 @@ export default function ClientTable({
             <span className="font-semibold text-lg mr-2">
               {selected.length}
             </span>{" "}
-            pelanggan dipilih
+            Members Selected
           </h2>
           <div className="relative">
             <div
               onClick={handleNextStep}
               className="cursor-pointer"
               data-tooltip-id="tooltip-delete"
-              data-tooltip-content="Tulis Pesan"
+              data-tooltip-content="Write Message"
             >
               <FontAwesomeIcon
                 icon={faPaperPlane}
@@ -268,6 +268,12 @@ export default function ClientTable({
                         </div>
                       </th>
                     ))}
+                    <th
+                      scope="col"
+                      className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
+                    >
+                      Last Detection
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">

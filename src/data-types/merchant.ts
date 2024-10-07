@@ -17,6 +17,7 @@ export interface IMemberFIlter {
   limit: number;
   transaction: string;
   unit: string;
+  value: string;
 }
 
 export interface IConnectionType {

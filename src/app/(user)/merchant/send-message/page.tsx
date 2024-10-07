@@ -9,6 +9,7 @@ export default function UserReminder() {
     limit: 10,
     transaction: "true",
     unit: "month",
+    value: "1",
   });
 
   const [search, setSearch] = useState("");

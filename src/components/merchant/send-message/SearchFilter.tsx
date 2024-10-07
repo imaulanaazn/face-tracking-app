@@ -4,17 +4,20 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
+const initialFilter = {
+  limit: 10,
+  transaction: "true",
+  unit: "month",
+  value: "1",
+};
+
 export default function SearchFilter({
   handleApply,
 }: {
   handleApply: (filter: IMemberFIlter) => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [filter, setFilter] = useState({
-    limit: 10,
-    transaction: "true",
-    unit: "month",
-  });
+  const [filter, setFilter] = useState(initialFilter);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -110,6 +113,25 @@ export default function SearchFilter({
               </div>
             </div>
 
+            <div className="sort mt-4">
+              <p className="mb-2">Value :</p>
+              <input
+                type="number"
+                name="value"
+                id=""
+                min={1}
+                max={50}
+                value={filter.value}
+                className="w-full border border-slate-300 rounded-md py-1 px-2"
+                onChange={(e) => {
+                  setFilter((prev) => ({
+                    ...prev,
+                    value: e.target.value,
+                  }));
+                }}
+              />
+            </div>
+
             <div className="unit mt-4">
               <p className="mb-2">Unit :</p>
               <div className="flex gap-2">
@@ -123,6 +145,24 @@ export default function SearchFilter({
                     setFilter((prev) => ({
                       ...prev,
                       unit: "day",
+                    }));
+                  }}
+                />
+                <label htmlFor="week" className="hover:cursor-pointer text-sm">
+                  Week
+                </label>
+              </div>
+              <div className="flex gap-2">
+                <input
+                  type="radio"
+                  id="week"
+                  name="unit"
+                  className="hover:cursor-pointer"
+                  defaultChecked={filter.unit === "week"}
+                  onChange={(e) => {
+                    setFilter((prev) => ({
+                      ...prev,
+                      unit: "week",
                     }));
                   }}
                 />
@@ -168,6 +208,10 @@ export default function SearchFilter({
               </div>
             </div>
 
+            <p className="text-sm text-gray-600 mt-4">
+              Get members from the last {filter.value} {filter.unit}
+            </p>
+
             <button
               onClick={() => {
                 if (!filter.limit) {
@@ -175,10 +219,21 @@ export default function SearchFilter({
                 } else {
                   handleApply(filter);
                 }
+                closeDropdown();
               }}
               className="py-2 px-3 rounded-md bg-blue-600 text-white hover:bg-blue-500 w-full mt-4"
             >
-              Terapkan
+              Apply Filter
+            </button>
+            <button
+              onClick={() => {
+                setFilter(initialFilter);
+                handleApply(initialFilter);
+                closeDropdown();
+              }}
+              className="py-2 px-3 rounded-md bg-rose-600 text-white hover:bg-rose-500 w-full mt-2"
+            >
+              Clear Filter
             </button>
           </div>
         </div>
