@@ -14,7 +14,7 @@ export const getThemeMessageCount = async (
   connectionId: string
 ): Promise<IGetMessageThemeCount> => {
   try {
-    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const accessToken = JSON.parse(localStorage.getItem("usrAccToken")!);
     const response = await apiClient.get<IMessageThemeCount[]>(
       `/v1/merchant/theme-messages-count/${connectionId}`,
       {
@@ -43,7 +43,7 @@ export const getMessageDetail = async (
   messageId: string
 ): Promise<IGetMessageDetail> => {
   try {
-    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const accessToken = JSON.parse(localStorage.getItem("usrAccToken")!);
     const response = await apiClient.get<IGetMessageAPIResponse>(
       `/v1/merchant/messages/${messageId}`,
       {
@@ -76,7 +76,7 @@ export const sendMessage = async (
   data: SendMessageData
 ): Promise<IAPIResponseTemplate> => {
   try {
-    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const accessToken = JSON.parse(localStorage.getItem("usrAccToken")!);
     const response = await apiClient.post(`/v1/merchant/send-messages`, data, {
       headers: {
         Authorization: accessToken ? "Bearer " + accessToken.token : "",
@@ -103,7 +103,7 @@ export const getMessageHistories = async (query: {
   sort?: string;
 }): Promise<IGetMessageHistories> => {
   try {
-    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const accessToken = JSON.parse(localStorage.getItem("usrAccToken")!);
     const response = await apiClient.get<IMessageHistoryResponse>(
       "/v1/merchant/messages",
       {

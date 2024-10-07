@@ -16,7 +16,7 @@ export const getAdminConnections = async (query: {
   search?: string;
 }): Promise<IGetAdminConnections> => {
   try {
-    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const accessToken = JSON.parse(localStorage.getItem("admAccToken")!);
     const response = await apiClient.get<IGetAdminConnectionsAPIResponse>(
       "/v1/admin/bolo-numbers",
       {
@@ -46,7 +46,7 @@ export const createNewBoloNumber = async (
   mobileNumber: string
 ): Promise<ICreateNewBoloNumber> => {
   try {
-    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const accessToken = JSON.parse(localStorage.getItem("admAccToken")!);
     const response = await apiClient.post(
       "/v1/admin/create-connection",
       {

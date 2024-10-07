@@ -12,7 +12,7 @@ interface IGetMyMerchantAPIResponse extends IMerchant {
 
 export const getMyMerchant = async (): Promise<IGetMyMerchant> => {
   try {
-    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const accessToken = JSON.parse(localStorage.getItem("usrAccToken")!);
     const response = await apiClient.get<IGetMyMerchantAPIResponse>(
       "/v1/merchant/me",
       {
@@ -146,7 +146,7 @@ export const updateMerchantProfile = async (
   const formData = new FormData();
   logo && formData.append("logo", logo);
   try {
-    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const accessToken = JSON.parse(localStorage.getItem("usrAccToken")!);
     const response = await apiClient.put<IPutMerchantProfileAPIResponse>(
       "/v1/merchant/logo",
       formData,
@@ -258,7 +258,7 @@ export const editMerchantAddress = async (
   data: IEditMerchantAddressData
 ): Promise<IEditMerchantAddress> => {
   try {
-    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const accessToken = JSON.parse(localStorage.getItem("usrAccToken")!);
     const response = await apiClient.put("/v1/merchant/profile", data, {
       headers: {
         Authorization: accessToken ? "Bearer " + accessToken.token : "",

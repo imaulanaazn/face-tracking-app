@@ -44,7 +44,7 @@ export const getMerchantMemberHistory = async (
   memberId: string
 ): Promise<IGetMerchantMemberHistory> => {
   try {
-    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const accessToken = JSON.parse(localStorage.getItem("usrAccToken")!);
     const response = await apiClient.get<IGetMerchantMemberHistoryResponse>(
       `/v1/merchant/member-detection-history/${memberId}?limit=10`,
       {
@@ -72,7 +72,7 @@ export const getMembersByMerchant = async (query: {
   unit?: string;
 }): Promise<IGetMembersByMerchant> => {
   try {
-    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const accessToken = JSON.parse(localStorage.getItem("usrAccToken")!);
     const response = await apiClient.get<IGetMembersByMerchantResponse>(
       "/v1/merchant/members",
       {

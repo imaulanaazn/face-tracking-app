@@ -13,7 +13,7 @@ export const registerFace = async (
   data: IRegisterFaceData
 ): Promise<IRegisterFaceResponse> => {
   try {
-    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const accessToken = JSON.parse(localStorage.getItem("usrAccToken")!);
     const response = await apiClient.post(
       "/v1/merchant/face-registration",
       data,
@@ -53,7 +53,7 @@ export const checkAttendance = async (
   data: IAttendanceData
 ): Promise<ICheckAttendance> => {
   try {
-    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const accessToken = JSON.parse(localStorage.getItem("usrAccToken")!);
     const response = await apiClient.post<ICheckAttendanceAPIResponse>(
       "/v1/merchant/attendace",
       data,

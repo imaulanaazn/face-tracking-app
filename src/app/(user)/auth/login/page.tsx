@@ -29,8 +29,8 @@ export default function LoginPage() {
         expiredAt: response.data.refreshTokenExpiredAt,
       };
 
-      localStorage.setItem("accessToken", JSON.stringify(accessToken));
-      localStorage.setItem("refreshToken", JSON.stringify(refreshToken));
+      localStorage.setItem("usrAccToken", JSON.stringify(accessToken));
+      localStorage.setItem("usrRefToken", JSON.stringify(refreshToken));
 
       startTokenRefresh("merchant");
       router.push("/merchant/dashboard");

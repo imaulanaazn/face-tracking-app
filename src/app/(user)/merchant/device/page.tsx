@@ -82,7 +82,7 @@ export default function Device() {
   }, []);
 
   useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = localStorage.getItem("usrAccToken");
     if (accessToken) {
       const token = JSON.parse(accessToken);
       socket = io(SOCKET_URL, {

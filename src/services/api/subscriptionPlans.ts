@@ -37,7 +37,7 @@ export const getMerchantSubscriptions = async (query: {
   sort?: string;
 }): Promise<IGetMerchantSubscriptions> => {
   try {
-    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const accessToken = JSON.parse(localStorage.getItem("usrAccToken")!);
     const response = await apiClient.get<IGetSubscriptionsResponse>(
       `/v1/merchant/subscriptions`,
       {
@@ -69,7 +69,7 @@ export const getSubscriptionDetail = async (
   subscriptionId: string
 ): Promise<IGetSubscriptionDetail> => {
   try {
-    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const accessToken = JSON.parse(localStorage.getItem("usrAccToken")!);
     const response = await apiClient.get<ISubscriptionDetail>(
       `/v1/merchant/subscriptions/${subscriptionId}`,
       {

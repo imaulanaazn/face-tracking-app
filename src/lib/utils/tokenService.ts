@@ -31,8 +31,12 @@ export const startTokenRefresh = (user: "merchant" | "admin") => {
     }, refreshTime);
   };
 
-  const accessToken = getTokenFromStorage("accessToken");
-  const refreshToken = getTokenFromStorage("refreshToken");
+  const accessToken = getTokenFromStorage(
+    user === "admin" ? "admAccToken" : "usrAccToken"
+  );
+  const refreshToken = getTokenFromStorage(
+    user === "admin" ? "admRefToken" : "usrRefToken"
+  );
 
   if (refreshToken && isTokenValid(refreshToken.expiredAt)) {
     const expiresIn = accessToken?.expiredAt

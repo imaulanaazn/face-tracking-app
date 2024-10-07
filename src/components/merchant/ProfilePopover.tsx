@@ -93,7 +93,7 @@ export default function ProfilePopover() {
             icon={faArrowRightFromBracket}
             label="Sign Out"
             handleClick={() => {
-              logout();
+              logout(merchant.id ? "merchant" : "admin");
             }}
           />
         </ul>

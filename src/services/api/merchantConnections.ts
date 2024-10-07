@@ -30,7 +30,7 @@ interface IGetMerchantConnections extends IAPIResponseTemplate {
 export const getListConnectionType =
   async (): Promise<IGetListConnectionType> => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+      const accessToken = JSON.parse(localStorage.getItem("usrAccToken")!);
       const response = await apiClient.get<IConnectionType[]>(
         "/v1/merchant/whatsapp-connection-type",
         {
@@ -54,7 +54,7 @@ export const getListConnectionType =
 export const getAvailableWhatsapp =
   async (): Promise<IGetAvailableWhatsapp> => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+      const accessToken = JSON.parse(localStorage.getItem("usrAccToken")!);
       const response = await apiClient.get<IWhatsappConnection[]>(
         "/v1/merchant/available-whatsapp-connection",
         {
@@ -86,7 +86,7 @@ export const createConnection = async (
   data: ICreateConnectionData
 ): Promise<ICreateConnection> => {
   try {
-    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const accessToken = JSON.parse(localStorage.getItem("usrAccToken")!);
     const response = await apiClient.post(
       "/v1/merchant/create-connection",
       data,
@@ -110,7 +110,7 @@ export const createConnection = async (
 export const getMerchantConnections =
   async (): Promise<IGetMerchantConnections> => {
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+      const accessToken = JSON.parse(localStorage.getItem("usrAccToken")!);
       const response = await apiClient.get<IConnection[]>(
         "/v1/merchant/connection",
         {
@@ -135,7 +135,7 @@ export const connectWhatsapp = async (
   connectionId: string
 ): Promise<IAPIResponseTemplate> => {
   try {
-    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const accessToken = JSON.parse(localStorage.getItem("usrAccToken")!);
     const response = await apiClient.post(
       "/v1/merchant/connect-whatsapp",
       {
@@ -162,7 +162,7 @@ export const deleteWhatsappConnection = async (
   connectionId: string
 ): Promise<IAPIResponseTemplate> => {
   try {
-    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const accessToken = JSON.parse(localStorage.getItem("usrAccToken")!);
     const response = await apiClient.delete(
       `/v1/merchant/delete-whatsapp-connection/${connectionId}`,
       {

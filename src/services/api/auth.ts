@@ -89,11 +89,11 @@ export const tokenResetPassword = async (
   }
 };
 
-export const logout = () => {
-  localStorage.removeItem("accessToken");
-  localStorage.removeItem("refreshToken");
+export const logout = (user: string) => {
+  localStorage.removeItem(user === "admin" ? "admAccToken" : "usrAccToken");
+  localStorage.removeItem(user === "admin" ? "admRefToken" : "usrRefToken");
   localStorage.removeItem("user");
-  window.location.href = "/auth/login";
+  window.location.href = user === "admin" ? "/admin/auth/login" : "/auth/login";
 };
 
 export const validateTokenReset = async (

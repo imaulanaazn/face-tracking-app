@@ -15,14 +15,14 @@ export const getListPaymentMethod = async (
   planId: string
 ): Promise<IGetMerchant> => {
   try {
-    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    // const accessToken = JSON.parse(localStorage.getItem("usrAccToken")!);
     const response = await apiClient.get<IPaymentMethodWithCategory[]>(
-      `/v1/payment-methods?planId=${planId}`,
-      {
-        headers: {
-          Authorization: accessToken ? "Bearer " + accessToken.token : "",
-        },
-      }
+      `/v1/payment-methods?planId=${planId}`
+      // {
+      //   headers: {
+      //     Authorization: accessToken ? "Bearer " + accessToken.token : "",
+      //   },
+      // }
     );
 
     const result = {
@@ -57,7 +57,7 @@ export const subscribePlan = async ({
   value,
 }: ISubscribePlanProps): Promise<ISubscribePlan> => {
   try {
-    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const accessToken = JSON.parse(localStorage.getItem("usrAccToken")!);
     const response = await apiClient.post<{ invoiceId: string }>(
       "/v1/subscription/order",
       {
@@ -103,7 +103,7 @@ export const renewalPlan = async ({
   value,
 }: IRenewalPlanProps): Promise<ISubscribePlan> => {
   try {
-    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const accessToken = JSON.parse(localStorage.getItem("usrAccToken")!);
     const response = await apiClient.post<{ invoiceId: string }>(
       "/v1/subscription/renewal",
       {
@@ -141,7 +141,7 @@ export const getOrderDetail = async (
   invoiceId: string
 ): Promise<IGetOrderDetail> => {
   try {
-    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const accessToken = JSON.parse(localStorage.getItem("usrAccToken")!);
     const response = await apiClient.get<IOrderDetail>(
       `/v1/merchant/order/${invoiceId}`,
       {
@@ -178,7 +178,7 @@ export const getPaymentHistories = async (query: {
   sort?: string;
 }): Promise<IGetPaymentHistories> => {
   try {
-    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const accessToken = JSON.parse(localStorage.getItem("usrAccToken")!);
     const response = await apiClient.get<IPaymentHistoryResponse>(
       "/v1/merchant/order",
       {
@@ -209,7 +209,7 @@ interface IGetPaymentStatus extends IAPIResponseTemplate {
 
 export const getPaymentStatuses = async (): Promise<IGetPaymentStatus> => {
   try {
-    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const accessToken = JSON.parse(localStorage.getItem("usrAccToken")!);
     const response = await apiClient.get<{ name: string; cd: string }[]>(
       "/v1/order-statuses",
       {

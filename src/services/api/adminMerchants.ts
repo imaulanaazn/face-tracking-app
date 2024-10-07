@@ -16,7 +16,7 @@ export const getBoloMerchants = async (query: {
   search?: string;
 }): Promise<IGetBoloMerchants> => {
   try {
-    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const accessToken = JSON.parse(localStorage.getItem("admAccToken")!);
     const response = await apiClient.get<IGetBoloMerchantsAPIResponse>(
       "/v1/admin/merchants",
       {
@@ -48,7 +48,7 @@ export const getBoloMerchantDetail = async (
   merchantId: string
 ): Promise<IGetBoloMerchantDetail> => {
   try {
-    const accessToken = JSON.parse(localStorage.getItem("accessToken")!);
+    const accessToken = JSON.parse(localStorage.getItem("admAccToken")!);
     const response = await apiClient.get<IBoloMerchantDetail>(
       `/v1/admin/merchants/${merchantId}`,
       {

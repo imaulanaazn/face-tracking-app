@@ -30,20 +30,12 @@ export default function RootLayout({
         dispatch(setMerchant(response.data));
         setIsLoading(false);
       } catch (error: any) {
-        toast.error("Please login with valid credential");
+        toast.error("Please use valid credential to access this page");
         router.push("/auth/login");
       }
     };
 
     fetchMerchantData();
-    // refreshAccessToken()
-    //   .then(() => {
-    //     startTokenRefresh();
-    //   })
-    //   .catch(() => {
-    //     toast.error("Sesi anda berakhir, silahkan login");
-    //     router.push("/auth/login");
-    //   });
   }, [dispatch, router]);
 
   return (

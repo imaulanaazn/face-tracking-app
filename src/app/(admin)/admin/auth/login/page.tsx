@@ -28,8 +28,8 @@ export default function LoginPage() {
         expiredAt: response.data.refreshTokenExpiredAt,
       };
 
-      localStorage.setItem("accessToken", JSON.stringify(accessToken));
-      localStorage.setItem("refreshToken", JSON.stringify(refreshToken));
+      localStorage.setItem("admAccToken", JSON.stringify(accessToken));
+      localStorage.setItem("admRefToken", JSON.stringify(refreshToken));
 
       startTokenRefresh("admin");
       router.push("/admin/dashboard");

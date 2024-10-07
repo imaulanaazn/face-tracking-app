@@ -6,8 +6,8 @@ import { adminNavigation } from "@/lib/statics";
 import { startTokenRefresh } from "@/lib/utils/tokenService";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Provider, useDispatch } from "react-redux";
-import { toast, ToastContainer } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 export default function RootLayout({
   children,
@@ -15,7 +15,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const dispatch = useDispatch();
 
   const router = useRouter();
 

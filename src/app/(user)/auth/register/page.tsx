@@ -50,8 +50,8 @@ export default function RegisterPage() {
         expiredAt: response.data.refreshTokenExpiredAt,
       };
 
-      localStorage.setItem("accessToken", JSON.stringify(accessToken));
-      localStorage.setItem("refreshToken", JSON.stringify(refreshToken));
+      localStorage.setItem("usrAccToken", JSON.stringify(accessToken));
+      localStorage.setItem("usrRefToken", JSON.stringify(refreshToken));
 
       router.push("/auth/login");
     } catch (err: any) {
