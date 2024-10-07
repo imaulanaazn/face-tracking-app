@@ -4,7 +4,7 @@ import NotFound from "@/components/global/NotFound";
 import RenewalModal from "@/components/merchant/subscriptions/RenewalModal";
 import { ISubscriptionDetail } from "@/data-types/merchant";
 import { ORDER_STATUS } from "@/enum";
-import { formatDate } from "@/lib/utils/formatter";
+import formateDateIntr, { formatDate } from "@/lib/utils/formatter";
 import { getPaymentStatuses } from "@/services/api/payment";
 import { getSubscriptionDetail } from "@/services/api/subscriptionPlans";
 import { faCircle, faCircleDot } from "@fortawesome/free-solid-svg-icons";
@@ -45,6 +45,7 @@ export default function SubsciptionDetail() {
         setStatuses(response.data);
       } catch (error: any) {
         console.error(error.message);
+        toast.error(error.message);
       }
     }
     fetchStatuses();
@@ -216,7 +217,10 @@ export default function SubsciptionDetail() {
                               </div>
                             </td>
                             <td className="px-4 py-0 text-sm text-gray-500 whitespace-nowrap font-medium border-b border-gray-300">
-                              {formatDate(subscription.dateCreated)}
+                              {formateDateIntr({
+                                isoDate: subscription.dateCreated,
+                                includeTime: true,
+                              })}
                             </td>
                             <td className="px-4 py-0 text-sm text-gray-500 whitespace-nowrap text-center border-b border-gray-300">
                               {subscription.periodeSubscription}
@@ -224,7 +228,7 @@ export default function SubsciptionDetail() {
                             <td className="px-4 py-0 text-sm text-gray-500 whitespace-nowrap text-center border-b border-gray-300">
                               {subscription.periodeOnMonth}
                             </td>
-                            <td className="px-4 py-0 text-sm text-gray-800 whitespace-nowrap text-center border-b border-gray-300">
+                            <td className="px-4 py-0 text-sm text-gray-500 whitespace-nowrap text-center border-b border-gray-300">
                               <p>{subscription.type}</p>
                             </td>
                             <td

@@ -9,6 +9,7 @@ import { getMerchantSubscriptions } from "@/services/api/subscriptionPlans";
 import formateDateIntr from "@/lib/utils/formatter";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
+import TableSkeleton from "@/components/admin/skeleton/TableSkeleton";
 
 interface IFilter {
   limit: number;
@@ -43,6 +44,7 @@ export default function TableSubscriptions({
 }) {
   const [subscriptions, setSubscriptions] =
     useState<IGetSubscriptionsResponse>(initialSubscription);
+  const [loading, setLoading] = useState(true);
 
   const [query, setQuery] = useState<{
     order: string;
@@ -72,6 +74,8 @@ export default function TableSubscriptions({
     } catch (error: any) {
       toast.error(error.message);
       console.error("Error fetching histories:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -97,157 +101,166 @@ export default function TableSubscriptions({
 
   return (
     <>
-      <div className="flex flex-col mt-8">
-        <div className="overflow-x-auto">
-          <div className="w-full inline-block align-middle">
-            <div className="overflow-hidden overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-slate-100">
-                  <tr>
-                    <th
-                      scope="col"
-                      className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
-                    >
-                      <div className="flex gap-3 items-center justify-left">
-                        <p>Plan Name</p>
-                      </div>
-                    </th>
-                    <th
-                      scope="col"
-                      className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
-                    >
-                      <div className="flex gap-3 items-center justify-left">
-                        <p>Device Limit</p>
-                      </div>
-                    </th>
-                    <th
-                      scope="col"
-                      className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
-                    >
-                      <div className="flex gap-3 items-center justify-left">
-                        <p>Remaining Periode</p>
-                      </div>
-                    </th>
-                    <th
-                      scope="col"
-                      className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
-                    >
-                      <div className="flex gap-3 items-center justify-left">
-                        <p>Start Date</p>
-                      </div>
-                    </th>
-                    <th
-                      scope="col"
-                      className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
-                    >
-                      <div className="flex gap-3 items-center justify-left">
-                        <p>End Date</p>
-                      </div>
-                    </th>
-
-                    <th
-                      scope="col"
-                      className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-neutral-600 uppercase text-left"
-                    >
-                      <div className="flex gap-3 items-center justify-start">
-                        <p>Status</p>
-                      </div>
-                    </th>
-                    <th
-                      scope="col"
-                      className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
-                    >
-                      <div className="flex gap-3 items-center justify-center">
-                        <p>Aksi</p>
-                      </div>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {subscriptions.data.map((subs) => (
-                    <tr
-                      key={subs.plan.id}
-                      className="bg-white hover:bg-gray-100"
-                    >
-                      <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {subs.plan.name}
-                      </td>
-                      <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {subs.deviceLimit}
-                      </td>
-
-                      <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {subs.remainPeriode}
-                      </td>
-                      <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {formateDateIntr({
-                          isoDate: subs.startDate,
-                          includeTime: true,
-                        })}
-                      </td>
-                      <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {formateDateIntr({
-                          isoDate: subs.endDate,
-                          includeTime: true,
-                        })}
-                      </td>
-                      <td
-                        className={`px-4 py-4 text-sm whitespace-nowrap font-medium ${
-                          subs.isActive ? "text-emerald-600" : "text-rose-600"
-                        }`}
+      {loading && <TableSkeleton />}
+      {!loading && (
+        <div className="flex flex-col mt-8">
+          <div className="overflow-x-auto">
+            <div className="w-full inline-block align-middle">
+              <div className="overflow-hidden overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-slate-100">
+                    <tr>
+                      <th
+                        scope="col"
+                        className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
                       >
-                        {subs.isActive ? "Active" : "Not Active"}
-                      </td>
-                      <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap text-center">
-                        <Link
-                          href={`/merchant/subscriptions/${subs.id}`}
-                          className="py-2 px-4 rounded-md bg-blue-600 text-white w-max mx-auto flex gap-2 items-center justify-center"
-                        >
-                          Details <FontAwesomeIcon icon={faArrowRight} />
-                        </Link>
-                      </td>
+                        <div className="flex gap-3 items-center justify-left">
+                          <p>Plan Name</p>
+                        </div>
+                      </th>
+                      <th
+                        scope="col"
+                        className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
+                      >
+                        <div className="flex gap-3 items-center justify-left">
+                          <p>Device Limit</p>
+                        </div>
+                      </th>
+                      <th
+                        scope="col"
+                        className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
+                      >
+                        <div className="flex gap-3 items-center justify-left">
+                          <p>Remaining Periode</p>
+                        </div>
+                      </th>
+                      <th
+                        scope="col"
+                        className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
+                      >
+                        <div className="flex gap-3 items-center justify-left">
+                          <p>Start Date</p>
+                        </div>
+                      </th>
+                      <th
+                        scope="col"
+                        className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
+                      >
+                        <div className="flex gap-3 items-center justify-left">
+                          <p>End Date</p>
+                        </div>
+                      </th>
+
+                      <th
+                        scope="col"
+                        className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-neutral-600 uppercase text-left"
+                      >
+                        <div className="flex gap-3 items-center justify-start">
+                          <p>Status</p>
+                        </div>
+                      </th>
+                      <th
+                        scope="col"
+                        className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
+                      >
+                        <div className="flex gap-3 items-center justify-center">
+                          <p>Aksi</p>
+                        </div>
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {subscriptions.data.map((subs) => (
+                      <tr
+                        key={subs.plan.id}
+                        className="bg-white hover:bg-gray-100"
+                      >
+                        <td className="px-4 py-4 text-sm text-gray-800 font-medium whitespace-nowrap">
+                          {subs.plan.name}
+                        </td>
+                        <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
+                          {subs.deviceLimit} devices
+                        </td>
 
-              <div className="flex justify-center items-center mt-4 gap-4">
-                <button
-                  onClick={() => handlePageChange("prev")}
-                  className="px-4 py-2 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
-                  disabled={query.page === 1}
-                >
-                  Prev
-                </button>
-                <input
-                  type="number"
-                  className="py-2 px-4 px-1 border border-gray-400 rounded-md max-w-28 text-center"
-                  min={1}
-                  max={100}
-                  value={query.page}
-                  onChange={(e) => {
-                    setQuery((prev) => ({
-                      ...prev,
-                      page: parseInt(e.target.value),
-                    }));
-                  }}
-                />
-                <button
-                  onClick={() => handlePageChange("next")}
-                  className="px-4 py-2 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
-                  disabled={subscriptions.totalPages === subscriptions.page}
-                >
-                  Next
-                </button>
+                        <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
+                          {subs.remainPeriode}
+                        </td>
+                        <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
+                          {formateDateIntr({
+                            isoDate: subs.startDate,
+                            includeTime: true,
+                          })}
+                        </td>
+                        <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
+                          {formateDateIntr({
+                            isoDate: subs.endDate,
+                            includeTime: true,
+                          })}
+                        </td>
+                        <td
+                          className={`px-4 py-4 text-sm whitespace-nowrap font-medium ${
+                            subs.isActive ? "text-emerald-600" : "text-rose-600"
+                          }`}
+                        >
+                          {subs.isActive ? "Active" : "Not Active"}
+                        </td>
+                        <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap text-center">
+                          <Link
+                            href={`/merchant/subscriptions/${subs.id}`}
+                            className="py-2 px-4 rounded-md bg-blue-600 text-white w-max mx-auto flex gap-2 items-center justify-center"
+                          >
+                            Details <FontAwesomeIcon icon={faArrowRight} />
+                          </Link>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+
+                {!subscriptions.data.length && !loading && (
+                  <p className="text-gray-800 text-center mt-6">
+                    Data is Empty
+                  </p>
+                )}
+
+                <div className="flex justify-center items-center mt-4 gap-4">
+                  <button
+                    onClick={() => handlePageChange("prev")}
+                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
+                    disabled={query.page === 1}
+                  >
+                    Prev
+                  </button>
+                  <input
+                    type="number"
+                    className="py-2 px-4 px-1 border border-gray-400 rounded-md max-w-28 text-center"
+                    min={1}
+                    max={100}
+                    value={query.page}
+                    onChange={(e) => {
+                      setQuery((prev) => ({
+                        ...prev,
+                        page: parseInt(e.target.value),
+                      }));
+                    }}
+                  />
+                  <button
+                    onClick={() => handlePageChange("next")}
+                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
+                    disabled={subscriptions.totalPages === subscriptions.page}
+                  >
+                    Next
+                  </button>
+                </div>
+
+                <p className="text-center mt-4">
+                  total page : {subscriptions.totalPages}
+                </p>
               </div>
-
-              <p className="text-center mt-4">
-                total page : {subscriptions.totalPages}
-              </p>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 }

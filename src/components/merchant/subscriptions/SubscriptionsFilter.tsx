@@ -37,6 +37,7 @@ export default function SubscriptionsFilter({
   function handleClearFilter() {
     setFilter(initialFilter);
     handleApply(initialFilter);
+    closeDropdown();
   }
 
   return (
@@ -178,6 +179,7 @@ export default function SubscriptionsFilter({
                 } else {
                   handleApply(filter);
                 }
+                closeDropdown();
               }}
               className="py-2 px-3 rounded-md bg-blue-600 text-white hover:bg-blue-500 w-full mt-4"
             >
