@@ -4,7 +4,7 @@ import NotFound from "@/components/global/NotFound";
 import RenewalModal from "@/components/merchant/subscriptions/RenewalModal";
 import { ISubscriptionDetail } from "@/data-types/merchant";
 import { ORDER_STATUS } from "@/enum";
-import { formatDate } from "@/lib/formatter";
+import { formatDate } from "@/lib/utils/formatter";
 import { getPaymentStatuses } from "@/services/api/payment";
 import { getSubscriptionDetail } from "@/services/api/subscriptionPlans";
 import { faCircle, faCircleDot } from "@fortawesome/free-solid-svg-icons";

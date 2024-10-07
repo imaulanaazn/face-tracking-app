@@ -13,7 +13,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 
 import React, { useEffect, useRef, useState } from "react";
-import ClientsChart from "@/components/admin/dashboard/TransactionLineChart";
+import ClientsChart from "@/components/merchant/dashboard/ClientsChart";
 
 const breakpoints = {
   0: {
@@ -262,7 +262,7 @@ export default function Dashboard() {
         </SwiperSlide>
       </Swiper>
 
-      <ClientsChart data={dummyChart} time={"This Month"} />
+      <ClientsChart data={dummyChart} />
     </div>
   );
 }

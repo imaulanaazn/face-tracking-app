@@ -14,7 +14,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { IDRRupiah } from "@/lib/formatter";
+import { IDRRupiah } from "@/lib/utils/formatter";
 import CloseButton from "@/components/global/CloseButton";
 
 interface ICheckoutModalProps {

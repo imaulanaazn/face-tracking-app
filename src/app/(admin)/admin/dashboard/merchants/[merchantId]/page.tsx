@@ -6,7 +6,7 @@ import {
   IMerchantPlan,
   IMerchantSubscription,
 } from "@/data-types/merchant";
-import { formatDate } from "@/lib/formatter";
+import { formatDate } from "@/lib/utils/formatter";
 import { getBoloMerchantDetail } from "@/services/api/adminMerchants";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

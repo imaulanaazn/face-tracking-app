@@ -2,17 +2,22 @@ import {
   faAd,
   faBolt,
   faBullhorn,
+  faCalendar,
+  faChartBar,
   faChartPie,
   faChartSimple,
   faClockRotateLeft,
   faComputer,
   faCreditCard,
+  faDatabase,
   faExpand,
   faHouse,
   faLink,
   faMessage,
   faNewspaper,
   faPaperPlane,
+  faShieldHalved,
+  faSitemap,
   faStore,
   faTag,
   faTags,
@@ -144,94 +149,58 @@ export const collabApps = [
   {
     id: "0",
     title: "Figma",
-    icon: "/assets/collaboration/figma.png",
+    icon: faPaperPlane,
     width: 26,
     height: 36,
   },
   {
     id: "1",
     title: "Notion",
-    icon: "/assets/collaboration/notion.png",
+    icon: faShieldHalved,
     width: 34,
     height: 36,
   },
   {
     id: "2",
     title: "Discord",
-    icon: "/assets/collaboration/discord.png",
+    icon: faBolt,
     width: 36,
     height: 28,
   },
   {
     id: "3",
     title: "Slack",
-    icon: "/assets/collaboration/slack.png",
+    icon: faChartBar,
     width: 34,
     height: 35,
   },
   {
     id: "4",
     title: "Photoshop",
-    icon: "/assets/collaboration/photoshop.png",
+    icon: faDatabase,
     width: 34,
     height: 34,
   },
   {
     id: "5",
     title: "Protopie",
-    icon: "/assets/collaboration/protopie.png",
+    icon: faExpand,
     width: 34,
     height: 34,
   },
   {
     id: "6",
     title: "Framer",
-    icon: "/assets/collaboration/framer.png",
+    icon: faSitemap,
     width: 26,
     height: 34,
   },
   {
     id: "7",
     title: "Raindrop",
-    icon: "/assets/collaboration/raindrop.png",
+    icon: faCalendar,
     width: 38,
     height: 32,
-  },
-];
-
-export const pricing = [
-  {
-    id: "0",
-    title: "Basic",
-    description: "AI chatbot, personalized recommendations",
-    price: "0",
-    features: [
-      "An AI chatbot that can understand your queries",
-      "Personalized recommendations based on your preferences",
-      "Ability to explore the app and its features without any cost",
-    ],
-  },
-  {
-    id: "1",
-    title: "Premium",
-    description: "Advanced AI chatbot, priority support, analytics dashboard",
-    price: "9.99",
-    features: [
-      "An advanced AI chatbot that can understand complex queries",
-      "An analytics dashboard to track your conversations",
-      "Priority support to solve issues quickly",
-    ],
-  },
-  {
-    id: "2",
-    title: "Enterprise",
-    description: "Custom AI chatbot, advanced analytics, dedicated account",
-    price: null,
-    features: [
-      "An AI chatbot that can understand your queries",
-      "Personalized recommendations based on your preferences",
-      "Ability to explore the app and its features without any cost",
-    ],
   },
 ];
 
@@ -288,35 +257,63 @@ export const benefits = [
   },
 ];
 
-export const socials = [
+export const dashboardStatsTimeRange = [
   {
-    id: "0",
-    title: "Discord",
-    iconUrl: "/assets/socials/discord.svg",
-    url: "#",
+    value: "today",
+    text: "Today",
   },
   {
-    id: "1",
-    title: "Twitter",
-    iconUrl: "/assets/socials/twitter.svg",
-    url: "#",
+    value: "thisWeek",
+    text: "This Week",
   },
   {
-    id: "2",
-    title: "Instagram",
-    iconUrl: "/assets/socials/instagram.svg",
-    url: "#",
+    value: "thisMonth",
+    text: "This Month",
   },
   {
-    id: "3",
-    title: "Telegram",
-    iconUrl: "/assets/socials/telegram.svg",
-    url: "#",
-  },
-  {
-    id: "4",
-    title: "Facebook",
-    iconUrl: "/assets/socials/facebook.svg",
-    url: "#",
+    value: "thisYear",
+    text: "This Year",
   },
 ];
+
+export const DashboardStatsTimeFreq = [
+  {
+    value: "month",
+    text: "Month",
+  },
+  {
+    value: "week",
+    text: "Week",
+  },
+  {
+    value: "day",
+    text: "Day",
+  },
+  {
+    value: "hour",
+    text: "Hour",
+  },
+  {
+    value: "minute",
+    text: "Minute",
+  },
+];
+
+export const dashboardStatsBreakpoints = {
+  0: {
+    slidesPerView: 1.4,
+    spaceBetween: 20,
+  },
+  640: {
+    slidesPerView: 1.5,
+    spaceBetween: 30,
+  },
+  768: {
+    slidesPerView: 2.3,
+    spaceBetween: 35,
+  },
+  1024: {
+    slidesPerView: 3,
+    spaceBetween: 30,
+  },
+};

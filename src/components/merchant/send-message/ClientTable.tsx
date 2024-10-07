@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { usePathname, useRouter } from "next/navigation";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import { IMemberFIlter } from "@/data-types/merchant";
-import formateDateIntr from "@/lib/formatter";
+import formateDateIntr from "@/lib/utils/formatter";
 import { getMembersByMerchant } from "@/services/api/merchantMembers";
 
 const column = [

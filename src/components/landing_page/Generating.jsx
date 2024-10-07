@@ -14,7 +14,7 @@ const Generating = ({ className }) => {
         src={"/assets/loading.png"}
         alt="Loading"
       />
-      <span className="text-white">Remind User</span>
+      <span className="text-white">Recognizing Member</span>
     </div>
   );
 };

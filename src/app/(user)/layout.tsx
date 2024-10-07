@@ -5,8 +5,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { Provider } from "react-redux";
 import store from "@/store";
 import { useEffect } from "react";
-import { refreshAccessToken } from "@/lib/refreshToken";
-import { startTokenRefresh } from "@/lib/tokenService";
+import { refreshAccessToken } from "@/lib/utils/refreshToken";
+import { startTokenRefresh } from "@/lib/utils/tokenService";
 
 export default function RootLayout({
   children,

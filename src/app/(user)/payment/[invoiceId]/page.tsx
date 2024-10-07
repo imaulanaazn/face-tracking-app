@@ -5,7 +5,7 @@ import LoadingAnimation from "@/components/global/LoadingAnimation";
 import NotFound from "@/components/global/NotFound";
 import { IOrderDetail } from "@/data-types/merchant";
 import { ORDER_STATUS, PaymentAction } from "@/enum";
-import { IDRRupiah } from "@/lib/formatter";
+import { IDRRupiah } from "@/lib/utils/formatter";
 import { getOrderDetail } from "@/services/api/payment";
 import {
   faArrowRight,

@@ -1,20 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  IGetSubscriptionsResponse,
-  IPaymentHistoryResponse,
-} from "@/data-types/merchant";
 import { toast } from "react-toastify";
-import { getMerchantSubscriptions } from "@/services/api/subscriptionPlans";
-import formateDateIntr from "@/lib/utils/formatter";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import Link from "next/link";
-
-interface IFilter {
-  limit: number;
-  sort: string;
-  order: string;
-}
+import { getOrders, OrdersResponse } from "@/services/api/adminStatistic";
 
 interface IQuery {
   page?: string;
@@ -24,7 +10,7 @@ interface IQuery {
   search?: string;
 }
 
-const initialSubscription = {
+const initialHistory = {
   limit: 10,
   sort: "dateCreated",
   order: "DESC",
@@ -34,32 +20,24 @@ const initialSubscription = {
   totalData: 0,
 };
 
-export default function TableSubscriptions({
-  filter,
-  search,
-}: {
-  filter: IFilter;
-  search: string;
-}) {
-  const [subscriptions, setSubscriptions] =
-    useState<IGetSubscriptionsResponse>(initialSubscription);
+export default function TableOrders({ search }: { search: string }) {
+  const [orders, setOrders] = useState<OrdersResponse>(initialHistory);
 
   const [query, setQuery] = useState<{
     order: string;
     page: number;
     sort: string;
   }>({
-    order: filter.order,
+    order: "DESC",
     page: 1,
-    sort: filter.sort,
+    sort: "dateCreated",
   });
 
-  const fetchSubscriptions = async () => {
-    setSubscriptions(initialSubscription);
+  const fetchOrders = async () => {
+    setOrders(initialHistory);
     const newQuery: IQuery = {
       ...query,
       page: query.page.toString(),
-      ...filter,
     };
 
     if (search) {
@@ -67,28 +45,20 @@ export default function TableSubscriptions({
     }
 
     try {
-      const response = await getMerchantSubscriptions(newQuery);
-      setSubscriptions(response.data);
+      const response = await getOrders(newQuery);
+      setOrders(response);
     } catch (error: any) {
       toast.error(error.message);
-      console.error("Error fetching histories:", error);
+      console.error("Error fetching orders:", error);
     }
   };
 
   useEffect(() => {
-    fetchSubscriptions();
-  }, [
-    query.page,
-    query.sort,
-    query.order,
-    filter.limit,
-    filter.sort,
-    filter.order,
-    search,
-  ]);
+    fetchOrders();
+  }, [query.page, query.sort, query.order, search]);
 
   const handlePageChange = (direction: string) => {
-    if (direction === "next" && subscriptions.data.length === filter.limit) {
+    if (direction === "next" && orders.data.length === 10) {
       setQuery((prev) => ({ ...prev, page: query.page + 1 }));
     } else if (direction === "prev" && query.page > 0) {
       setQuery((prev) => ({ ...prev, page: query.page - 1 }));
@@ -108,48 +78,48 @@ export default function TableSubscriptions({
                       scope="col"
                       className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
                     >
-                      <div className="flex gap-3 items-center justify-left">
-                        <p>Plan Name</p>
+                      <div className="flex gap-3 items-center justify-center">
+                        <p>Invoice Id</p>
                       </div>
                     </th>
                     <th
                       scope="col"
                       className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
                     >
-                      <div className="flex gap-3 items-center justify-left">
-                        <p>Device Limit</p>
+                      <div className="flex gap-3 items-center justify-center">
+                        <p>Order Type</p>
                       </div>
                     </th>
                     <th
                       scope="col"
                       className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
                     >
-                      <div className="flex gap-3 items-center justify-left">
-                        <p>Remaining Periode</p>
-                      </div>
-                    </th>
-                    <th
-                      scope="col"
-                      className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
-                    >
-                      <div className="flex gap-3 items-center justify-left">
-                        <p>Start Date</p>
-                      </div>
-                    </th>
-                    <th
-                      scope="col"
-                      className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
-                    >
-                      <div className="flex gap-3 items-center justify-left">
-                        <p>End Date</p>
+                      <div className="flex gap-3 items-center justify-center">
+                        <p>Subsciption Periode</p>
                       </div>
                     </th>
 
                     <th
                       scope="col"
-                      className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-neutral-600 uppercase text-left"
+                      className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
                     >
-                      <div className="flex gap-3 items-center justify-start">
+                      <div className="flex gap-3 items-center justify-center">
+                        <p>Periode on Month</p>
+                      </div>
+                    </th>
+                    <th
+                      scope="col"
+                      className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
+                    >
+                      <div className="flex gap-3 items-center justify-center">
+                        <p>Order at</p>
+                      </div>
+                    </th>
+                    <th
+                      scope="col"
+                      className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
+                    >
+                      <div className="flex gap-3 items-center justify-center">
                         <p>Status</p>
                       </div>
                     </th>
@@ -158,53 +128,42 @@ export default function TableSubscriptions({
                       className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
                     >
                       <div className="flex gap-3 items-center justify-center">
-                        <p>Aksi</p>
+                        <p>Detail</p>
                       </div>
                     </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {subscriptions.data.map((subs) => (
+                  {orders.data.map((order) => (
                     <tr
-                      key={subs.plan.id}
+                      key={order.invoiceId}
                       className="bg-white hover:bg-gray-100"
                     >
-                      <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {subs.plan.name}
+                      <td className="px-4 py-4 text-sm font-medium  text-gray-800 whitespace-nowrap">
+                        {order.invoiceId}
                       </td>
                       <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {subs.deviceLimit}
-                      </td>
-
-                      <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {subs.remainPeriode}
-                      </td>
-                      <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {formateDateIntr({
-                          isoDate: subs.startDate,
-                          includeTime: true,
-                        })}
-                      </td>
-                      <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
-                        {formateDateIntr({
-                          isoDate: subs.endDate,
-                          includeTime: true,
-                        })}
-                      </td>
-                      <td
-                        className={`px-4 py-4 text-sm whitespace-nowrap font-medium ${
-                          subs.isActive ? "text-emerald-600" : "text-rose-600"
-                        }`}
-                      >
-                        {subs.isActive ? "Active" : "Not Active"}
+                        <p>{order.type}</p>
                       </td>
                       <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap text-center">
-                        <Link
-                          href={`/merchant/subscriptions/${subs.id}`}
-                          className="py-2 px-4 rounded-md bg-blue-600 text-white w-max mx-auto flex gap-2 items-center justify-center"
+                        {order.periodeSubscription}
+                      </td>
+                      <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap text-center">
+                        {order.periodeOnMonth}
+                      </td>
+                      <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap text-center">
+                        {order.createdAt}
+                      </td>
+                      <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap text-center">
+                        {order.status}
+                      </td>
+                      <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap text-center">
+                        <a
+                          href={`/payment/${order.invoiceId}`}
+                          className="py-2 px-4 rounded-md bg-blue-600 text-white"
                         >
-                          Details <FontAwesomeIcon icon={faArrowRight} />
-                        </Link>
+                          Details
+                        </a>
                       </td>
                     </tr>
                   ))}
@@ -235,14 +194,14 @@ export default function TableSubscriptions({
                 <button
                   onClick={() => handlePageChange("next")}
                   className="px-4 py-2 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
-                  disabled={subscriptions.totalPages === subscriptions.page}
+                  disabled={orders.totalPages === orders.page}
                 >
                   Next
                 </button>
               </div>
 
               <p className="text-center mt-4">
-                total halaman : {subscriptions.totalPages}
+                total halaman : {orders.totalPages}
               </p>
             </div>
           </div>

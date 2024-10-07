@@ -1,6 +1,6 @@
 "use client";
 import { IGetMessageAPIResponse } from "@/data-types/merchant";
-import formateDateIntr from "@/lib/formatter";
+import formateDateIntr from "@/lib/utils/formatter";
 import { getMessageDetail } from "@/services/api/merchantMessage";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";

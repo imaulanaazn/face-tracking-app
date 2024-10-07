@@ -3,6 +3,7 @@ import { collabApps, collabContent, collabText } from "../../lib/statics";
 import Section from "./Section";
 import { LeftCurve, RightCurve } from "./design/Collaboration";
 import Image from "next/image";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Collaboration = () => {
   return (
@@ -69,17 +70,11 @@ const Collaboration = () => {
                   }`}
                 >
                   <div
-                    className={`relative -top-[1.6rem] flex w-[3.2rem] h-[3.2rem] bg-blue-400 border border-n-1/15 rounded-xl -rotate-${
+                    className={`relative -top-[1.6rem] flex w-[3.2rem] h-[3.2rem] bg-blue-400 border border-n-1/15 rounded-xl items-center justify-center text-white -rotate-${
                       index * 45
                     }`}
                   >
-                    <Image
-                      className="m-auto"
-                      width={app.width}
-                      height={app.height}
-                      alt={app.title}
-                      src={app.icon}
-                    />
+                    <FontAwesomeIcon icon={app.icon} className="text-xl" />
                   </div>
                 </li>
               ))}

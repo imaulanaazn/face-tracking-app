@@ -1,6 +1,6 @@
 "use client";
 import { IDetectionHistory } from "@/data-types/merchant";
-import formateDateIntr from "@/lib/formatter";
+import formateDateIntr from "@/lib/utils/formatter";
 import { getMerchantMemberHistory } from "@/services/api/merchantMembers";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

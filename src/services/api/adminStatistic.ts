@@ -41,13 +41,11 @@ export async function getTransactionChart(
       params: params,
     });
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error fetching transaction chart:", error);
-    throw error;
+    throw new Error(error.response?.data?.message || error.message);
   }
 }
-
-import axios from "axios";
 
 // Define the types for the response data
 interface TotalNewMerchant {
@@ -74,7 +72,7 @@ interface TotalDevices {
   totalUserDevices: number;
 }
 
-interface StatisticsResponse {
+export interface StatisticsResponse {
   totalMerchants: number;
   totalNewMerchant: TotalNewMerchant;
   totalTransactions: TotalTransactions;
@@ -97,8 +95,66 @@ export async function getStatistics(
       }
     );
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error fetching statistics:", error);
-    throw error;
+    throw new Error(error.response?.data?.message || error.message);
+  }
+}
+
+interface Merchant {
+  id: string;
+  name: string;
+  email: string;
+  mobileNumber: string;
+  logo: string;
+}
+
+interface Amount {
+  price: number;
+  totalAmount: number;
+  discountAmount: number;
+  feeAmount: number;
+}
+
+interface Order {
+  invoiceId: string;
+  merchant: Merchant;
+  amount: Amount;
+  status: string;
+  type: string;
+  periodeSubscription: string;
+  periodeOnMonth: number;
+  createdAt: string;
+}
+
+export interface OrdersResponse {
+  data: Order[];
+  page: number;
+  limit: number;
+  totalData: number;
+  sort: string;
+  order: string;
+  totalPages: number;
+}
+
+// API call to get the orders data
+export async function getOrders(query: {
+  page?: string;
+  limit?: number;
+  order?: string;
+  name?: string;
+  sort?: string;
+  search?: string;
+}): Promise<OrdersResponse> {
+  try {
+    const response = await apiClient.get<OrdersResponse>("/v1/admin/orders", {
+      params: {
+        ...query,
+      },
+    });
+    return response.data;
+  } catch (error: any) {
+    console.error("Error fetching orders:", error);
+    throw new Error(error.response?.data?.message || error.message);
   }
 }

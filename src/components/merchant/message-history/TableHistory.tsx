@@ -6,7 +6,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tooltip as ReactTooltip } from "react-tooltip";
-import formateDateIntr from "@/lib/formatter";
+import formateDateIntr from "@/lib/utils/formatter";
 import { IMessageHistoryResponse } from "@/data-types/merchant";
 import { toast } from "react-toastify";
 import { getMessageHistories } from "@/services/api/merchantMessage";

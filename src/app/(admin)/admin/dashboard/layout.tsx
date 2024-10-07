@@ -1,9 +1,9 @@
 "use client";
 import Header from "@/components/merchant/Header";
 import Sidebar from "@/components/global/Sidebar";
-import { refreshAdminAccessToken } from "@/lib/refreshToken";
+import { refreshAdminAccessToken } from "@/lib/utils/refreshToken";
 import { adminNavigation } from "@/lib/statics";
-import { startTokenRefresh } from "@/lib/tokenService";
+import { startTokenRefresh } from "@/lib/utils/tokenService";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Provider, useDispatch } from "react-redux";

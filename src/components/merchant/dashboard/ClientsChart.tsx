@@ -1,4 +1,4 @@
-import { formatDate } from "@/lib/formatter";
+import { formatDate } from "@/lib/utils/formatter";
 import dynamic from "next/dynamic";
 import React, { useEffect, useState } from "react";
 

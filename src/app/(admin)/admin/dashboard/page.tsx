@@ -1,9 +1,5 @@
 "use client";
 import {
-  faArrowDown,
-  faArrowUp,
-  faChevronDown,
-  faChevronUp,
   faPaperPlane,
   faUserGroup,
   faUserPlus,
@@ -12,118 +8,32 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 
-import React, { useEffect, useRef, useState } from "react";
-import ClientsChart from "@/components/admin/dashboard/TransactionLineChart";
+import React, { useEffect, useState } from "react";
 import {
   ChartResponse,
-  getCurrentEndDate,
-  getPreviousMonthStartDate,
   getStatistics,
   getTransactionChart,
+  StatisticsResponse,
 } from "@/services/api/adminStatistic";
 import Loading from "@/components/global/Loading";
 import Dropdown from "@/components/global/SimpleDropDown";
 import { toast } from "react-toastify";
-import formateDateIntr from "@/lib/formatter";
+import formateDateIntr from "@/lib/utils/formatter";
+import TableOrders from "@/components/admin/dashboard/TableOrders";
+import SearchBar from "@/components/merchant/SearchBar";
 import TransactionBarChart from "@/components/admin/dashboard/TransactionBarChart";
-
-const breakpoints = {
-  0: {
-    slidesPerView: 1.4,
-    spaceBetween: 20,
-  },
-  640: {
-    slidesPerView: 1.5,
-    spaceBetween: 30,
-  },
-  768: {
-    slidesPerView: 2.3,
-    spaceBetween: 35,
-  },
-  1024: {
-    slidesPerView: 3,
-    spaceBetween: 30,
-  },
-};
-
-const statsTimeRange = [
-  {
-    value: "today",
-    text: "Today",
-  },
-  {
-    value: "thisWeek",
-    text: "This Week",
-  },
-  {
-    value: "thisMonth",
-    text: "This Month",
-  },
-  {
-    value: "thisYear",
-    text: "This Year",
-  },
-];
-
-const statsTimeFreq = [
-  {
-    value: "month",
-    text: "Month",
-  },
-  {
-    value: "week",
-    text: "Week",
-  },
-  {
-    value: "day",
-    text: "Day",
-  },
-  {
-    value: "hour",
-    text: "Hour",
-  },
-  {
-    value: "minute",
-    text: "Minute",
-  },
-];
-
-interface TotalNewMerchant {
-  startDate: string;
-  endDate: string;
-  total: number;
-}
-
-interface TotalTransactions {
-  startDate: string;
-  endDate: string;
-  total: {
-    total: number;
-    totalPendingPayment: number;
-    totalProcessing: number;
-    totalCompleted: number;
-    totalFailed: number;
-  };
-}
-
-interface TotalDevices {
-  total: number;
-  totalBoloDevices: number;
-  totalUserDevices: number;
-}
-
-interface StatisticsResponse {
-  totalMerchants: number;
-  totalNewMerchant: TotalNewMerchant;
-  totalTransactions: TotalTransactions;
-  totalDevices: TotalDevices;
-}
+import TransactionLineChart from "@/components/admin/dashboard/TransactionLineChart";
+import {
+  dashboardStatsBreakpoints,
+  dashboardStatsTimeRange,
+} from "@/lib/statics";
+import { getStartAndEndDates } from "@/lib/utils/getDates";
+import StatsCardSkeleton from "@/components/admin/skeleton/StatsCardSkeleton";
+import BarChartSkeleton from "@/components/admin/skeleton/BarChartSkeleton";
 
 export default function Dashboard() {
-  const [chartData, setChartData] = useState<ChartResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [frequencies, setFrequencies] = useState(statsTimeFreq);
+  const [frequencies, setFrequencies] = useState(dashboardStatsTimeRange);
   const [frequency, setFrequency] = useState<{
     value: string;
     text: string;
@@ -132,6 +42,7 @@ export default function Dashboard() {
     text: "Day",
   });
   const [statistics, setStatistics] = useState<StatisticsResponse | null>(null);
+  const [search, setSearch] = useState("");
 
   const [selectedOption, setSelectedOption] = useState<{
     value: string;
@@ -161,7 +72,8 @@ export default function Dashboard() {
 
     const defaultFrequency = { value: "day", text: "Day" };
 
-    const frequencies = frequencyOptions[option.value] || statsTimeFreq;
+    const frequencies =
+      frequencyOptions[option.value] || dashboardStatsTimeRange;
     const selectedFrequency =
       frequencyOptions[option.value]?.[0] || defaultFrequency;
 
@@ -174,21 +86,6 @@ export default function Dashboard() {
     setFrequency(option);
   };
 
-  async function fetchChartData(query?: {
-    startDate: string;
-    endDate: string;
-    frequency: string;
-  }) {
-    try {
-      const response = await getTransactionChart(query);
-      setChartData(response);
-    } catch (err) {
-      setError("Failed to fetch chart data");
-    } finally {
-      setLoading(false);
-    }
-  }
-
   useEffect(() => {
     async function fetchStatistics() {
       try {
@@ -197,7 +94,7 @@ export default function Dashboard() {
           getStartAndEndDates(selectedOption.value).endDate
         );
         setStatistics(response);
-      } catch (err) {
+      } catch (err: any) {
         toast.error("Failed to fetch statistics");
       } finally {
         setLoading(false);
@@ -207,60 +104,6 @@ export default function Dashboard() {
     fetchStatistics();
   }, [selectedOption.value]);
 
-  useEffect(() => {
-    const dates = getStartAndEndDates(selectedOption.value);
-    fetchChartData({ frequency: frequency.value, ...dates });
-  }, [selectedOption.value, frequency]);
-
-  function getStartAndEndDates(period: string): {
-    startDate: string;
-    endDate: string;
-  } {
-    const today = new Date();
-    let startDate: Date;
-    let endDate: Date = new Date(today.toISOString().split("T")[0]); // Set endDate to current date (00:00:00 of today)
-
-    switch (period) {
-      case "today":
-        startDate = new Date(today.setHours(0, 0, 0, 0));
-        break;
-
-      case "thisWeek":
-        const dayOfWeek = today.getDay();
-        const diff = today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // Adjust for week starting on Monday
-        startDate = new Date(today.setDate(diff));
-        startDate.setHours(0, 0, 0, 0);
-        break;
-
-      case "thisMonth":
-        startDate = new Date(
-          today.getFullYear(),
-          today.getMonth(),
-          1,
-          0,
-          0,
-          0,
-          0
-        );
-        break;
-
-      case "thisYear":
-        startDate = new Date(today.getFullYear(), 0, 1, 0, 0, 0, 0);
-        break;
-
-      default:
-        throw new Error("Invalid period");
-    }
-
-    return {
-      startDate: startDate.toISOString(),
-      endDate: endDate.toISOString(), // This will always be the current date at 00:00:00 UTC
-    };
-  }
-
-  if (loading) return <Loading />;
-  if (error) return <div>{error}</div>;
-
   return (
     <div className="dashboard-wrapper w-full p-6 md:p-8">
       <div className="flex flex-col md:flex-row justify-between items-center">
@@ -269,7 +112,7 @@ export default function Dashboard() {
           <div className="relative inline-block text-left z-30 flex items-center justify-between gap-4">
             <span className="text-gray-600">Time Range :</span>
             <Dropdown
-              options={statsTimeRange}
+              options={dashboardStatsTimeRange}
               selectedOption={selectedOption}
               onOptionSelect={handleOptionRangeSelect}
             />
@@ -285,100 +128,125 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <Swiper
-        className="mt-8"
-        slidesPerView={1.5}
-        breakpoints={breakpoints}
-        onSlideChange={() => {}}
-        onSwiper={() => {}}
-      >
-        <SwiperSlide style={{ height: "auto" }}>
-          <div className="bg-blue-600 h-full rounded-xl md:rounded-2xl flex-1 text-white p-6">
-            <div className="flex items-center gap-4">
-              <FontAwesomeIcon icon={faUserGroup} className="text-xl" />
-              <h3 className="">Merchants</h3>
-            </div>
-            <div className="flex items-end gap-2 mt-4">
-              <h4 className="text-4xl font-bold">
-                {statistics?.totalMerchants}
-              </h4>
-              {/* <div className="flex items-center gap-2 text-emerald-400">
+      {loading ? (
+        <StatsCardSkeleton />
+      ) : (
+        <Swiper
+          className="mt-8"
+          slidesPerView={1.5}
+          breakpoints={dashboardStatsBreakpoints}
+          onSlideChange={() => {}}
+          onSwiper={() => {}}
+        >
+          <SwiperSlide style={{ height: "auto" }}>
+            <div className="bg-blue-600 h-full rounded-xl md:rounded-2xl flex-1 text-white p-6">
+              <div className="flex items-center gap-4">
+                <FontAwesomeIcon icon={faUserGroup} className="text-xl" />
+                <h3 className="">Merchants</h3>
+              </div>
+              <div className="flex items-end gap-2 mt-4">
+                <h4 className="text-4xl font-bold">
+                  {statistics?.totalMerchants}
+                </h4>
+                {/* <div className="flex items-center gap-2 text-emerald-400">
                 <span className="text-sm">+20%</span>
                 <FontAwesomeIcon
                   icon={faArrowUp}
                   className="text-xs font-light"
                 />
               </div> */}
+              </div>
             </div>
-          </div>
-        </SwiperSlide>
-        <SwiperSlide style={{ height: "auto" }}>
-          <div className="bg-white h-full rounded-xl md:rounded-2xl flex-1 text-gray-700 p-6">
-            <div className="flex items-center gap-4">
-              <FontAwesomeIcon icon={faPaperPlane} className="text-xl" />
-              <h3 className="">Transactions</h3>
+          </SwiperSlide>
+          <SwiperSlide style={{ height: "auto" }}>
+            <div className="bg-white h-full rounded-xl md:rounded-2xl flex-1 text-gray-700 p-6">
+              <div className="flex items-center gap-4">
+                <FontAwesomeIcon icon={faPaperPlane} className="text-xl" />
+                <h3 className="">Transactions</h3>
+              </div>
+              <div className="flex items-end gap-2 mt-4">
+                <h4 className="text-4xl font-bold">
+                  {statistics?.totalTransactions.total.total}
+                </h4>
+              </div>
+              <span className="text-sm font-light ">
+                {formateDateIntr({
+                  isoDate: statistics?.totalTransactions.startDate || "",
+                  includeTime: false,
+                })}{" "}
+                -{" "}
+                {formateDateIntr({
+                  isoDate: statistics?.totalTransactions.endDate || "",
+                  includeTime: false,
+                })}
+              </span>
             </div>
-            <div className="flex items-end gap-2 mt-4">
-              <h4 className="text-4xl font-bold">
-                {statistics?.totalTransactions.total.total}
-              </h4>
-            </div>
-            <span className="text-sm font-light ">
-              {formateDateIntr({
-                isoDate: statistics?.totalTransactions.startDate || "",
-                includeTime: false,
-              })}{" "}
-              -{" "}
-              {formateDateIntr({
-                isoDate: statistics?.totalTransactions.endDate || "",
-                includeTime: false,
-              })}
-            </span>
-          </div>
-        </SwiperSlide>
-        <SwiperSlide style={{ height: "auto" }}>
-          <div className="bg-white h-full rounded-xl md:rounded-2xl flex-1 text-gray-700 p-6">
-            <div className="flex items-center gap-4">
-              <FontAwesomeIcon icon={faUserPlus} className="text-xl" />
-              <h3 className="">New Merchants</h3>
-            </div>
-            <div className="flex items-end gap-2 mt-4">
-              <h4 className="text-4xl font-bold">
-                {statistics?.totalNewMerchant.total}
-              </h4>
-              {/* <div className="flex items-center gap-2 text-rose-600">
+          </SwiperSlide>
+          <SwiperSlide style={{ height: "auto" }}>
+            <div className="bg-white h-full rounded-xl md:rounded-2xl flex-1 text-gray-700 p-6">
+              <div className="flex items-center gap-4">
+                <FontAwesomeIcon icon={faUserPlus} className="text-xl" />
+                <h3 className="">New Merchants</h3>
+              </div>
+              <div className="flex items-end gap-2 mt-4">
+                <h4 className="text-4xl font-bold">
+                  {statistics?.totalNewMerchant.total}
+                </h4>
+                {/* <div className="flex items-center gap-2 text-rose-600">
                 <span className="text-sm">-20%</span>
                 <FontAwesomeIcon
                   icon={faArrowDown}
                   className="text-xs font-light"
                 />
               </div> */}
+              </div>
+              <span className="text-sm font-light ">
+                {formateDateIntr({
+                  isoDate: statistics?.totalNewMerchant.startDate || "",
+                  includeTime: false,
+                })}{" "}
+                -{" "}
+                {formateDateIntr({
+                  isoDate: statistics?.totalNewMerchant.endDate || "",
+                  includeTime: false,
+                })}
+              </span>
             </div>
-            <span className="text-sm font-light ">
-              {formateDateIntr({
-                isoDate: statistics?.totalNewMerchant.startDate || "",
-                includeTime: false,
-              })}{" "}
-              -{" "}
-              {formateDateIntr({
-                isoDate: statistics?.totalNewMerchant.endDate || "",
-                includeTime: false,
-              })}
-            </span>
-          </div>
-        </SwiperSlide>
-      </Swiper>
+          </SwiperSlide>
+        </Swiper>
+      )}
 
       <div className="w-full flex flex-col xl:flex-row gap-6 md:gap-8 mt-6 md:mt-8">
-        {chartData?.data && (
-          <ClientsChart data={chartData?.data} time={selectedOption.text} />
-        )}
-        {statistics?.totalTransactions && (
+        <TransactionLineChart
+          time={selectedOption.text}
+          frequency={frequency}
+          selectedOption={selectedOption}
+        />
+
+        {loading && <BarChartSkeleton />}
+
+        {!loading && statistics?.totalTransactions && (
           <TransactionBarChart
             data={statistics.totalTransactions.total}
             time={selectedOption.text}
           />
         )}
+      </div>
+
+      <div className="lg:p-8 md:p-6 p-4 bg-white rounded-xl mt-6 md:mt-8">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4">
+          <h2 className="text-xl font-semibold text-gray-800">Orders</h2>
+          <div className="flex gap-6 items-center">
+            <SearchBar
+              placeHolder="Invoice Id / name / email / phone number"
+              onChange={(keyword: string) => {
+                setSearch(keyword);
+              }}
+            />
+          </div>
+        </div>
+
+        <TableOrders search={search} />
       </div>
     </div>
   );

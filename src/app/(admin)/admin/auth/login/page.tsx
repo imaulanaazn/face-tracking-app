@@ -1,5 +1,5 @@
 "use client";
-import { startTokenRefresh } from "@/lib/tokenService";
+import { startTokenRefresh } from "@/lib/utils/tokenService";
 import { adminLogin, login } from "@/services/api/auth";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
