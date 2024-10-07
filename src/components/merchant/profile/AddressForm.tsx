@@ -27,6 +27,7 @@ export default function AddressForm() {
   const dispatch = useDispatch();
 
   async function updateMerchantAddress() {
+    const toastId = toast.loading("Updating Profile");
     try {
       const data = {
         province: getProvinceName()?.name || "",
@@ -38,8 +39,19 @@ export default function AddressForm() {
       setUserAddress;
       dispatch(setMerchant({ ...merchant, ...data }));
       setUserAddress(initialUserAddress);
+      toast.update(toastId, {
+        type: "success",
+        isLoading: false,
+        render: "Successfully update profile",
+        autoClose: 3000,
+      });
     } catch (error: any) {
-      toast.error(error.message);
+      toast.update(toastId, {
+        type: "error",
+        isLoading: false,
+        render: error.message || "Failed to update merchant profile",
+        autoClose: 3000,
+      });
       console.error(error.message);
     }
   }
@@ -60,7 +72,6 @@ export default function AddressForm() {
         const response = await getIndonesiaLocations();
         setProvinces(response.data);
       } catch (error: any) {
-        toast.error(error.message);
         console.error(error.message);
       }
     }
@@ -74,7 +85,6 @@ export default function AddressForm() {
         const response = await getCities(userAddress.province);
         setCities(response.data);
       } catch (error: any) {
-        toast.error(error.message);
         console.error(error.message);
       }
     }
@@ -88,7 +98,6 @@ export default function AddressForm() {
         const response = await getDistricts(userAddress.city);
         setDistrics(response.data);
       } catch (error: any) {
-        toast.error(error.message);
         console.error(error.message);
       }
     }
@@ -100,14 +109,14 @@ export default function AddressForm() {
     <div>
       {" "}
       <h2 className="text-xl font-semibold text-gray-800 mb-6">
-        Alamat Merchant
+        Merchant Address
       </h2>
       <div className="w-full mb-4 mt-6 ">
         <label
           className="block text-gray-600 text-sm shrink-0"
           htmlFor="province"
         >
-          Provinsi
+          Province
         </label>
         <div className="relative w-full mt-2">
           <select
@@ -250,12 +259,7 @@ export default function AddressForm() {
         </div>
 
         <button
-          onClick={() => {
-            toast.promise(updateMerchantAddress(), {
-              pending: "Mengubah profile",
-              success: "Berhasil Mengubah Profile",
-            });
-          }}
+          onClick={updateMerchantAddress}
           type="submit"
           className={`w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded mt-6`}
         >
