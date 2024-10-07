@@ -1,5 +1,6 @@
 import { changeEmail } from "@/services/api/merchant";
 import React, { SyntheticEvent, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function EmailForm() {
   const [email, setEmail] = useState("");
@@ -10,8 +11,9 @@ export default function EmailForm() {
     try {
       const data = { email };
       const response = await changeEmail(data);
-    } catch (err: any) {
-      console.error(err.message);
+    } catch (error: any) {
+      toast.error(error.message);
+      console.error(error.message);
     }
   };
 

@@ -1,5 +1,6 @@
 import { changePassword } from "@/services/api/merchant";
 import React, { SyntheticEvent, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function PasswordForm() {
   const [oldPassword, setOldPassword] = useState("");
@@ -13,8 +14,9 @@ export default function PasswordForm() {
       try {
         const data = { oldPassword, newPassword };
         const response = await changePassword(data);
-      } catch (err: any) {
-        console.error(err.message);
+      } catch (error: any) {
+        toast.error(error.message);
+        console.error(error.message);
       }
     }
   };

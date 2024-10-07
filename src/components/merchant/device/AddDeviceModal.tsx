@@ -38,6 +38,7 @@ const AddDeviceModal = ({
         setConnectionTypes(response.data);
         setConnectionType(response.data[0]);
       } catch (error: any) {
+        toast.error(error.message);
         console.error(error.message);
       }
     }
@@ -54,6 +55,7 @@ const AddDeviceModal = ({
           setSelectedWhatsappId(response.data[0].id);
         }
       } catch (error: any) {
+        toast.error(error.message);
         console.error(error.message);
       }
     }
@@ -130,7 +132,7 @@ const AddDeviceModal = ({
                 className="block text-gray-600 text-sm mb-2"
                 htmlFor="connection-name"
               >
-                Nama Koneksi
+                Connection Name
               </label>
               <div className="relative mt-1 rounded-md shadow-sm">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -155,7 +157,7 @@ const AddDeviceModal = ({
                 className="block text-gray-600 text-sm shrink-0"
                 htmlFor="connection"
               >
-                Tipe Koneksi
+                Connection Type
               </label>
               <div className="relative w-full mt-2">
                 <select
@@ -199,7 +201,7 @@ const AddDeviceModal = ({
                   className="block text-gray-600 text-sm mb-2"
                   htmlFor="whatsapp-number"
                 >
-                  Nomor Whatsapp-mu
+                  Your Whatsapp Number
                 </label>
                 <div className="relative mt-1 rounded-md shadow-sm">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -222,7 +224,7 @@ const AddDeviceModal = ({
                   className="block text-gray-600 text-sm shrink-0"
                   htmlFor="available-whatsapp"
                 >
-                  Pilih Nomor Whatsapp
+                  Choose Whatsapp Number
                 </label>
                 <div className="relative w-full mt-2">
                   <select

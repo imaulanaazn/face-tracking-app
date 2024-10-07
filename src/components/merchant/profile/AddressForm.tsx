@@ -39,6 +39,7 @@ export default function AddressForm() {
       dispatch(setMerchant({ ...merchant, ...data }));
       setUserAddress(initialUserAddress);
     } catch (error: any) {
+      toast.error(error.message);
       console.error(error.message);
     }
   }
@@ -59,6 +60,7 @@ export default function AddressForm() {
         const response = await getIndonesiaLocations();
         setProvinces(response.data);
       } catch (error: any) {
+        toast.error(error.message);
         console.error(error.message);
       }
     }
@@ -72,6 +74,7 @@ export default function AddressForm() {
         const response = await getCities(userAddress.province);
         setCities(response.data);
       } catch (error: any) {
+        toast.error(error.message);
         console.error(error.message);
       }
     }
@@ -85,6 +88,7 @@ export default function AddressForm() {
         const response = await getDistricts(userAddress.city);
         setDistrics(response.data);
       } catch (error: any) {
+        toast.error(error.message);
         console.error(error.message);
       }
     }

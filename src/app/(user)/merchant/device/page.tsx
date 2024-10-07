@@ -59,6 +59,7 @@ export default function Device() {
         );
         setConnections(tempConnections);
       } catch (error: any) {
+        toast.error(error.message);
         console.error(error.message);
       }
     }
@@ -73,7 +74,7 @@ export default function Device() {
         setConnections(response.data);
       } catch (error: any) {
         console.error(error.message);
-        toast.error("Gagal mengambil data connections" + error.message);
+        toast.error(error.message);
       }
     }
 

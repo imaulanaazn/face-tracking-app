@@ -1,5 +1,6 @@
 import { changeMerchantName } from "@/services/api/merchant";
 import React, { SyntheticEvent, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function UsernameForm() {
   const [firstName, setFirstName] = useState("");
@@ -10,8 +11,9 @@ export default function UsernameForm() {
     try {
       const data = { firstName, lastName };
       const response = await changeMerchantName(data);
-    } catch (err: any) {
-      console.error(err.message);
+    } catch (error: any) {
+      toast.error(error.message);
+      console.error(error.message);
     }
   };
   return (
