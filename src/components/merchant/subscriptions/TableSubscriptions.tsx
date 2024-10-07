@@ -242,7 +242,7 @@ export default function TableSubscriptions({
               </div>
 
               <p className="text-center mt-4">
-                total halaman : {subscriptions.totalPages}
+                total page : {subscriptions.totalPages}
               </p>
             </div>
           </div>

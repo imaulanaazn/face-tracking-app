@@ -229,7 +229,7 @@ export default function TableConnections({
                 </div>
 
                 <p className="text-center mt-4">
-                  total halaman : {connections.totalPages}
+                  total page : {connections.totalPages}
                 </p>
               </div>
             </div>

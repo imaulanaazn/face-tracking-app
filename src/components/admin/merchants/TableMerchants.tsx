@@ -206,7 +206,7 @@ export default function TableMerchants({
                 </div>
 
                 <p className="text-center mt-4">
-                  total halaman : {merchants.totalPages}
+                  total page : {merchants.totalPages}
                 </p>
               </div>
             </div>

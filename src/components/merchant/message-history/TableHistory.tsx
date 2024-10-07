@@ -352,7 +352,7 @@ export default function TableHistory({
               </div>
 
               <p className="text-center mt-4">
-                total halaman : {histories.totalPages}
+                total page : {histories.totalPages}
               </p>
             </div>
           </div>

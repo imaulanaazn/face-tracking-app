@@ -201,7 +201,7 @@ export default function TableOrders({ search }: { search: string }) {
               </div>
 
               <p className="text-center mt-4">
-                total halaman : {orders.totalPages}
+                total page : {orders.totalPages}
               </p>
             </div>
           </div>
