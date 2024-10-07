@@ -46,10 +46,6 @@ export default function RootLayout({
     //   });
   }, [dispatch, router]);
 
-  if (loading) {
-    return <Loading />;
-  }
-
   return (
     <main className="flex bg-slate-100 justify-end">
       <Sidebar
