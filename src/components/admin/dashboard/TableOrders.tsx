@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { getOrders, OrdersResponse } from "@/services/api/adminStatistic";
+import formateDateIntr from "@/lib/utils/formatter";
+import { getPaymentStatuses } from "@/services/api/payment";
+import { ORDER_STATUS } from "@/enum";
 
 interface IQuery {
   page?: string;
@@ -22,6 +25,7 @@ const initialHistory = {
 
 export default function TableOrders({ search }: { search: string }) {
   const [orders, setOrders] = useState<OrdersResponse>(initialHistory);
+  const [statuses, setStatuses] = useState<{ name: string; cd: string }[]>([]);
 
   const [query, setQuery] = useState<{
     order: string;
@@ -64,6 +68,31 @@ export default function TableOrders({ search }: { search: string }) {
       setQuery((prev) => ({ ...prev, page: query.page - 1 }));
     }
   };
+
+  useEffect(() => {
+    async function fetchStatuses() {
+      try {
+        const response = await getPaymentStatuses();
+        setStatuses(response.data);
+      } catch (error: any) {
+        console.error(error.message);
+        toast.error(error.message);
+      }
+    }
+    fetchStatuses();
+  }, []);
+
+  function getStatusColor(statusCd: string): string {
+    if (statusCd === ORDER_STATUS.COMPLETED) {
+      return "text-emerald-600";
+    } else if (statusCd === ORDER_STATUS.PENDING_PAYMENT) {
+      return "text-yellow-600";
+    } else if (statusCd === ORDER_STATUS.PROCESSING) {
+      return "text-blue-600";
+    } else {
+      return "text-rose-600";
+    }
+  }
 
   return (
     <>
@@ -123,14 +152,6 @@ export default function TableOrders({ search }: { search: string }) {
                         <p>Status</p>
                       </div>
                     </th>
-                    <th
-                      scope="col"
-                      className="p-4 lg:py-4 lg:py-5 text-xs font-bold text-left text-neutral-600 uppercase text-left"
-                    >
-                      <div className="flex gap-3 items-center justify-center">
-                        <p>Detail</p>
-                      </div>
-                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
@@ -152,18 +173,19 @@ export default function TableOrders({ search }: { search: string }) {
                         {order.periodeOnMonth}
                       </td>
                       <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap text-center">
-                        {order.createdAt}
+                        {formateDateIntr({
+                          isoDate: order.createdAt,
+                          includeTime: false,
+                        })}
                       </td>
-                      <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap text-center">
-                        {order.status}
-                      </td>
-                      <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap text-center">
-                        <a
-                          href={`/payment/${order.invoiceId}`}
-                          className="py-2 px-4 rounded-md bg-blue-600 text-white"
-                        >
-                          Details
-                        </a>
+                      <td
+                        className={`px-4 py-4 text-sm whitespace-nowrap text-center ${getStatusColor(
+                          order.status
+                        )}`}
+                      >
+                        {statuses.map((status) =>
+                          status.cd === order.status ? status.name : ""
+                        )}
                       </td>
                     </tr>
                   ))}

@@ -5,6 +5,8 @@ import { getBoloMerchants } from "@/services/api/adminMerchants";
 import Image from "next/image";
 import Link from "next/link";
 import TableSkeleton from "../skeleton/TableSkeleton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 interface IFilter {
   limit: number;
@@ -159,9 +161,9 @@ export default function TableMerchants({
                         <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
                           <Link
                             href={`/admin/dashboard/merchants/${merchant.id}`}
-                            className="py-2 px-4 rounded-md bg-blue-600 text-white"
+                            className="py-2 px-4 rounded-md bg-blue-600 text-white flex gap-2 items-center w-max mx-auto"
                           >
-                            See Details
+                            Details <FontAwesomeIcon icon={faArrowRight} />
                           </Link>
                         </td>
                       </tr>
