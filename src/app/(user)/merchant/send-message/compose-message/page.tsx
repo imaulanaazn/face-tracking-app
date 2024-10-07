@@ -10,25 +10,25 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 
-const data = [
-  {
-    id: "1",
-    title: "Welcome",
-    message:
-      "Thank you for visiting our platform. We are committed to providing you with the best experience possible. Ourr.",
-  },
-  {
-    id: "2",
-    title: "Reminder",
-    message:
-      "This is just a friendly reminder to check out our latest offers and deals! Our current promotions include discounts on",
-  },
-  {
-    id: "3",
-    title: "Update",
-    message:
-      "We are excited to announce that our app has been updated with several new features designed to enhance your experience. From ",
-  },
+const data: any[] = [
+  // {
+  //   id: "1",
+  //   title: "Welcome",
+  //   message:
+  //     "Thank you for visiting our platform. We are committed to providing you with the best experience possible. Ourr.",
+  // },
+  // {
+  //   id: "2",
+  //   title: "Reminder",
+  //   message:
+  //     "This is just a friendly reminder to check out our latest offers and deals! Our current promotions include discounts on",
+  // },
+  // {
+  //   id: "3",
+  //   title: "Update",
+  //   message:
+  //     "We are excited to announce that our app has been updated with several new features designed to enhance your experience. From ",
+  // },
 ];
 
 export default function ComposeMessage() {
@@ -51,7 +51,7 @@ export default function ComposeMessage() {
     if (label && message) {
       setShowPreview(true);
     } else {
-      toast.error("Label dan message harus diisi");
+      toast.error("Label and message should not be empty");
     }
   }
 
@@ -82,8 +82,7 @@ export default function ComposeMessage() {
                 !selectedTemplate ? "text-white" : "text-gray-500"
               } font-light`}
             >
-              Buat pesanmu sendiri se kreativ mungkin agar menarik lebih banyak
-              pelanggan
+              Create your own message to engage your members
             </p>
           </div>
           {data.map((message) => (
@@ -152,7 +151,7 @@ export default function ComposeMessage() {
               setLabel(e.target.value);
             }}
             className="py-2  w-full focus:outline-none placeholder:text-xl placeholder:font-medium text-xl font-semibold text-gray-600"
-            placeholder="Tulis label pesan"
+            placeholder="Write message label"
           />
 
           <hr className="my-4" />
@@ -169,11 +168,11 @@ export default function ComposeMessage() {
             rows={20}
           ></textarea>
 
-          <div className="buttons flex flex-col md:flex-row gap-4 mt-4 justify-between">
-            <button className="w-full md:w-max flex gap-2 items-center justify-center border border-solid border-blue-500 py-2 px-4 rounded-md text-blue-500 font-medium">
+          <div className="buttons flex flex-col md:flex-row gap-4 mt-4 justify-end">
+            {/* <button className="w-full md:w-max flex gap-2 items-center justify-center border border-solid border-blue-500 py-2 px-4 rounded-md text-blue-500 font-medium">
               Save as template{" "}
               <FontAwesomeIcon icon={faFloppyDisk} className="text-sm" />
-            </button>
+            </button> */}
             <button
               onClick={() => {
                 handleTogglePreview(true);
